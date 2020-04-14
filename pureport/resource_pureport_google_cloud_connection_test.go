@@ -119,6 +119,31 @@ resource "pureport_google_cloud_connection" "main" {
 	return fmt.Sprintf(format, environment_name, router_name, interconnect_name, connection_name)
 }
 
+func testAccResourceGoogleCloudConnectionConfig_invalid_ha() string {
+	format := `
+resource "pureport_google_cloud_connection" "main" {
+  name = "%s"
+  speed = "100"
+  high_availability = false
+
+  location_href = "location/blah"
+  network_href = "network/blah"
+
+  primary_pairing_key = "some-key"
+
+  tags = {
+    Environment = "tf-test"
+    Owner       = "ksk-google"
+    sweep       = "TRUE"
+  }
+}
+`
+
+	connection_name := acctest.RandomWithPrefix("GoogleCloudTest")
+
+	return fmt.Sprintf(format, connection_name)
+}
+
 func TestResourceGoogleCloudConnection_basic(t *testing.T) {
 
 	resourceName := "pureport_google_cloud_connection.main"
@@ -158,6 +183,21 @@ func TestResourceGoogleCloudConnection_basic(t *testing.T) {
 					resource.TestCheckResourceAttr(resourceName, "tags.Environment", "tf-test"),
 					resource.TestCheckResourceAttr(resourceName, "tags.Owner", "ksk-google"),
 				),
+			},
+		},
+	})
+}
+
+func TestResourceGoogleCloudConnection_invalid_ha(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		IsUnitTest:   true,
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckAWSConnectionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccResourceGoogleCloudConnectionConfig_invalid_ha(),
+				ExpectError: regexp.MustCompile("Cloud Connection with high availability required for for speeds greater than 50Mbps"),
 			},
 		},
 	})
