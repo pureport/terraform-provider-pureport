@@ -214,13 +214,13 @@ func expandIkeVersion1(d *schema.ResourceData) *client.Ikev1Config {
 		tmp_ike := raw_config["ike"].([]interface{})
 		ike := tmp_ike[0].(map[string]interface{})
 
-		config.Esp = &client.Ikev1EspConfig{
+		config.Esp = client.Ikev1EspConfig{
 			DhGroup:    esp["dh_group"].(string),
 			Encryption: esp["encryption"].(string),
 			Integrity:  esp["integrity"].(string),
 		}
 
-		config.Ike = &client.Ikev1IkeConfig{
+		config.Ike = client.Ikev1IkeConfig{
 			DhGroup:    ike["dh_group"].(string),
 			Encryption: ike["encryption"].(string),
 			Integrity:  ike["integrity"].(string),
@@ -228,13 +228,13 @@ func expandIkeVersion1(d *schema.ResourceData) *client.Ikev1Config {
 
 	} else {
 
-		config.Esp = &client.Ikev1EspConfig{
+		config.Esp = client.Ikev1EspConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
 		}
 
-		config.Ike = &client.Ikev1IkeConfig{
+		config.Ike = client.Ikev1IkeConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
@@ -260,13 +260,13 @@ func expandIkeVersion2(d *schema.ResourceData) *client.Ikev2Config {
 		tmp_ike := raw_config["ike"].([]interface{})
 		ike := tmp_ike[0].(map[string]interface{})
 
-		config.Esp = &client.Ikev2EspConfig{
+		config.Esp = client.Ikev2EspConfig{
 			DhGroup:    esp["dh_group"].(string),
 			Encryption: esp["encryption"].(string),
 			Integrity:  esp["integrity"].(string),
 		}
 
-		config.Ike = &client.Ikev2IkeConfig{
+		config.Ike = client.Ikev2IkeConfig{
 			DhGroup:    ike["dh_group"].(string),
 			Encryption: ike["encryption"].(string),
 			Integrity:  ike["integrity"].(string),
@@ -275,13 +275,13 @@ func expandIkeVersion2(d *schema.ResourceData) *client.Ikev2Config {
 
 	} else {
 
-		config.Esp = &client.Ikev2EspConfig{
+		config.Esp = client.Ikev2EspConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
 		}
 
-		config.Ike = &client.Ikev2IkeConfig{
+		config.Ike = client.Ikev2IkeConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
@@ -298,7 +298,7 @@ func expandSiteVPNConnection(d *schema.ResourceData) client.SiteIpSecVpnConnecti
 
 	// Create the body of the request
 	c := client.SiteIpSecVpnConnection{
-		Type_:       "SITE_IPSEC_VPN",
+		Type:        "SITE_IPSEC_VPN",
 		Name:        d.Get("name").(string),
 		Speed:       int32(speed),
 		AuthType:    d.Get("auth_type").(string),
@@ -306,10 +306,10 @@ func expandSiteVPNConnection(d *schema.ResourceData) client.SiteIpSecVpnConnecti
 		RoutingType: d.Get("routing_type").(string),
 		PrimaryKey:  d.Get("primary_key").(string),
 
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		BillingTerm: d.Get("billing_term").(string),
@@ -375,7 +375,7 @@ func resourceSiteVPNConnectionCreate(d *schema.ResourceData, m interface{}) erro
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -387,7 +387,7 @@ func resourceSiteVPNConnectionCreate(d *schema.ResourceData, m interface{}) erro
 	if err != nil {
 
 		http_err := err
-		json_response := string(err.(client.GenericSwaggerError).Body()[:])
+		json_response := string(err.(client.GenericOpenAPIError).Body()[:])
 		response, err := structure.ExpandJsonFromString(json_response)
 		if err != nil {
 			log.Printf("Error Creating new %s: %v", connection.SiteVPNConnectionName, err)
@@ -649,7 +649,7 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -660,7 +660,7 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)

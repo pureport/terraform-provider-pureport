@@ -79,13 +79,13 @@ func expandAzureConnection(d *schema.ResourceData) client.AzureExpressRouteConne
 
 	// Create the body of the request
 	c := client.AzureExpressRouteConnection{
-		Type_: "AZURE_EXPRESS_ROUTE",
+		Type:  "AZURE_EXPRESS_ROUTE",
 		Name:  d.Get("name").(string),
 		Speed: int32(speed),
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		BillingTerm: d.Get("billing_term").(string),
@@ -123,7 +123,7 @@ func resourceAzureConnectionCreate(d *schema.ResourceData, m interface{}) error 
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -135,7 +135,7 @@ func resourceAzureConnectionCreate(d *schema.ResourceData, m interface{}) error 
 	if err != nil {
 
 		http_err := err
-		json_response := string(err.(client.GenericSwaggerError).Body()[:])
+		json_response := string(err.(client.GenericOpenAPIError).Body()[:])
 		response, err := structure.ExpandJsonFromString(json_response)
 		if err != nil {
 			log.Printf("Error Creating new %s: %v", connection.AzureConnectionName, err)
@@ -203,7 +203,7 @@ func resourceAzureConnectionRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("high_availability", conn.HighAvailability)
 	d.Set("href", conn.Href)
 	d.Set("name", conn.Name)
-	d.Set("peering_type", conn.Peering.Type_)
+	d.Set("peering_type", conn.Peering.Type)
 	d.Set("service_key", conn.ServiceKey)
 	d.Set("speed", conn.Speed)
 	d.Set("state", conn.State)
@@ -285,7 +285,7 @@ func resourceAzureConnectionUpdate(d *schema.ResourceData, m interface{}) error 
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -296,7 +296,7 @@ func resourceAzureConnectionUpdate(d *schema.ResourceData, m interface{}) error 
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)

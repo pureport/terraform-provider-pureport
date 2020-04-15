@@ -39,6 +39,10 @@ func dataSourceCloudRegions() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
+						"href": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
 					},
 				},
 			},
@@ -110,12 +114,12 @@ func dataSourceCloudRegionsRead(d *schema.ResourceData, m interface{}) error {
 func flattenRegions(regions []client.CloudRegion) (out []map[string]interface{}) {
 
 	for _, cr := range regions {
-
 		r := map[string]interface{}{
 			"id":         cr.Id,
 			"name":       cr.DisplayName,
 			"provider":   cr.Provider,
 			"identifier": cr.ProviderAssignedId,
+			"href":       cr.Href,
 		}
 
 		out = append(out, r)

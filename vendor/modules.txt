@@ -701,7 +701,7 @@ github.com/posener/complete
 github.com/posener/complete/cmd
 github.com/posener/complete/cmd/install
 github.com/posener/complete/match
-# github.com/pureport/pureport-sdk-go v1.2.3
+# github.com/pureport/pureport-sdk-go v1.3.1-0.20200414235331-55b27384e201
 ## explicit
 github.com/pureport/pureport-sdk-go/pureport
 github.com/pureport/pureport-sdk-go/pureport/client
@@ -1004,6 +1004,7 @@ golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
 # golang.org/x/tools v0.0.0-20191025165112-2b544e3f2db1
+## explicit
 golang.org/x/tools/cmd/goimports
 golang.org/x/tools/go/analysis
 golang.org/x/tools/go/analysis/internal/analysisflags

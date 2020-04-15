@@ -393,7 +393,7 @@ func FlattenVpnGateway(gateway *client.VpnGateway) (out map[string]interface{}) 
 		"customer_vti_ip":     gateway.CustomerVtiIP,
 		"pureport_gateway_ip": gateway.PureportGatewayIP,
 		"pureport_vti_ip":     gateway.PureportVtiIP,
-		"vpn_auth_type":       gateway.Auth.Type_,
+		"vpn_auth_type":       gateway.Auth.Type,
 		"vpn_auth_key":        gateway.Auth.Key,
 		"customer_asn":        0,
 		"customer_ip":         "",
@@ -689,9 +689,9 @@ func ExpandPeeringType(d *schema.ResourceData) *client.PeeringConfiguration {
 	peeringConfig := &client.PeeringConfiguration{}
 
 	if data, ok := d.GetOk("peering_type"); ok {
-		peeringConfig.Type_ = data.(string)
+		peeringConfig.Type = data.(string)
 	} else {
-		peeringConfig.Type_ = "Private"
+		peeringConfig.Type = "Private"
 	}
 
 	return peeringConfig
