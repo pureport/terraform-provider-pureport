@@ -696,3 +696,18 @@ func ExpandPeeringType(d *schema.ResourceData) *client.PeeringConfiguration {
 
 	return peeringConfig
 }
+
+func CloudResourceDiff(d *schema.ResourceDiff) error {
+	speed := d.Get("speed").(int)
+
+	highAvailability := false
+	if v, ok := d.GetOk("high_availability"); ok {
+		highAvailability = v.(bool)
+	}
+
+	if !highAvailability && speed > 50 {
+		return fmt.Errorf("Cloud Connection with high availability required for speeds greater than 50Mbps")
+	}
+
+	return nil
+}

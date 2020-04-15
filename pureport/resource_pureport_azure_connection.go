@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/antihax/optional"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -66,6 +67,14 @@ func resourceAzureConnection() *schema.Resource {
 			Create: schema.DefaultTimeout(connection.CreateTimeout),
 			Delete: schema.DefaultTimeout(connection.DeleteTimeout),
 		},
+		CustomizeDiff: customdiff.If(
+			customdiff.ResourceConditionFunc(func(d *schema.ResourceDiff, meta interface{}) bool {
+				return d.HasChange("speed") || d.HasChange("high_availability")
+			}),
+			schema.CustomizeDiffFunc(func(d *schema.ResourceDiff, meta interface{}) error {
+				return connection.CloudResourceDiff(d)
+			}),
+		),
 	}
 }
 
