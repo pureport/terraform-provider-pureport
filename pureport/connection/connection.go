@@ -706,7 +706,7 @@ func CloudResourceDiff(d *schema.ResourceDiff) error {
 	}
 
 	if !highAvailability && speed > 50 {
-		return fmt.Errorf("Cloud Connection with high availability required for for speeds greater than 50Mbps")
+		return fmt.Errorf("Cloud Connection with high availability required for speeds greater than 50Mbps")
 	}
 
 	return nil

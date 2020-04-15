@@ -197,7 +197,7 @@ func TestResourceGoogleCloudConnection_invalid_ha(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccResourceGoogleCloudConnectionConfig_invalid_ha(),
-				ExpectError: regexp.MustCompile("Cloud Connection with high availability required for for speeds greater than 50Mbps"),
+				ExpectError: regexp.MustCompile("Cloud Connection with high availability required for speeds greater than 50Mbps"),
 			},
 		},
 	})
