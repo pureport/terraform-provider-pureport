@@ -87,13 +87,13 @@ func expandAWSConnection(d *schema.ResourceData) client.AwsDirectConnectConnecti
 
 	// Create the body of the request
 	c := client.AwsDirectConnectConnection{
-		Type_: "AWS_DIRECT_CONNECT",
+		Type:  "AWS_DIRECT_CONNECT",
 		Name:  d.Get("name").(string),
 		Speed: int32(speed),
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		AwsAccountId: d.Get("aws_account_id").(string),
@@ -129,7 +129,7 @@ func resourceAWSConnectionCreate(d *schema.ResourceData, m interface{}) error {
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -141,7 +141,7 @@ func resourceAWSConnectionCreate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 
 		http_err := err
-		json_response := string(err.(client.GenericSwaggerError).Body()[:])
+		json_response := string(err.(client.GenericOpenAPIError).Body()[:])
 		response, err := structure.ExpandJsonFromString(json_response)
 
 		if err != nil {
@@ -212,7 +212,7 @@ func resourceAWSConnectionRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("high_availability", conn.HighAvailability)
 	d.Set("href", conn.Href)
 	d.Set("name", conn.Name)
-	d.Set("peering_type", conn.Peering.Type_)
+	d.Set("peering_type", conn.Peering.Type)
 	d.Set("speed", conn.Speed)
 	d.Set("state", conn.State)
 
@@ -311,7 +311,7 @@ func resourceAWSConnectionUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -322,7 +322,7 @@ func resourceAWSConnectionUpdate(d *schema.ResourceData, m interface{}) error {
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)

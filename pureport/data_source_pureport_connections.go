@@ -138,7 +138,7 @@ func flattenConnections(connections []client.Connection) (out []map[string]inter
 			"href":          c.Href,
 			"name":          c.Name,
 			"description":   c.Description,
-			"type":          c.Type_,
+			"type":          c.Type,
 			"speed":         c.Speed,
 			"location_href": c.Location.Href,
 			"state":         c.State,

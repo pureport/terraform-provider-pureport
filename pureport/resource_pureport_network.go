@@ -67,7 +67,7 @@ func resourceNetworkCreate(d *schema.ResourceData, m interface{}) error {
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddNetworkOpts{
-		Body: optional.NewInterface(network),
+		Network: optional.NewInterface(network),
 	}
 
 	_, resp, err := config.Session.Client.NetworksApi.AddNetwork(
@@ -79,7 +79,7 @@ func resourceNetworkCreate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 
 		http_err := err
-		json_response := string(err.(client.GenericSwaggerError).Body()[:])
+		json_response := string(err.(client.GenericOpenAPIError).Body()[:])
 		response, err := structure.ExpandJsonFromString(json_response)
 		if err != nil {
 			log.Printf("Error Creating new Network: %v", err)
@@ -171,7 +171,7 @@ func resourceNetworkUpdate(d *schema.ResourceData, m interface{}) error {
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.UpdateNetworkOpts{
-		Body: optional.NewInterface(n),
+		Network: optional.NewInterface(n),
 	}
 
 	_, resp, err := config.Session.Client.NetworksApi.UpdateNetwork(
@@ -182,7 +182,7 @@ func resourceNetworkUpdate(d *schema.ResourceData, m interface{}) error {
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)

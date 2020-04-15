@@ -76,13 +76,13 @@ func expandGoogleCloudConnection(d *schema.ResourceData) client.GoogleCloudInter
 
 	// Create the body of the request
 	c := client.GoogleCloudInterconnectConnection{
-		Type_: "GOOGLE_CLOUD_INTERCONNECT",
+		Type:  "GOOGLE_CLOUD_INTERCONNECT",
 		Name:  d.Get("name").(string),
 		Speed: int32(speed),
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		BillingTerm:       d.Get("billing_term").(string),
@@ -121,7 +121,7 @@ func resourceGoogleCloudConnectionCreate(d *schema.ResourceData, m interface{}) 
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -135,7 +135,7 @@ func resourceGoogleCloudConnectionCreate(d *schema.ResourceData, m interface{}) 
 		http_err := err
 
 		switch e := err.(type) {
-		case client.GenericSwaggerError:
+		case client.GenericOpenAPIError:
 			json_response := string(e.Body()[:])
 			response, err := structure.ExpandJsonFromString(json_response)
 
@@ -290,7 +290,7 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -301,7 +301,7 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)
