@@ -27,7 +27,8 @@ func resourceSiteVPNConnection() *schema.Resource {
 		},
 		"ike_version": {
 			Type:         schema.TypeString,
-			Required:     true,
+			Optional:     true,
+			Computed:     true,
 			ValidateFunc: validation.StringInSlice([]string{"V1", "V2"}, true),
 			StateFunc: func(val interface{}) string {
 				return strings.ToUpper(val.(string))
@@ -295,6 +296,10 @@ func expandSiteVPNConnection(d *schema.ResourceData) client.SiteIpSecVpnConnecti
 
 	// Generic Connection values
 	speed := d.Get("speed").(int)
+	ikeVersion := "V2"
+	if version, ok := d.GetOk("ike_version"); ok {
+		ikeVersion = version.(string)
+	}
 
 	// Create the body of the request
 	c := client.SiteIpSecVpnConnection{
@@ -302,7 +307,7 @@ func expandSiteVPNConnection(d *schema.ResourceData) client.SiteIpSecVpnConnecti
 		Name:        d.Get("name").(string),
 		Speed:       int32(speed),
 		AuthType:    d.Get("auth_type").(string),
-		IkeVersion:  d.Get("ike_version").(string),
+		IkeVersion:  ikeVersion,
 		RoutingType: d.Get("routing_type").(string),
 		PrimaryKey:  d.Get("primary_key").(string),
 
