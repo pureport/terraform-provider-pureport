@@ -8,11 +8,7 @@ def version = "1.1.8"
 def plugin_name = "terraform-provider-pureport"
 
 pipeline {
-    agent {
-      docker {
-        image 'golang:1.14'
-      }
-    }
+    agent any
     options {
         disableConcurrentBuilds()
     }
@@ -97,21 +93,26 @@ pipeline {
             steps {
 
                 retry(3) {
-                  sh "GOOS=linux GOARCH=amd64 make"
-                  sh "GOOS=linux GOARCH=amd64 PROVIDER_VERSION=${env.PROVIDER_VERSION} make plugin"
-                  sh "chmod +x ${plugin_name}"
-                  sh "tar cvf ${plugin_name}.linux_amd64.tar.bz2 ${plugin_name}"
-                  sh "rm ${plugin_name}"
+                    script {
+                        docker.image('golang:1.14').inside() {
 
-                  sh "GOOS=darwin GOARCH=amd64 make"
-                  sh "GOOS=darwin GOARCH=amd64 PROVIDER_VERSION=${env.PROVIDER_VERSION} make plugin"
-                  sh "chmod +x ${plugin_name}"
-                  sh "tar cvf ${plugin_name}.darwin_amd64.tar.bz2 ${plugin_name}"
-                  sh "rm ${plugin_name}"
+                            sh "GOOS=linux GOARCH=amd64 make"
+                            sh "GOOS=linux GOARCH=amd64 PROVIDER_VERSION=${env.PROVIDER_VERSION} make plugin"
+                            sh "chmod +x ${plugin_name}"
+                            sh "tar cvf ${plugin_name}.linux_amd64.tar.bz2 ${plugin_name}"
+                            sh "rm ${plugin_name}"
 
-                  archiveArtifacts(
-                      artifacts: "${plugin_name}.*.tar.bz2"
-                      )
+                            sh "GOOS=darwin GOARCH=amd64 make"
+                            sh "GOOS=darwin GOARCH=amd64 PROVIDER_VERSION=${env.PROVIDER_VERSION} make plugin"
+                            sh "chmod +x ${plugin_name}"
+                            sh "tar cvf ${plugin_name}.darwin_amd64.tar.bz2 ${plugin_name}"
+                            sh "rm ${plugin_name}"
+                        }
+                    }
+
+                    archiveArtifacts(
+                        artifacts: "${plugin_name}.*.tar.bz2"
+                        )
                 }
             }
         }
@@ -147,7 +148,6 @@ pipeline {
                 ARG_USE_MSI           = true
             }
             stages {
-
                 stage('in Dev1') {
                     when {
                       expression { return env.PUREPORT_ACC_TEST_ENVIRONMENT == "Dev1" }
@@ -157,9 +157,40 @@ pipeline {
                       PUREPORT_API_KEY      = credentials('terraform-pureport-dev1-api-key')
                       PUREPORT_API_SECRET   = credentials('terraform-pureport-dev1-api-secret')
                     }
-                    steps {
-                        script {
-                            sh "make testacc"
+                    stages {
+                        stage('Setup Environment') {
+                            steps {
+                                script {
+                                    docker.image('hashicorp/terraform:0.12.24').inside('--entrypoint=""') {
+                                        sh """
+                                        cd test-infr/dev1
+                                        /bin/terraform init
+                                        /bin/terraform apply -auto-approve
+                                        """
+                                    }
+                                }
+                            }
+                        }
+                        stage('Run Acceptance Tests') {
+                            steps {
+                                script {
+                                    docker.image('golang:1.14').inside() {
+                                        sh "make testacc"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    post {
+                        always {
+                            script {
+                                docker.image('hashicorp/terraform:0.12.24').inside('--entrypoint=""') {
+                                    sh """
+                                    cd test-infr/dev1
+                                    /bin/terraform destroy -force -auto-approve
+                                    """
+                                }
+                            }
                         }
                     }
                 }
@@ -173,9 +204,40 @@ pipeline {
                       PUREPORT_API_KEY      = credentials('terraform-testacc-prod-key-id')
                       PUREPORT_API_SECRET   = credentials('terraform-testacc-prod-secret')
                     }
-                    steps {
-                        script {
-                            sh "make testacc"
+                    stages {
+                        stage('Setup Environment') {
+                            steps {
+                                script {
+                                    docker.image('hashicorp/terraform:0.12.24').inside('--entrypoint=""') {
+                                        sh """
+                                        cd test-infr/prod
+                                        /bin/terraform init
+                                        /bin/terraform apply -auto-approve
+                                        """
+                                    }
+                                }
+                            }
+                        }
+                        stage('Run Acceptance Tests') {
+                            steps {
+                                script {
+                                    docker.image('golang:1.14').inside() {
+                                        sh "make testacc"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    post {
+                        always {
+                            script {
+                                docker.image('hashicorp/terraform:0.12.24').inside('--entrypoint=""') {
+                                    sh """
+                                    cd test-infr/prod
+                                    /bin/terraform destroy -force -auto-approve
+                                    """
+                                }
+                            }
                         }
                     }
                 }
