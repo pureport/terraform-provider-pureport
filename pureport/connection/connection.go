@@ -20,6 +20,7 @@ const (
 	AwsConnectionName     = "AWS Cloud Connection"
 	AzureConnectionName   = "Azure Cloud Connection"
 	GoogleConnectionName  = "Google Cloud Connection"
+	OracleConnectionName  = "Oracle Cloud Connection"
 	SiteVPNConnectionName = "SiteVPN Connection"
 
 	CreateTimeout = 15 * time.Minute

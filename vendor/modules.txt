@@ -698,7 +698,7 @@ github.com/posener/complete
 github.com/posener/complete/cmd
 github.com/posener/complete/cmd/install
 github.com/posener/complete/match
-# github.com/pureport/pureport-sdk-go v1.3.1-0.20200414235331-55b27384e201
+# github.com/pureport/pureport-sdk-go v1.3.1-0.20200501180004-7528e4358fab
 ## explicit
 github.com/pureport/pureport-sdk-go/pureport
 github.com/pureport/pureport-sdk-go/pureport/client
