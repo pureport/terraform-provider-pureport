@@ -57,8 +57,8 @@ func TestDataSourceOracleConnection_basic(t *testing.T) {
 					resource.ComposeAggregateTestCheckFunc(
 
 						resource.TestMatchResourceAttr(resourceName, "id", regexp.MustCompile("conn-.{16}")),
-						resource.TestMatchResourceAttr(resourceName, "primary_ocid", regexp.MustCompile("ocid1.virtualcircuit.oc1.iad.[a-z0-9]+")),
-						resource.TestMatchResourceAttr(resourceName, "secondary_ocid", regexp.MustCompile("ocid1.virtualcircuit.oc1.iad.[a-z0-9]+")),
+						resource.TestMatchResourceAttr(resourceName, "primary_ocid", regexp.MustCompile("ocid1.virtualcircuit.oc1.iad.[a-z0-9]{60}")),
+						resource.TestMatchResourceAttr(resourceName, "secondary_ocid", regexp.MustCompile("ocid1.virtualcircuit.oc1.iad.[a-z0-9]{60}")),
 						resource.TestCheckResourceAttr(resourceName, "speed", "1000"),
 						resource.TestMatchResourceAttr(resourceName, "href", regexp.MustCompile("/connections/conn-.{16}")),
 						resource.TestCheckResourceAttr(resourceName, "name", "ORACLE Connection DataSource"),
@@ -67,7 +67,6 @@ func TestDataSourceOracleConnection_basic(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "high_availability", "true"),
 						resource.TestMatchResourceAttr(resourceName, "network_href", regexp.MustCompile("/networks/network-.{16}")),
 						resource.TestCheckResourceAttr(resourceName, "location_href", "/locations/us-wdc"),
-						resource.TestCheckResourceAttr(resourceName, "cloud_service_hrefs.#", "0"),
 
 						resource.TestCheckResourceAttr(resourceName, "tags.#", "0"),
 
