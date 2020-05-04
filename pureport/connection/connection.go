@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"regexp"
 	"sort"
 	"time"
 
@@ -145,6 +146,22 @@ var (
 		"vpn_auth_key": {
 			Type:     schema.TypeString,
 			Computed: true,
+		},
+	}
+
+	BGPPeerSchema = map[string]*schema.Schema{
+		"pureport_subnet": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"customer_subnet": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"availability_domain": {
+			Type:         schema.TypeString,
+			Required:     true,
+			ValidateFunc: validation.StringMatch(regexp.MustCompile(`^(PRIMARY|SECONDARY)$`), "Must be a valid availability domain."),
 		},
 	}
 )
