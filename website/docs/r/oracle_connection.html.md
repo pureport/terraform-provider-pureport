@@ -99,17 +99,6 @@ The following arguments are supported:
 
 ## Attributes
 
-* `name` - The name for the connection
-* `location_href` - HREF for the Pureport Location to attach the connection.
-* `network_href` - HREF for the network to associate the connection.
-* `speed` - The maximum QoS for this connection. Valid values are 1000, 2000 in Mbps.
-* `description` - The description for the connection.
-* `customer_networks` - A list of named CIDR block to easily identify a customer network.
-    * `name` - The name for the network.
-    * `address` - The CIDR block for the network
-* `billing_term` - The billing term for the connection: (Currently only HOURLY is supported.)
-* `tags` - A dictionary of user defined key/value pairs to associate with this resource.
-
 * `nat_config` - The Network Address Translation configuration for the connection.
     * `enabled` - Is NAT enabled for this connection.
     * `mappings` - List of NAT mapped CIDR address
@@ -117,10 +106,6 @@ The following arguments are supported:
         * `nat_cidr` - The CIDR block use for NAT to the associated subnet.
     * `blocks` - List of reserved blocks for NAT.
     * `pnat_cidr` - CIDR use for PNAT between connections.
-
-* `primary_ocid` - The ID for the Primary Oracle Cloud Virtual Circuit.
-* `secondary_ocid` - The ID for the Secondary Oracle Cloud Virtual Circuit.
-* `bgp_peering` - List of BGP Subnet mapping for primary and secondary gateways.
 
 * `gateways` - List of cloud gateways and their configurations.
 
