@@ -32,7 +32,7 @@ The following arguments are supported:
 
 * `filter` - (Optional) A filter used to scope the list e.g. by tags.
   * `name` - (Required) The name of the filter. The valid values are defined in the
-    [Pureport SDK Model](https://github.com/pureport/pureport-sdk-go/blob/develop/docs/client/AwsDirectConnectConnection.md).
+    [Pureport SDK Model](https://github.com/pureport/pureport-sdk-go/blob/master/docs/client/AwsDirectConnectConnection.md).
     Nested values are supported. E.g.("Location.DisplayName")
   * `values` - (Required) The value of the filter. Currently only regex strings are supported.
 
