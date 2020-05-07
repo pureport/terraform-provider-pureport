@@ -238,6 +238,10 @@ resource "pureport_oracle_connection" "basic" {
 
 func TestResourceOracleConnection_basic(t *testing.T) {
 
+	if testEnvironmentName != "Production" {
+		return
+	}
+
 	resourceName := "pureport_oracle_connection.basic"
 	var instance client.OracleFastConnectConnection
 	var respawn_instance client.OracleFastConnectConnection
