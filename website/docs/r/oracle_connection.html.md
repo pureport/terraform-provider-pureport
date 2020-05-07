@@ -77,7 +77,7 @@ The following arguments are supported:
 
 * `name` - (Required) The name for the connection
 * `location_href` - (Required) HREF for the Pureport Location to attach the connection.
-* `network_href` - (Required) HREF for the network to associate the connection.
+* `network_href` - (Required) HREF for the network to associate with the connection.
 * `speed` - (Required) The maximum QoS for this connection. Valid values are 1000, 2000 in Mbps.
 * `primary_ocid` - (Required) Primary Oracle Virtual Circuit OCID.
 * `secondary_ocid` - (Required) Secondary Oracle Virtual Circuit OCID.
