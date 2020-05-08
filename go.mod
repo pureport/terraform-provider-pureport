@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/terraform v0.12.24
 	github.com/hashicorp/terraform-plugin-sdk v1.9.1
 	github.com/paultyng/changelog-gen v1.1.1-0.20200430172531-a35a38c6ab41
-	github.com/pureport/pureport-sdk-go v1.3.1-0.20200414235331-55b27384e201
+	github.com/pureport/pureport-sdk-go v1.3.1-0.20200501180004-7528e4358fab
 	github.com/stoewer/go-strcase v1.1.0 // indirect
 	github.com/terraform-providers/terraform-provider-aws v1.60.1-0.20191114211556-907e76d4b112
 	github.com/terraform-providers/terraform-provider-azurerm v1.40.0

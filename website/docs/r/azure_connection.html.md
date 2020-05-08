@@ -57,7 +57,7 @@ The following arguments are supported:
 
 * `name` - (Required) The name for the connection
 * `location_href` - (Required) HREF for the Pureport Location to attach the connection.
-* `network_href` - (Required) HREF for the network to associate the connection.
+* `network_href` - (Required) HREF for the network to associate with the connection.
 * `speed` - (Required) The maximum QoS for this connection. Valid values are 50, 100, 200, 300, 400, 500, 1000, 10000 in Mbps.
 * `service_key` - (Required) The Azure service key for the Express Route Circuit.
 

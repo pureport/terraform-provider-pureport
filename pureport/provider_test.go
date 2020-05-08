@@ -14,9 +14,11 @@ import (
 var (
 	testAccProviders map[string]terraform.ResourceProvider
 	testAccProvider  *schema.Provider
-)
 
-var testEnvironmentName string = "Production"
+	testEnvironmentName     string = "Production"
+	testOraclePrimaryOCID   string = ""
+	testOracleSecondaryOCID string = ""
+)
 
 func init() {
 	testAccProvider = Provider().(*schema.Provider)
@@ -31,6 +33,14 @@ func init() {
 	// Environment Variables for the Test Environment
 	if env := os.Getenv("PUREPORT_ACC_TEST_ENVIRONMENT"); env != "" {
 		testEnvironmentName = env
+	}
+
+	if ocid := os.Getenv("TF_VAR_oracle_primary_ocid"); ocid != "" {
+		testOraclePrimaryOCID = ocid
+	}
+
+	if ocid := os.Getenv("TF_VAR_oracle_secondary_ocid"); ocid != "" {
+		testOracleSecondaryOCID = ocid
 	}
 }
 
