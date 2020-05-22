@@ -193,7 +193,7 @@ resource "pureport_oracle_connection" "basic" {
 }
 
 func testAccResourceOracleConnectionConfig_invalid_ha() string {
-	format := `
+	format := testAccResourceOracleConnectionConfig_common + `
 resource "pureport_oracle_connection" "basic" {
   name = "%s"
   speed = "1000"
