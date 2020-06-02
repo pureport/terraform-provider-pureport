@@ -194,13 +194,13 @@ resource "pureport_oracle_connection" "basic" {
 
 func testAccResourceOracleConnectionConfig_invalid_ha() string {
 	format := testAccResourceOracleConnectionConfig_common + `
-resource "pureport_oracle_connection" "basic" {
+resource "pureport_oracle_connection" "invalid_ha" {
   name = "%s"
   speed = "1000"
   high_availability = false
 
-  location_href = "location/blah"
-  network_href = "network/blah"
+  location_href = data.pureport_locations.main.locations.0.href
+  network_href = data.pureport_networks.main.networks.0.href
   cloud_region_href = data.pureport_cloud_regions.main.regions.0.href
 
   primary_ocid = "%s"
