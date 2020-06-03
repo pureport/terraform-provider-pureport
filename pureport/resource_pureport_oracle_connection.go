@@ -27,19 +27,6 @@ var (
 	}
 )
 
-func OracleResourceDiff(d *schema.ResourceDiff) error {
-	highAvailability := false
-	if v, ok := d.GetOk("high_availability"); ok {
-		highAvailability = v.(bool)
-	}
-
-	if !highAvailability {
-		return fmt.Errorf("Oracle Cloud Connection high availability required.")
-	}
-
-	return nil
-}
-
 func resourceOracleConnection() *schema.Resource {
 
 	connection_schema := map[string]*schema.Schema{
@@ -92,12 +79,14 @@ func resourceOracleConnection() *schema.Resource {
 			Create: schema.DefaultTimeout(connection.CreateTimeout),
 			Delete: schema.DefaultTimeout(connection.DeleteTimeout),
 		},
-		CustomizeDiff: customdiff.If(
-			customdiff.ResourceConditionFunc(func(d *schema.ResourceDiff, meta interface{}) bool {
-				return d.HasChange("high_availability")
-			}),
-			schema.CustomizeDiffFunc(func(d *schema.ResourceDiff, meta interface{}) error {
-				return OracleResourceDiff(d)
+		CustomizeDiff: customdiff.All(
+			customdiff.ValidateValue("high_availability", func(value, meta interface{}) error {
+
+				if value == false {
+					return fmt.Errorf("Oracle Cloud Connection high availability required.")
+				}
+
+				return nil
 			}),
 		),
 	}

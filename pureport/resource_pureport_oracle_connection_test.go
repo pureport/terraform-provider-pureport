@@ -36,19 +36,13 @@ func init() {
 	})
 }
 
-const testAccResourceOracleConnectionConfig_common = `
+func testAccResourceOracleConnectionConfig_common() string {
 
+	common_config := `
 data "pureport_accounts" "main" {
   filter {
     name = "Name"
     values = ["Terraform"]
-  }
-}
-
-data "pureport_locations" "main" {
-  filter {
-    name = "Name"
-    values = ["^Washington*"]
   }
 }
 
@@ -66,11 +60,33 @@ data "pureport_cloud_regions" "main" {
     values = ["Ashburn"]
   }
 }
-
 `
 
+	if testEnvironmentName == "Production" {
+		return common_config + `
+
+data "pureport_locations" "main" {
+  filter {
+    name = "Name"
+    values = ["^Washington*"]
+  }
+}
+`
+	}
+
+	return common_config + `
+
+data "pureport_locations" "main" {
+  filter {
+    name = "Name"
+    values = ["^*, NC"]
+  }
+}
+`
+}
+
 func testAccResourceOracleConnectionConfig_basic() string {
-	format := testAccResourceOracleConnectionConfig_common + `
+	format := testAccResourceOracleConnectionConfig_common() + `
 resource "pureport_oracle_connection" "basic" {
   name = "%s"
   speed = "1000"
@@ -112,7 +128,7 @@ resource "pureport_oracle_connection" "basic" {
 }
 
 func testAccResourceOracleConnectionConfig_basic_update_no_respawn() string {
-	format := testAccResourceOracleConnectionConfig_common + `
+	format := testAccResourceOracleConnectionConfig_common() + `
 resource "pureport_oracle_connection" "basic" {
   name = "%s"
   description = "Oracle Basic Test"
@@ -156,7 +172,7 @@ resource "pureport_oracle_connection" "basic" {
 }
 
 func testAccResourceOracleConnectionConfig_basic_update_respawn() string {
-	format := testAccResourceOracleConnectionConfig_common + `
+	format := testAccResourceOracleConnectionConfig_common() + `
 resource "pureport_oracle_connection" "basic" {
   name = "%s"
   description = "Oracle Basic Test"
@@ -193,7 +209,8 @@ resource "pureport_oracle_connection" "basic" {
 }
 
 func testAccResourceOracleConnectionConfig_invalid_ha() string {
-	format := testAccResourceOracleConnectionConfig_common + `
+	format := testAccResourceOracleConnectionConfig_common() + `
+
 resource "pureport_oracle_connection" "invalid_ha" {
   name = "%s"
   speed = "1000"
@@ -341,8 +358,9 @@ func TestResourceOracleConnection_invalid_ha(t *testing.T) {
 		Providers:  testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config:      testAccResourceOracleConnectionConfig_invalid_ha(),
-				ExpectError: regexp.MustCompile("Oracle Cloud Connection high availability required."),
+				Config:                    testAccResourceOracleConnectionConfig_invalid_ha(),
+				ExpectError:               regexp.MustCompile("Oracle Cloud Connection high availability required."),
+				PreventPostDestroyRefresh: true,
 			},
 		},
 	})
