@@ -30,7 +30,7 @@ pipeline {
           )
       choice(
           name: 'ACCEPTANCE_TESTS_LOG_LEVEL',
-          choices: ['WARN', 'ERROR', 'DEBUG', 'INFO', 'TRACE'],
+          choices: ['DEBUG', 'WARN', 'ERROR', 'INFO', 'TRACE'],
           description: 'The Terraform Debug Level'
           )
       choice(
@@ -247,7 +247,7 @@ pipeline {
 
                     archiveArtifacts(
                         allowEmptyArchive: true,
-                        artifacts: 'pureport/tf_log.log'
+                        artifacts: '**/tf_log.log'
                     )
                 }
             }
