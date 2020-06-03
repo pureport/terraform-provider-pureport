@@ -128,9 +128,9 @@ pipeline {
                 }
             }
             environment {
-                PUREPORT_LOG_FILE=pureport.log
-                PUREPORT_LOG_LEVEL=DEBUG
-                PUREPORT_LOG_NOCOLOR=TRUE
+                PUREPORT_LOG_FILE    = "pureport.log"
+                PUREPORT_LOG_LEVEL   = "DEBUG"
+                PUREPORT_LOG_NOCOLOR = "TRUE"
 
                 TF_LOG                = "${params.ACCEPTANCE_TESTS_LOG_LEVEL}"
                 TF_LOG_PATH           = "${params.ACCEPTANCE_TESTS_LOG_TO_FILE ? 'tf_log.log' : '' }"
