@@ -509,7 +509,7 @@ func WaitForConnection(name string, d *schema.ResourceData, m interface{}) error
 
 		},
 		Timeout:                   d.Timeout(schema.TimeoutCreate),
-		Delay:                     5 * time.Second,
+		Delay:                     20 * time.Second,
 		MinTimeout:                5 * time.Second,
 		ContinuousTargetOccurence: 2,
 	}
@@ -565,7 +565,7 @@ func DeleteConnection(name string, d *schema.ResourceData, m interface{}) error 
 
 		},
 		Timeout:                   d.Timeout(schema.TimeoutDelete),
-		Delay:                     5 * time.Second,
+		Delay:                     1 * time.Second,
 		MinTimeout:                1 * time.Second,
 		ContinuousTargetOccurence: 2,
 	}
@@ -617,8 +617,8 @@ func DeleteConnection(name string, d *schema.ResourceData, m interface{}) error 
 
 		},
 		Timeout:                   d.Timeout(schema.TimeoutDelete),
-		Delay:                     5 * time.Second,
-		MinTimeout:                1 * time.Second,
+		Delay:                     20 * time.Second,
+		MinTimeout:                5 * time.Second,
 		ContinuousTargetOccurence: 2,
 	}
 
