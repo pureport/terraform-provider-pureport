@@ -6,9 +6,9 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/arn"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/waf"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 // WAF requires UpdateIPSet operations be split into batches of 1000 Updates
@@ -42,15 +42,10 @@ func resourceAwsWafIPSet() *schema.Resource {
 						"type": {
 							Type:     schema.TypeString,
 							Required: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								waf.IPSetDescriptorTypeIpv4,
-								waf.IPSetDescriptorTypeIpv6,
-							}, false),
 						},
 						"value": {
-							Type:         schema.TypeString,
-							Required:     true,
-							ValidateFunc: validation.IsCIDR,
+							Type:     schema.TypeString,
+							Required: true,
 						},
 					},
 				},
@@ -75,16 +70,7 @@ func resourceAwsWafIPSetCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 	resp := out.(*waf.CreateIPSetOutput)
 	d.SetId(*resp.IPSet.IPSetId)
-
-	if v, ok := d.GetOk("ip_set_descriptors"); ok && v.(*schema.Set).Len() > 0 {
-
-		err := updateWafIpSetDescriptors(d.Id(), nil, v.(*schema.Set).List(), conn)
-		if err != nil {
-			return fmt.Errorf("Error Setting IP Descriptors: %s", err)
-		}
-	}
-
-	return resourceAwsWafIPSetRead(d, meta)
+	return resourceAwsWafIPSetUpdate(d, meta)
 }
 
 func resourceAwsWafIPSetRead(d *schema.ResourceData, meta interface{}) error {
@@ -96,7 +82,7 @@ func resourceAwsWafIPSetRead(d *schema.ResourceData, meta interface{}) error {
 
 	resp, err := conn.GetIPSet(params)
 	if err != nil {
-		if isAWSErr(err, waf.ErrCodeNonexistentItemException, "") {
+		if awsErr, ok := err.(awserr.Error); ok && awsErr.Code() == "WAFNonexistentItemException" {
 			log.Printf("[WARN] WAF IPSet (%s) not found, removing from state", d.Id())
 			d.SetId("")
 			return nil
@@ -109,8 +95,8 @@ func resourceAwsWafIPSetRead(d *schema.ResourceData, meta interface{}) error {
 
 	for _, descriptor := range resp.IPSet.IPSetDescriptors {
 		d := map[string]interface{}{
-			"type":  aws.StringValue(descriptor.Type),
-			"value": aws.StringValue(descriptor.Value),
+			"type":  *descriptor.Type,
+			"value": *descriptor.Value,
 		}
 		descriptors = append(descriptors, d)
 	}
@@ -152,7 +138,8 @@ func resourceAwsWafIPSetDelete(d *schema.ResourceData, meta interface{}) error {
 	oldDescriptors := d.Get("ip_set_descriptors").(*schema.Set).List()
 
 	if len(oldDescriptors) > 0 {
-		err := updateWafIpSetDescriptors(d.Id(), oldDescriptors, nil, conn)
+		noDescriptors := []interface{}{}
+		err := updateWafIpSetDescriptors(d.Id(), oldDescriptors, noDescriptors, conn)
 		if err != nil {
 			return fmt.Errorf("Error Deleting IPSetDescriptors: %s", err)
 		}

@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/waf"
 	"github.com/aws/aws-sdk-go/service/wafregional"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 )
 
 func resourceAwsWafRegionalXssMatchSet() *schema.Resource {
@@ -17,9 +16,6 @@ func resourceAwsWafRegionalXssMatchSet() *schema.Resource {
 		Read:   resourceAwsWafRegionalXssMatchSetRead,
 		Update: resourceAwsWafRegionalXssMatchSetUpdate,
 		Delete: resourceAwsWafRegionalXssMatchSetDelete,
-		Importer: &schema.ResourceImporter{
-			State: schema.ImportStatePassthrough,
-		},
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -33,7 +29,7 @@ func resourceAwsWafRegionalXssMatchSet() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"field_to_match": {
-							Type:     schema.TypeList,
+							Type:     schema.TypeSet,
 							Required: true,
 							MaxItems: 1,
 							Elem: &schema.Resource{
@@ -45,15 +41,6 @@ func resourceAwsWafRegionalXssMatchSet() *schema.Resource {
 									"type": {
 										Type:     schema.TypeString,
 										Required: true,
-										ValidateFunc: validation.StringInSlice([]string{
-											wafregional.MatchFieldTypeUri,
-											wafregional.MatchFieldTypeSingleQueryArg,
-											wafregional.MatchFieldTypeQueryString,
-											wafregional.MatchFieldTypeMethod,
-											wafregional.MatchFieldTypeHeader,
-											wafregional.MatchFieldTypeBody,
-											wafregional.MatchFieldTypeAllQueryArgs,
-										}, false),
 									},
 								},
 							},
@@ -61,14 +48,6 @@ func resourceAwsWafRegionalXssMatchSet() *schema.Resource {
 						"text_transformation": {
 							Type:     schema.TypeString,
 							Required: true,
-							ValidateFunc: validation.StringInSlice([]string{
-								wafregional.TextTransformationUrlDecode,
-								wafregional.TextTransformationNone,
-								wafregional.TextTransformationHtmlEntityDecode,
-								wafregional.TextTransformationCompressWhiteSpace,
-								wafregional.TextTransformationCmdLine,
-								wafregional.TextTransformationLowercase,
-							}, false),
 						},
 					},
 				},
@@ -97,16 +76,9 @@ func resourceAwsWafRegionalXssMatchSetCreate(d *schema.ResourceData, meta interf
 	}
 	resp := out.(*waf.CreateXssMatchSetOutput)
 
-	d.SetId(aws.StringValue(resp.XssMatchSet.XssMatchSetId))
+	d.SetId(*resp.XssMatchSet.XssMatchSetId)
 
-	if v, ok := d.Get("xss_match_tuple").(*schema.Set); ok && v.Len() > 0 {
-		err := updateXssMatchSetResourceWR(d.Id(), nil, v.List(), conn, region)
-		if err != nil {
-			return fmt.Errorf("Failed updating regional WAF XSS Match Set: %s", err)
-		}
-	}
-
-	return resourceAwsWafRegionalXssMatchSetRead(d, meta)
+	return resourceAwsWafRegionalXssMatchSetUpdate(d, meta)
 }
 
 func resourceAwsWafRegionalXssMatchSetRead(d *schema.ResourceData, meta interface{}) error {

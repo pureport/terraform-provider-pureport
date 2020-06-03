@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsFsxLustreFileSystem() *schema.Resource {
@@ -84,10 +83,10 @@ func resourceAwsFsxLustreFileSystem() *schema.Resource {
 				Type:         schema.TypeInt,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: validation.IntAtLeast(1200),
+				ValidateFunc: validation.IntAtLeast(3600),
 			},
 			"subnet_ids": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Required: true,
 				ForceNew: true,
 				MinItems: 1,
@@ -119,7 +118,7 @@ func resourceAwsFsxLustreFileSystemCreate(d *schema.ResourceData, meta interface
 		ClientRequestToken: aws.String(resource.UniqueId()),
 		FileSystemType:     aws.String(fsx.FileSystemTypeLustre),
 		StorageCapacity:    aws.Int64(int64(d.Get("storage_capacity").(int))),
-		SubnetIds:          expandStringList(d.Get("subnet_ids").([]interface{})),
+		SubnetIds:          expandStringSet(d.Get("subnet_ids").(*schema.Set)),
 	}
 
 	if v, ok := d.GetOk("export_path"); ok {
@@ -151,7 +150,7 @@ func resourceAwsFsxLustreFileSystemCreate(d *schema.ResourceData, meta interface
 	}
 
 	if v, ok := d.GetOk("tags"); ok {
-		input.Tags = keyvaluetags.New(v.(map[string]interface{})).IgnoreAws().FsxTags()
+		input.Tags = tagsFromMapFSX(v.(map[string]interface{}))
 	}
 
 	if v, ok := d.GetOk("weekly_maintenance_start_time"); ok {
@@ -182,10 +181,8 @@ func resourceAwsFsxLustreFileSystemUpdate(d *schema.ResourceData, meta interface
 	conn := meta.(*AWSClient).fsxconn
 
 	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.FsxUpdateTags(conn, d.Get("arn").(string), o, n); err != nil {
-			return fmt.Errorf("error updating FSx Windows File System (%s) tags: %s", d.Get("arn").(string), err)
+		if err := setTagsFSX(conn, d); err != nil {
+			return fmt.Errorf("Error updating tags for FSx filesystem: %s", err)
 		}
 	}
 
@@ -213,7 +210,6 @@ func resourceAwsFsxLustreFileSystemUpdate(d *schema.ResourceData, meta interface
 
 func resourceAwsFsxLustreFileSystemRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).fsxconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	filesystem, err := describeFsxFileSystem(conn, d.Id())
 
@@ -263,7 +259,7 @@ func resourceAwsFsxLustreFileSystemRead(d *schema.ResourceData, meta interface{}
 		return fmt.Errorf("error setting subnet_ids: %s", err)
 	}
 
-	if err := d.Set("tags", keyvaluetags.FsxKeyValueTags(filesystem.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tagsToMapFSX(filesystem.Tags)); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 

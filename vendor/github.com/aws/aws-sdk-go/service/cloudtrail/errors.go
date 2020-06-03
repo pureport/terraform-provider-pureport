@@ -2,10 +2,6 @@
 
 package cloudtrail
 
-import (
-	"github.com/aws/aws-sdk-go/private/protocol"
-)
-
 const (
 
 	// ErrCodeARNInvalidException for service response error code
@@ -31,13 +27,6 @@ const (
 	//
 	// Cannot set a CloudWatch Logs delivery for this region.
 	ErrCodeCloudWatchLogsDeliveryUnavailableException = "CloudWatchLogsDeliveryUnavailableException"
-
-	// ErrCodeInsightNotEnabledException for service response error code
-	// "InsightNotEnabledException".
-	//
-	// If you run GetInsightSelectors on a trail that does not have Insights events
-	// enabled, the operation throws the exception InsightNotEnabledException.
-	ErrCodeInsightNotEnabledException = "InsightNotEnabledException"
 
 	// ErrCodeInsufficientDependencyServiceAccessPermissionException for service response error code
 	// "InsufficientDependencyServiceAccessPermissionException".
@@ -79,13 +68,6 @@ const (
 	// This exception is thrown when the provided role is not valid.
 	ErrCodeInvalidCloudWatchLogsRoleArnException = "InvalidCloudWatchLogsRoleArnException"
 
-	// ErrCodeInvalidEventCategoryException for service response error code
-	// "InvalidEventCategoryException".
-	//
-	// Occurs if an event category that is not valid is specified as a value of
-	// EventCategory.
-	ErrCodeInvalidEventCategoryException = "InvalidEventCategoryException"
-
 	// ErrCodeInvalidEventSelectorsException for service response error code
 	// "InvalidEventSelectorsException".
 	//
@@ -116,14 +98,6 @@ const (
 	// This exception is thrown when an operation is called on a trail from a region
 	// other than the region in which the trail was created.
 	ErrCodeInvalidHomeRegionException = "InvalidHomeRegionException"
-
-	// ErrCodeInvalidInsightSelectorsException for service response error code
-	// "InvalidInsightSelectorsException".
-	//
-	// The formatting or syntax of the InsightSelectors JSON statement in your PutInsightSelectors
-	// or GetInsightSelectors request is not valid, or the specified insight type
-	// in the InsightSelectors statement is not a valid insight type.
-	ErrCodeInvalidInsightSelectorsException = "InvalidInsightSelectorsException"
 
 	// ErrCodeInvalidKmsKeyIdException for service response error code
 	// "InvalidKmsKeyIdException".
@@ -322,48 +296,3 @@ const (
 	// This exception is thrown when the requested operation is not supported.
 	ErrCodeUnsupportedOperationException = "UnsupportedOperationException"
 )
-
-var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"CloudTrailARNInvalidException":                          newErrorARNInvalidException,
-	"CloudTrailAccessNotEnabledException":                    newErrorAccessNotEnabledException,
-	"CloudWatchLogsDeliveryUnavailableException":             newErrorCloudWatchLogsDeliveryUnavailableException,
-	"InsightNotEnabledException":                             newErrorInsightNotEnabledException,
-	"InsufficientDependencyServiceAccessPermissionException": newErrorInsufficientDependencyServiceAccessPermissionException,
-	"InsufficientEncryptionPolicyException":                  newErrorInsufficientEncryptionPolicyException,
-	"InsufficientS3BucketPolicyException":                    newErrorInsufficientS3BucketPolicyException,
-	"InsufficientSnsTopicPolicyException":                    newErrorInsufficientSnsTopicPolicyException,
-	"InvalidCloudWatchLogsLogGroupArnException":              newErrorInvalidCloudWatchLogsLogGroupArnException,
-	"InvalidCloudWatchLogsRoleArnException":                  newErrorInvalidCloudWatchLogsRoleArnException,
-	"InvalidEventCategoryException":                          newErrorInvalidEventCategoryException,
-	"InvalidEventSelectorsException":                         newErrorInvalidEventSelectorsException,
-	"InvalidHomeRegionException":                             newErrorInvalidHomeRegionException,
-	"InvalidInsightSelectorsException":                       newErrorInvalidInsightSelectorsException,
-	"InvalidKmsKeyIdException":                               newErrorInvalidKmsKeyIdException,
-	"InvalidLookupAttributesException":                       newErrorInvalidLookupAttributesException,
-	"InvalidMaxResultsException":                             newErrorInvalidMaxResultsException,
-	"InvalidNextTokenException":                              newErrorInvalidNextTokenException,
-	"InvalidParameterCombinationException":                   newErrorInvalidParameterCombinationException,
-	"InvalidS3BucketNameException":                           newErrorInvalidS3BucketNameException,
-	"InvalidS3PrefixException":                               newErrorInvalidS3PrefixException,
-	"InvalidSnsTopicNameException":                           newErrorInvalidSnsTopicNameException,
-	"InvalidTagParameterException":                           newErrorInvalidTagParameterException,
-	"InvalidTimeRangeException":                              newErrorInvalidTimeRangeException,
-	"InvalidTokenException":                                  newErrorInvalidTokenException,
-	"InvalidTrailNameException":                              newErrorInvalidTrailNameException,
-	"KmsException":                                           newErrorKmsException,
-	"KmsKeyDisabledException":                                newErrorKmsKeyDisabledException,
-	"KmsKeyNotFoundException":                                newErrorKmsKeyNotFoundException,
-	"MaximumNumberOfTrailsExceededException":                 newErrorMaximumNumberOfTrailsExceededException,
-	"NotOrganizationMasterAccountException":                  newErrorNotOrganizationMasterAccountException,
-	"OperationNotPermittedException":                         newErrorOperationNotPermittedException,
-	"OrganizationNotInAllFeaturesModeException":              newErrorOrganizationNotInAllFeaturesModeException,
-	"OrganizationsNotInUseException":                         newErrorOrganizationsNotInUseException,
-	"ResourceNotFoundException":                              newErrorResourceNotFoundException,
-	"ResourceTypeNotSupportedException":                      newErrorResourceTypeNotSupportedException,
-	"S3BucketDoesNotExistException":                          newErrorS3BucketDoesNotExistException,
-	"TagsLimitExceededException":                             newErrorTagsLimitExceededException,
-	"TrailAlreadyExistsException":                            newErrorTrailAlreadyExistsException,
-	"TrailNotFoundException":                                 newErrorTrailNotFoundException,
-	"TrailNotProvidedException":                              newErrorTrailNotProvidedException,
-	"UnsupportedOperationException":                          newErrorUnsupportedOperationException,
-}

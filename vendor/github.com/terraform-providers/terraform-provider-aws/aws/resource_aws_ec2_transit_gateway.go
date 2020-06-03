@@ -10,7 +10,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsEc2TransitGateway() *schema.Resource {
@@ -91,7 +90,11 @@ func resourceAwsEc2TransitGateway() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"tags": tagsSchema(),
+			"tags": {
+				Type:     schema.TypeMap,
+				Optional: true,
+				Elem:     &schema.Schema{Type: schema.TypeString},
+			},
 			"vpn_ecmp_support": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -117,7 +120,7 @@ func resourceAwsEc2TransitGatewayCreate(d *schema.ResourceData, meta interface{}
 			DnsSupport:                   aws.String(d.Get("dns_support").(string)),
 			VpnEcmpSupport:               aws.String(d.Get("vpn_ecmp_support").(string)),
 		},
-		TagSpecifications: ec2TagSpecificationsFromMap(d.Get("tags").(map[string]interface{}), ec2.ResourceTypeTransitGateway),
+		TagSpecifications: expandEc2TransitGatewayTagSpecifications(d.Get("tags").(map[string]interface{})),
 	}
 
 	if v, ok := d.GetOk("amazon_side_asn"); ok {
@@ -145,7 +148,6 @@ func resourceAwsEc2TransitGatewayCreate(d *schema.ResourceData, meta interface{}
 
 func resourceAwsEc2TransitGatewayRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	transitGateway, err := ec2DescribeTransitGateway(conn, d.Id())
 
@@ -186,7 +188,7 @@ func resourceAwsEc2TransitGatewayRead(d *schema.ResourceData, meta interface{}) 
 	d.Set("owner_id", transitGateway.OwnerId)
 	d.Set("propagation_default_route_table_id", transitGateway.Options.PropagationDefaultRouteTableId)
 
-	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(transitGateway.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tagsToMap(transitGateway.Tags)); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -198,12 +200,8 @@ func resourceAwsEc2TransitGatewayRead(d *schema.ResourceData, meta interface{}) 
 func resourceAwsEc2TransitGatewayUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
 
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.Ec2UpdateTags(conn, d.Id(), o, n); err != nil {
-			return fmt.Errorf("error updating EC2 Transit Gateway (%s) tags: %s", d.Id(), err)
-		}
+	if err := setTags(conn, d); err != nil {
+		return fmt.Errorf("error updating EC2 Transit Gateway (%s) tags: %s", d.Id(), err)
 	}
 
 	return nil
@@ -229,10 +227,6 @@ func resourceAwsEc2TransitGatewayDelete(d *schema.ResourceData, meta interface{}
 		}
 
 		if isAWSErr(err, "IncorrectState", "has non-deleted VPN Attachments") {
-			return resource.RetryableError(err)
-		}
-
-		if isAWSErr(err, "IncorrectState", "has non-deleted Transit Gateway Cross Region Peering Attachments") {
 			return resource.RetryableError(err)
 		}
 

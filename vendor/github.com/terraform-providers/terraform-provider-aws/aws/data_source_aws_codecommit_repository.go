@@ -18,6 +18,7 @@ func dataSourceAwsCodeCommitRepository() *schema.Resource {
 			"repository_name": {
 				Type:         schema.TypeString,
 				Required:     true,
+				ForceNew:     true,
 				ValidateFunc: validation.StringLenBetween(0, 100),
 			},
 

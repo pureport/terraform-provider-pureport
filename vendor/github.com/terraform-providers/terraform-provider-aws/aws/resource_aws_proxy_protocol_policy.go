@@ -59,7 +59,10 @@ func resourceAwsProxyProtocolPolicyCreate(d *schema.ResourceData, meta interface
 			*input.PolicyName, err)
 	}
 
+	// Assign the policy name for use later
+	d.Partial(true)
 	d.SetId(fmt.Sprintf("%s:%s", *elbname, *input.PolicyName))
+	d.SetPartial("load_balancer")
 	log.Printf("[INFO] ELB PolicyName: %s", *input.PolicyName)
 
 	return resourceAwsProxyProtocolPolicyUpdate(d, meta)
@@ -67,11 +70,11 @@ func resourceAwsProxyProtocolPolicyCreate(d *schema.ResourceData, meta interface
 
 func resourceAwsProxyProtocolPolicyRead(d *schema.ResourceData, meta interface{}) error {
 	elbconn := meta.(*AWSClient).elbconn
-	elbname := d.Get("load_balancer").(string)
+	elbname := aws.String(d.Get("load_balancer").(string))
 
 	// Retrieve the current ELB policies for updating the state
 	req := &elb.DescribeLoadBalancersInput{
-		LoadBalancerNames: []*string{aws.String(elbname)},
+		LoadBalancerNames: []*string{elbname},
 	}
 	resp, err := elbconn.DescribeLoadBalancers(req)
 	if err != nil {
@@ -91,7 +94,7 @@ func resourceAwsProxyProtocolPolicyRead(d *schema.ResourceData, meta interface{}
 		ports = append(ports, &ipstr)
 	}
 	d.Set("instance_ports", ports)
-	d.Set("load_balancer", elbname)
+	d.Set("load_balancer", *elbname)
 	return nil
 }
 
@@ -116,6 +119,7 @@ func resourceAwsProxyProtocolPolicyUpdate(d *schema.ResourceData, meta interface
 	backends := flattenBackendPolicies(resp.LoadBalancerDescriptions[0].BackendServerDescriptions)
 	policyName := resourceAwsProxyProtocolPolicyParseId(d.Id())
 
+	d.Partial(true)
 	if d.HasChange("instance_ports") {
 		o, n := d.GetChange("instance_ports")
 		os := o.(*schema.Set)
@@ -143,6 +147,8 @@ func resourceAwsProxyProtocolPolicyUpdate(d *schema.ResourceData, meta interface
 				return fmt.Errorf("Error setting policy for backend: %s", err)
 			}
 		}
+
+		d.SetPartial("instance_ports")
 	}
 
 	return resourceAwsProxyProtocolPolicyRead(d, meta)

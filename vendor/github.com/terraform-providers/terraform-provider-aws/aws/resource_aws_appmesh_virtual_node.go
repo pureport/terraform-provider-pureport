@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsAppmeshVirtualNode() *schema.Resource {
@@ -86,7 +85,7 @@ func resourceAwsAppmeshVirtualNode() *schema.Resource {
 						},
 
 						"listener": {
-							Type:     schema.TypeList,
+							Type:     schema.TypeSet,
 							Optional: true,
 							MinItems: 0,
 							MaxItems: 1,
@@ -173,6 +172,7 @@ func resourceAwsAppmeshVirtualNode() *schema.Resource {
 									},
 								},
 							},
+							Set: appmeshVirtualNodeListenerHash,
 						},
 
 						"logging": {
@@ -235,13 +235,12 @@ func resourceAwsAppmeshVirtualNode() *schema.Resource {
 												"namespace_name": {
 													Type:         schema.TypeString,
 													Required:     true,
-													ValidateFunc: validation.StringLenBetween(1, 1024),
+													ValidateFunc: validateServiceDiscoveryHttpNamespaceName,
 												},
 
 												"service_name": {
-													Type:         schema.TypeString,
-													Required:     true,
-													ValidateFunc: validation.StringLenBetween(1, 1024),
+													Type:     schema.TypeString,
+													Required: true,
 												},
 											},
 										},
@@ -304,7 +303,7 @@ func resourceAwsAppmeshVirtualNodeCreate(d *schema.ResourceData, meta interface{
 		MeshName:        aws.String(d.Get("mesh_name").(string)),
 		VirtualNodeName: aws.String(d.Get("name").(string)),
 		Spec:            expandAppmeshVirtualNodeSpec(d.Get("spec").([]interface{})),
-		Tags:            keyvaluetags.New(d.Get("tags").(map[string]interface{})).IgnoreAws().AppmeshTags(),
+		Tags:            tagsFromMapAppmesh(d.Get("tags").(map[string]interface{})),
 	}
 
 	log.Printf("[DEBUG] Creating App Mesh virtual node: %#v", req)
@@ -320,7 +319,6 @@ func resourceAwsAppmeshVirtualNodeCreate(d *schema.ResourceData, meta interface{
 
 func resourceAwsAppmeshVirtualNodeRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).appmeshconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	resp, err := conn.DescribeVirtualNode(&appmesh.DescribeVirtualNodeInput{
 		MeshName:        aws.String(d.Get("mesh_name").(string)),
@@ -340,10 +338,9 @@ func resourceAwsAppmeshVirtualNodeRead(d *schema.ResourceData, meta interface{})
 		return nil
 	}
 
-	arn := aws.StringValue(resp.VirtualNode.Metadata.Arn)
 	d.Set("name", resp.VirtualNode.VirtualNodeName)
 	d.Set("mesh_name", resp.VirtualNode.MeshName)
-	d.Set("arn", arn)
+	d.Set("arn", resp.VirtualNode.Metadata.Arn)
 	d.Set("created_date", resp.VirtualNode.Metadata.CreatedAt.Format(time.RFC3339))
 	d.Set("last_updated_date", resp.VirtualNode.Metadata.LastUpdatedAt.Format(time.RFC3339))
 	err = d.Set("spec", flattenAppmeshVirtualNodeSpec(resp.VirtualNode.Spec))
@@ -351,14 +348,14 @@ func resourceAwsAppmeshVirtualNodeRead(d *schema.ResourceData, meta interface{})
 		return fmt.Errorf("error setting spec: %s", err)
 	}
 
-	tags, err := keyvaluetags.AppmeshListTags(conn, arn)
-
-	if err != nil {
-		return fmt.Errorf("error listing tags for App Mesh virtual node (%s): %s", arn, err)
+	err = saveTagsAppmesh(conn, d, aws.StringValue(resp.VirtualNode.Metadata.Arn))
+	if isAWSErr(err, appmesh.ErrCodeNotFoundException, "") {
+		log.Printf("[WARN] App Mesh virtual node (%s) not found, removing from state", d.Id())
+		d.SetId("")
+		return nil
 	}
-
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
+	if err != nil {
+		return fmt.Errorf("error saving tags: %s", err)
 	}
 
 	return nil
@@ -382,13 +379,14 @@ func resourceAwsAppmeshVirtualNodeUpdate(d *schema.ResourceData, meta interface{
 		}
 	}
 
-	arn := d.Get("arn").(string)
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.AppmeshUpdateTags(conn, arn, o, n); err != nil {
-			return fmt.Errorf("error updating App Mesh virtual node (%s) tags: %s", arn, err)
-		}
+	err := setTagsAppmesh(conn, d, d.Get("arn").(string))
+	if isAWSErr(err, appmesh.ErrCodeNotFoundException, "") {
+		log.Printf("[WARN] App Mesh virtual node (%s) not found, removing from state", d.Id())
+		d.SetId("")
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("error setting tags: %s", err)
 	}
 
 	return resourceAwsAppmeshVirtualNodeRead(d, meta)
@@ -445,6 +443,44 @@ func appmeshVirtualNodeBackendHash(vBackend interface{}) int {
 	if vVirtualService, ok := mBackend["virtual_service"].([]interface{}); ok && len(vVirtualService) > 0 && vVirtualService[0] != nil {
 		mVirtualService := vVirtualService[0].(map[string]interface{})
 		if v, ok := mVirtualService["virtual_service_name"].(string); ok {
+			buf.WriteString(fmt.Sprintf("%s-", v))
+		}
+	}
+	return hashcode.String(buf.String())
+}
+
+func appmeshVirtualNodeListenerHash(vListener interface{}) int {
+	var buf bytes.Buffer
+	mListener := vListener.(map[string]interface{})
+	if vHealthCheck, ok := mListener["health_check"].([]interface{}); ok && len(vHealthCheck) > 0 && vHealthCheck[0] != nil {
+		mHealthCheck := vHealthCheck[0].(map[string]interface{})
+		if v, ok := mHealthCheck["healthy_threshold"].(int); ok {
+			buf.WriteString(fmt.Sprintf("%d-", v))
+		}
+		if v, ok := mHealthCheck["interval_millis"].(int); ok {
+			buf.WriteString(fmt.Sprintf("%d-", v))
+		}
+		if v, ok := mHealthCheck["path"].(string); ok {
+			buf.WriteString(fmt.Sprintf("%s-", v))
+		}
+		// Don't include "port" in the hash as it's Optional/Computed.
+		// If present it must match the "port_mapping.port" value, so changes will be detected.
+		if v, ok := mHealthCheck["protocol"].(string); ok {
+			buf.WriteString(fmt.Sprintf("%s-", v))
+		}
+		if v, ok := mHealthCheck["timeout_millis"].(int); ok {
+			buf.WriteString(fmt.Sprintf("%d-", v))
+		}
+		if v, ok := mHealthCheck["unhealthy_threshold"].(int); ok {
+			buf.WriteString(fmt.Sprintf("%d-", v))
+		}
+	}
+	if vPortMapping, ok := mListener["port_mapping"].([]interface{}); ok && len(vPortMapping) > 0 && vPortMapping[0] != nil {
+		mPortMapping := vPortMapping[0].(map[string]interface{})
+		if v, ok := mPortMapping["port"].(int); ok {
+			buf.WriteString(fmt.Sprintf("%d-", v))
+		}
+		if v, ok := mPortMapping["protocol"].(string); ok {
 			buf.WriteString(fmt.Sprintf("%s-", v))
 		}
 	}

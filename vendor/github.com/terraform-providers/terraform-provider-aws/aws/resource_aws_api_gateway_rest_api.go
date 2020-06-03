@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsApiGatewayRestApi() *schema.Resource {
@@ -39,17 +38,13 @@ func resourceAwsApiGatewayRestApi() *schema.Resource {
 			"api_key_source": {
 				Type:     schema.TypeString,
 				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					apigateway.ApiKeySourceTypeAuthorizer,
-					apigateway.ApiKeySourceTypeHeader,
-				}, true),
-				Default: apigateway.ApiKeySourceTypeHeader,
+				Default:  "HEADER",
 			},
 
 			"policy": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				ValidateFunc:     validation.StringIsJSON,
+				ValidateFunc:     validation.ValidateJsonString,
 				DiffSuppressFunc: suppressEquivalentAwsPolicyDiffs,
 			},
 
@@ -107,28 +102,15 @@ func resourceAwsApiGatewayRestApi() *schema.Resource {
 								}, false),
 							},
 						},
-						"vpc_endpoint_ids": {
-							Type:     schema.TypeSet,
-							Optional: true,
-							MinItems: 1,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
 					},
 				},
 			},
-			"arn": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"tags": tagsSchema(),
 		},
 	}
 }
 
 func resourceAwsApiGatewayRestApiCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Creating API Gateway")
 
 	var description *string
@@ -151,10 +133,6 @@ func resourceAwsApiGatewayRestApiCreate(d *schema.ResourceData, meta interface{}
 
 	if v, ok := d.GetOk("policy"); ok && v.(string) != "" {
 		params.Policy = aws.String(v.(string))
-	}
-
-	if v, ok := d.GetOk("tags"); ok {
-		params.Tags = keyvaluetags.New(v.(map[string]interface{})).IgnoreAws().ApigatewayTags()
 	}
 
 	binaryMediaTypes, binaryMediaTypesOk := d.GetOk("binary_media_types")
@@ -190,9 +168,7 @@ func resourceAwsApiGatewayRestApiCreate(d *schema.ResourceData, meta interface{}
 }
 
 func resourceAwsApiGatewayRestApiRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
-
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Reading API Gateway %s", d.Id())
 
 	api, err := conn.GetRestApi(&apigateway.GetRestApiInput{
@@ -245,14 +221,14 @@ func resourceAwsApiGatewayRestApiRead(d *schema.ResourceData, meta interface{}) 
 
 	d.Set("binary_media_types", api.BinaryMediaTypes)
 
-	execution_arn := arn.ARN{
+	arn := arn.ARN{
 		Partition: meta.(*AWSClient).partition,
 		Service:   "execute-api",
 		Region:    meta.(*AWSClient).region,
 		AccountID: meta.(*AWSClient).accountid,
 		Resource:  d.Id(),
 	}.String()
-	d.Set("execution_arn", execution_arn)
+	d.Set("execution_arn", arn)
 
 	if api.MinimumCompressionSize == nil {
 		d.Set("minimum_compression_size", -1)
@@ -267,18 +243,6 @@ func resourceAwsApiGatewayRestApiRead(d *schema.ResourceData, meta interface{}) 
 		return fmt.Errorf("error setting endpoint_configuration: %s", err)
 	}
 
-	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(api.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
-
-	rest_api_arn := arn.ARN{
-		Partition: meta.(*AWSClient).partition,
-		Service:   "apigateway",
-		Region:    meta.(*AWSClient).region,
-		Resource:  fmt.Sprintf("/restapis/%s", d.Id()),
-	}.String()
-	d.Set("arn", rest_api_arn)
-
 	return nil
 }
 
@@ -287,7 +251,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 
 	if d.HasChange("name") {
 		operations = append(operations, &apigateway.PatchOperation{
-			Op:    aws.String(apigateway.OpReplace),
+			Op:    aws.String("replace"),
 			Path:  aws.String("/name"),
 			Value: aws.String(d.Get("name").(string)),
 		})
@@ -295,7 +259,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 
 	if d.HasChange("description") {
 		operations = append(operations, &apigateway.PatchOperation{
-			Op:    aws.String(apigateway.OpReplace),
+			Op:    aws.String("replace"),
 			Path:  aws.String("/description"),
 			Value: aws.String(d.Get("description").(string)),
 		})
@@ -303,7 +267,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 
 	if d.HasChange("api_key_source") {
 		operations = append(operations, &apigateway.PatchOperation{
-			Op:    aws.String(apigateway.OpReplace),
+			Op:    aws.String("replace"),
 			Path:  aws.String("/apiKeySource"),
 			Value: aws.String(d.Get("api_key_source").(string)),
 		})
@@ -311,7 +275,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 
 	if d.HasChange("policy") {
 		operations = append(operations, &apigateway.PatchOperation{
-			Op:    aws.String(apigateway.OpReplace),
+			Op:    aws.String("replace"),
 			Path:  aws.String("/policy"),
 			Value: aws.String(d.Get("policy").(string)),
 		})
@@ -324,7 +288,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 			value = strconv.Itoa(minimumCompressionSize)
 		}
 		operations = append(operations, &apigateway.PatchOperation{
-			Op:    aws.String(apigateway.OpReplace),
+			Op:    aws.String("replace"),
 			Path:  aws.String("/minimumCompressionSize"),
 			Value: aws.String(value),
 		})
@@ -341,7 +305,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 		// since there are no replacings.
 		for _, v := range old {
 			operations = append(operations, &apigateway.PatchOperation{
-				Op:   aws.String(apigateway.OpRemove),
+				Op:   aws.String("remove"),
 				Path: aws.String(fmt.Sprintf("/%s/%s", prefix, escapeJsonPointer(v.(string)))),
 			})
 		}
@@ -350,7 +314,7 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 		if len(new) > 0 {
 			for _, v := range new {
 				operations = append(operations, &apigateway.PatchOperation{
-					Op:   aws.String(apigateway.OpAdd),
+					Op:   aws.String("add"),
 					Path: aws.String(fmt.Sprintf("/%s/%s", prefix, escapeJsonPointer(v.(string)))),
 				})
 			}
@@ -364,33 +328,9 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 			m := v.([]interface{})[0].(map[string]interface{})
 
 			operations = append(operations, &apigateway.PatchOperation{
-				Op:    aws.String(apigateway.OpReplace),
+				Op:    aws.String("replace"),
 				Path:  aws.String("/endpointConfiguration/types/0"),
 				Value: aws.String(m["types"].([]interface{})[0].(string)),
-			})
-		}
-	}
-
-	if d.HasChange("endpoint_configuration.0.vpc_endpoint_ids") {
-		o, n := d.GetChange("endpoint_configuration.0.vpc_endpoint_ids")
-		prefix := "/endpointConfiguration/vpcEndpointIds"
-
-		old := o.(*schema.Set).List()
-		new := n.(*schema.Set).List()
-
-		for _, v := range old {
-			operations = append(operations, &apigateway.PatchOperation{
-				Op:    aws.String(apigateway.OpRemove),
-				Path:  aws.String(prefix),
-				Value: aws.String(v.(string)),
-			})
-		}
-
-		for _, v := range new {
-			operations = append(operations, &apigateway.PatchOperation{
-				Op:    aws.String(apigateway.OpAdd),
-				Path:  aws.String(prefix),
-				Value: aws.String(v.(string)),
 			})
 		}
 	}
@@ -399,15 +339,8 @@ func resourceAwsApiGatewayRestApiUpdateOperations(d *schema.ResourceData) []*api
 }
 
 func resourceAwsApiGatewayRestApiUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Updating API Gateway %s", d.Id())
-
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-		if err := keyvaluetags.ApigatewayUpdateTags(conn, d.Get("arn").(string), o, n); err != nil {
-			return fmt.Errorf("error updating tags: %s", err)
-		}
-	}
 
 	if d.HasChange("body") {
 		if body, ok := d.GetOk("body"); ok {
@@ -437,7 +370,7 @@ func resourceAwsApiGatewayRestApiUpdate(d *schema.ResourceData, meta interface{}
 }
 
 func resourceAwsApiGatewayRestApiDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 
 	input := &apigateway.DeleteRestApiInput{
 		RestApiId: aws.String(d.Id()),
@@ -468,10 +401,6 @@ func expandApiGatewayEndpointConfiguration(l []interface{}) *apigateway.Endpoint
 		Types: expandStringList(m["types"].([]interface{})),
 	}
 
-	if endpointIds, ok := m["vpc_endpoint_ids"]; ok {
-		endpointConfiguration.VpcEndpointIds = expandStringSet(endpointIds.(*schema.Set))
-	}
-
 	return endpointConfiguration
 }
 
@@ -482,10 +411,6 @@ func flattenApiGatewayEndpointConfiguration(endpointConfiguration *apigateway.En
 
 	m := map[string]interface{}{
 		"types": flattenStringList(endpointConfiguration.Types),
-	}
-
-	if len(endpointConfiguration.VpcEndpointIds) > 0 {
-		m["vpc_endpoint_ids"] = aws.StringValueSlice(endpointConfiguration.VpcEndpointIds)
 	}
 
 	return []interface{}{m}

@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsKinesisAnalyticsApplication() *schema.Resource {
@@ -590,8 +589,8 @@ func resourceAwsKinesisAnalyticsApplicationCreate(d *schema.ResourceData, meta i
 		createOpts.Outputs = outputs
 	}
 
-	if v := d.Get("tags").(map[string]interface{}); len(v) > 0 {
-		createOpts.Tags = keyvaluetags.New(v).IgnoreAws().KinesisanalyticsTags()
+	if v, ok := d.GetOk("tags"); ok {
+		createOpts.Tags = tagsFromMapKinesisAnalytics(v.(map[string]interface{}))
 	}
 
 	// Retry for IAM eventual consistency
@@ -631,8 +630,6 @@ func resourceAwsKinesisAnalyticsApplicationCreate(d *schema.ResourceData, meta i
 
 func resourceAwsKinesisAnalyticsApplicationRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).kinesisanalyticsconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
-
 	name := d.Get("name").(string)
 
 	describeOpts := &kinesisanalytics.DescribeApplicationInput{
@@ -648,9 +645,8 @@ func resourceAwsKinesisAnalyticsApplicationRead(d *schema.ResourceData, meta int
 		return fmt.Errorf("error reading Kinesis Analytics Application (%s): %s", d.Id(), err)
 	}
 
-	arn := aws.StringValue(resp.ApplicationDetail.ApplicationARN)
 	d.Set("name", aws.StringValue(resp.ApplicationDetail.ApplicationName))
-	d.Set("arn", arn)
+	d.Set("arn", aws.StringValue(resp.ApplicationDetail.ApplicationARN))
 	d.Set("code", aws.StringValue(resp.ApplicationDetail.ApplicationCode))
 	d.Set("create_timestamp", aws.TimeValue(resp.ApplicationDetail.CreateTimestamp).Format(time.RFC3339))
 	d.Set("description", aws.StringValue(resp.ApplicationDetail.ApplicationDescription))
@@ -674,13 +670,7 @@ func resourceAwsKinesisAnalyticsApplicationRead(d *schema.ResourceData, meta int
 		return fmt.Errorf("error setting reference_data_sources: %s", err)
 	}
 
-	tags, err := keyvaluetags.KinesisanalyticsListTags(conn, arn)
-
-	if err != nil {
-		return fmt.Errorf("error listing tags for Kinesis Analytics Application (%s): %s", arn, err)
-	}
-
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := getTagsKinesisAnalytics(conn, d); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -704,7 +694,10 @@ func resourceAwsKinesisAnalyticsApplicationUpdate(d *schema.ResourceData, meta i
 			CurrentApplicationVersionId: aws.Int64(int64(version)),
 		}
 
-		applicationUpdate := createApplicationUpdateOpts(d)
+		applicationUpdate, err := createApplicationUpdateOpts(d)
+		if err != nil {
+			return err
+		}
 
 		if !reflect.DeepEqual(applicationUpdate, &kinesisanalytics.ApplicationUpdate{}) {
 			updateApplicationOpts.SetApplicationUpdate(applicationUpdate)
@@ -818,14 +811,10 @@ func resourceAwsKinesisAnalyticsApplicationUpdate(d *schema.ResourceData, meta i
 			}
 		}
 
-		arn := d.Get("arn").(string)
-		if d.HasChange("tags") {
-			o, n := d.GetChange("tags")
-
-			if err := keyvaluetags.KinesisanalyticsUpdateTags(conn, arn, o, n); err != nil {
-				return fmt.Errorf("error updating Kinesis Analytics Application (%s) tags: %s", arn, err)
-			}
+		if err := setTagsKinesisAnalytics(conn, d); err != nil {
+			return fmt.Errorf("Error update resource tags for %s: %s", d.Id(), err)
 		}
+
 	}
 
 	oldReferenceData, newReferenceData := d.GetChange("reference_data_sources")
@@ -1082,7 +1071,7 @@ func expandKinesisAnalyticsReferenceData(rd map[string]interface{}) *kinesisanal
 	return referenceData
 }
 
-func createApplicationUpdateOpts(d *schema.ResourceData) *kinesisanalytics.ApplicationUpdate {
+func createApplicationUpdateOpts(d *schema.ResourceData) (*kinesisanalytics.ApplicationUpdate, error) {
 	applicationUpdate := &kinesisanalytics.ApplicationUpdate{}
 
 	if d.HasChange("code") {
@@ -1151,7 +1140,7 @@ func createApplicationUpdateOpts(d *schema.ResourceData) *kinesisanalytics.Appli
 		}
 	}
 
-	return applicationUpdate
+	return applicationUpdate, nil
 }
 
 func expandKinesisAnalyticsInputUpdate(vL map[string]interface{}) *kinesisanalytics.InputUpdate {

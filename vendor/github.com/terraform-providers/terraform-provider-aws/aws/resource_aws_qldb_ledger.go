@@ -106,7 +106,6 @@ func resourceAwsQLDBLedgerCreate(d *schema.ResourceData, meta interface{}) error
 
 func resourceAwsQLDBLedgerRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).qldbconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	// Refresh the QLDB state
 	input := &qldb.DescribeLedgerInput{
@@ -146,7 +145,7 @@ func resourceAwsQLDBLedgerRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("Error listing tags for QLDB Ledger: %s", err)
 	}
 
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tags.IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -155,6 +154,9 @@ func resourceAwsQLDBLedgerRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAwsQLDBLedgerUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).qldbconn
+
+	// Turn on partial mode
+	d.Partial(true)
 
 	if d.HasChange("deletion_protection") {
 		val := d.Get("deletion_protection").(bool)
@@ -169,6 +171,8 @@ func resourceAwsQLDBLedgerUpdate(d *schema.ResourceData, meta interface{}) error
 
 			return err
 		}
+
+		d.SetPartial("deletion_protection")
 	}
 
 	if d.HasChange("tags") {
@@ -178,6 +182,7 @@ func resourceAwsQLDBLedgerUpdate(d *schema.ResourceData, meta interface{}) error
 		}
 	}
 
+	d.Partial(false)
 	return resourceAwsQLDBLedgerRead(d, meta)
 }
 

@@ -20,7 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsEMRCluster() *schema.Resource {
@@ -85,10 +84,6 @@ func resourceAwsEMRCluster() *schema.Resource {
 		},
 
 		Schema: map[string]*schema.Schema{
-			"arn": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 			"name": {
 				Type:     schema.TypeString,
 				ForceNew: true,
@@ -111,7 +106,7 @@ func resourceAwsEMRCluster() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				ForceNew:         true,
-				ValidateFunc:     validation.StringIsJSON,
+				ValidateFunc:     validation.ValidateJsonString,
 				DiffSuppressFunc: suppressEquivalentJsonDiffs,
 				StateFunc: func(v interface{}) string {
 					json, _ := structure.NormalizeJsonString(v)
@@ -203,13 +198,11 @@ func resourceAwsEMRCluster() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
-							Computed: true,
 						},
 						"emr_managed_slave_security_group": {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
-							Computed: true,
 						},
 						"instance_profile": {
 							Type:     schema.TypeString,
@@ -220,7 +213,6 @@ func resourceAwsEMRCluster() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 							ForceNew: true,
-							Computed: true,
 						},
 					},
 				},
@@ -276,7 +268,7 @@ func resourceAwsEMRCluster() *schema.Resource {
 							Type:             schema.TypeString,
 							Optional:         true,
 							DiffSuppressFunc: suppressEquivalentJsonDiffs,
-							ValidateFunc:     validation.StringIsJSON,
+							ValidateFunc:     validation.ValidateJsonString,
 						},
 						"bid_price": {
 							Type:     schema.TypeString,
@@ -460,7 +452,7 @@ func resourceAwsEMRCluster() *schema.Resource {
 							Type:             schema.TypeString,
 							Optional:         true,
 							DiffSuppressFunc: suppressEquivalentJsonDiffs,
-							ValidateFunc:     validation.StringIsJSON,
+							ValidateFunc:     validation.ValidateJsonString,
 							StateFunc: func(v interface{}) string {
 								jsonString, _ := structure.NormalizeJsonString(v)
 								return jsonString
@@ -492,7 +484,7 @@ func resourceAwsEMRCluster() *schema.Resource {
 				Set: resourceAwsEMRClusterInstanceGroupHash,
 			},
 			"bootstrap_action": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Optional: true,
 				ForceNew: true,
 				Elem: &schema.Resource{
@@ -561,7 +553,6 @@ func resourceAwsEMRCluster() *schema.Resource {
 										Type:     schema.TypeMap,
 										Optional: true,
 										ForceNew: true,
-										Elem:     &schema.Schema{Type: schema.TypeString},
 									},
 								},
 							},
@@ -586,7 +577,7 @@ func resourceAwsEMRCluster() *schema.Resource {
 				Optional:         true,
 				ForceNew:         true,
 				ConflictsWith:    []string{"configurations"},
-				ValidateFunc:     validation.StringIsJSON,
+				ValidateFunc:     validation.ValidateJsonString,
 				DiffSuppressFunc: suppressEquivalentJsonDiffs,
 				StateFunc: func(v interface{}) string {
 					json, _ := structure.NormalizeJsonString(v)
@@ -633,12 +624,6 @@ func resourceAwsEMRCluster() *schema.Resource {
 				ForceNew:     true,
 				Optional:     true,
 				ValidateFunc: validateAwsEmrCustomAmiId,
-			},
-			"step_concurrency_level": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				Default:      1,
-				ValidateFunc: validation.IntBetween(1, 256),
 			},
 		},
 	}
@@ -724,7 +709,7 @@ func resourceAwsEMRClusterCreate(d *schema.ResourceData, meta interface{}) error
 	// DEPRECATED: Remove in a future major version
 	if v, ok := d.GetOk("master_instance_type"); ok {
 		masterInstanceGroupConfig := &emr.InstanceGroupConfig{
-			InstanceRole:  aws.String(emr.InstanceRoleTypeMaster),
+			InstanceRole:  aws.String("MASTER"),
 			InstanceType:  aws.String(v.(string)),
 			InstanceCount: aws.Int64(1),
 		}
@@ -745,7 +730,7 @@ func resourceAwsEMRClusterCreate(d *schema.ResourceData, meta interface{}) error
 	} else if coreInstanceCount > 0 && coreInstanceType != "" {
 		coreInstanceGroupConfig := &emr.InstanceGroupConfig{
 			InstanceCount: aws.Int64(int64(d.Get("core_instance_count").(int))),
-			InstanceRole:  aws.String(emr.InstanceRoleTypeCore),
+			InstanceRole:  aws.String("CORE"),
 			InstanceType:  aws.String(d.Get("core_instance_type").(string)),
 		}
 		instanceConfig.InstanceGroups = append(instanceConfig.InstanceGroups, coreInstanceGroupConfig)
@@ -817,7 +802,6 @@ func resourceAwsEMRClusterCreate(d *schema.ResourceData, meta interface{}) error
 		ReleaseLabel:      aws.String(d.Get("release_label").(string)),
 		ServiceRole:       aws.String(d.Get("service_role").(string)),
 		VisibleToAllUsers: aws.Bool(d.Get("visible_to_all_users").(bool)),
-		Tags:              keyvaluetags.New(d.Get("tags").(map[string]interface{})).IgnoreAws().EmrTags(),
 	}
 
 	if v, ok := d.GetOk("additional_info"); ok {
@@ -852,21 +836,21 @@ func resourceAwsEMRClusterCreate(d *schema.ResourceData, meta interface{}) error
 		params.CustomAmiId = aws.String(v.(string))
 	}
 
-	if v, ok := d.GetOk("step_concurrency_level"); ok {
-		params.StepConcurrencyLevel = aws.Int64(int64(v.(int)))
-	}
-
 	if instanceProfile != "" {
 		params.JobFlowRole = aws.String(instanceProfile)
 	}
 
 	if v, ok := d.GetOk("bootstrap_action"); ok {
-		bootstrapActions := v.([]interface{})
+		bootstrapActions := v.(*schema.Set).List()
 		params.BootstrapActions = expandBootstrapActions(bootstrapActions)
 	}
 	if v, ok := d.GetOk("step"); ok {
 		steps := v.([]interface{})
 		params.Steps = expandEmrStepConfigs(steps)
+	}
+	if v, ok := d.GetOk("tags"); ok {
+		tagsIn := v.(map[string]interface{})
+		params.Tags = expandTags(tagsIn)
 	}
 	if v, ok := d.GetOk("configurations"); ok {
 		confUrl := v.(string)
@@ -962,7 +946,6 @@ func resourceAwsEMRClusterCreate(d *schema.ResourceData, meta interface{}) error
 
 func resourceAwsEMRClusterRead(d *schema.ResourceData, meta interface{}) error {
 	emrconn := meta.(*AWSClient).emrconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	req := &emr.DescribeClusterInput{
 		ClusterId: aws.String(d.Id()),
@@ -991,8 +974,6 @@ func resourceAwsEMRClusterRead(d *schema.ResourceData, meta interface{}) error {
 		}
 
 		d.Set("cluster_state", state)
-
-		d.Set("arn", aws.StringValue(cluster.ClusterArn))
 	}
 
 	instanceGroups, err := fetchAllEMRInstanceGroups(emrconn, d.Id())
@@ -1039,10 +1020,6 @@ func resourceAwsEMRClusterRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("error setting master_instance_group: %s", err)
 	}
 
-	if err := d.Set("tags", keyvaluetags.EmrKeyValueTags(cluster.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error settings tags: %s", err)
-	}
-
 	d.Set("name", cluster.Name)
 
 	d.Set("service_role", cluster.ServiceRole)
@@ -1052,10 +1029,10 @@ func resourceAwsEMRClusterRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("log_uri", cluster.LogUri)
 	d.Set("master_public_dns", cluster.MasterPublicDnsName)
 	d.Set("visible_to_all_users", cluster.VisibleToAllUsers)
+	d.Set("tags", tagsToMapEMR(cluster.Tags))
 	d.Set("ebs_root_volume_size", cluster.EbsRootVolumeSize)
 	d.Set("scale_down_behavior", cluster.ScaleDownBehavior)
 	d.Set("termination_protection", cluster.TerminationProtected)
-	d.Set("step_concurrency_level", cluster.StepConcurrencyLevel)
 
 	if cluster.CustomAmiId != nil {
 		d.Set("custom_ami_id", cluster.CustomAmiId)
@@ -1127,7 +1104,10 @@ func resourceAwsEMRClusterRead(d *schema.ResourceData, meta interface{}) error {
 func resourceAwsEMRClusterUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).emrconn
 
+	d.Partial(true)
+
 	if d.HasChange("core_instance_count") {
+		d.SetPartial("core_instance_count")
 		log.Printf("[DEBUG] Modify EMR cluster")
 		groups, err := fetchAllEMRInstanceGroups(conn, d.Id())
 		if err != nil {
@@ -1181,6 +1161,7 @@ func resourceAwsEMRClusterUpdate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	if d.HasChange("visible_to_all_users") {
+		d.SetPartial("visible_to_all_users")
 		_, errModify := conn.SetVisibleToAllUsers(&emr.SetVisibleToAllUsersInput{
 			JobFlowIds:        []*string{aws.String(d.Id())},
 			VisibleToAllUsers: aws.Bool(d.Get("visible_to_all_users").(bool)),
@@ -1192,6 +1173,7 @@ func resourceAwsEMRClusterUpdate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	if d.HasChange("termination_protection") {
+		d.SetPartial("termination_protection")
 		_, errModify := conn.SetTerminationProtection(&emr.SetTerminationProtectionInput{
 			JobFlowIds:           []*string{aws.String(d.Id())},
 			TerminationProtected: aws.Bool(d.Get("termination_protection").(bool)),
@@ -1342,24 +1324,13 @@ func resourceAwsEMRClusterUpdate(d *schema.ResourceData, meta interface{}) error
 		}
 	}
 
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.EmrUpdateTags(conn, d.Id(), o, n); err != nil {
-			return fmt.Errorf("error updating EMR Cluster (%s) tags: %s", d.Id(), err)
-		}
+	if err := setTagsEMR(conn, d); err != nil {
+		return err
+	} else {
+		d.SetPartial("tags")
 	}
 
-	if d.HasChange("step_concurrency_level") {
-		_, errModify := conn.ModifyCluster(&emr.ModifyClusterInput{
-			ClusterId:            aws.String(d.Id()),
-			StepConcurrencyLevel: aws.Int64(int64(d.Get("step_concurrency_level").(int))),
-		})
-		if errModify != nil {
-			log.Printf("[ERROR] %s", errModify)
-			return errModify
-		}
-	}
+	d.Partial(false)
 
 	return resourceAwsEMRClusterRead(d, meta)
 }
@@ -1419,14 +1390,9 @@ func resourceAwsEMRClusterDelete(d *schema.ResourceData, meta interface{}) error
 }
 
 func countEMRRemainingInstances(resp *emr.ListInstancesOutput, emrClusterId string) int {
-	if resp == nil {
-		log.Printf("[ERROR] response is nil")
-		return 0
-	}
-
 	instanceCount := len(resp.Instances)
 
-	if instanceCount == 0 {
+	if resp == nil || instanceCount == 0 {
 		log.Printf("[DEBUG] No instances found for EMR Cluster (%s)", emrClusterId)
 		return 0
 	}
@@ -1770,6 +1736,85 @@ func emrCoreInstanceGroup(grps []*emr.InstanceGroup) *emr.InstanceGroup {
 			return grp
 		}
 	}
+	return nil
+}
+
+func expandTags(m map[string]interface{}) []*emr.Tag {
+	var result []*emr.Tag
+	for k, v := range m {
+		result = append(result, &emr.Tag{
+			Key:   aws.String(k),
+			Value: aws.String(v.(string)),
+		})
+	}
+
+	return result
+}
+
+func tagsToMapEMR(ts []*emr.Tag) map[string]string {
+	result := make(map[string]string)
+	for _, t := range ts {
+		result[*t.Key] = *t.Value
+	}
+
+	return result
+}
+
+func diffTagsEMR(oldTags, newTags []*emr.Tag) ([]*emr.Tag, []*emr.Tag) {
+	// First, we're creating everything we have
+	create := make(map[string]interface{})
+	for _, t := range newTags {
+		create[*t.Key] = *t.Value
+	}
+
+	// Build the list of what to remove
+	var remove []*emr.Tag
+	for _, t := range oldTags {
+		old, ok := create[*t.Key]
+		if !ok || old != *t.Value {
+			// Delete it!
+			remove = append(remove, t)
+		}
+	}
+
+	return expandTags(create), remove
+}
+
+func setTagsEMR(conn *emr.EMR, d *schema.ResourceData) error {
+	if d.HasChange("tags") {
+		oraw, nraw := d.GetChange("tags")
+		o := oraw.(map[string]interface{})
+		n := nraw.(map[string]interface{})
+		create, remove := diffTagsEMR(expandTags(o), expandTags(n))
+
+		// Set tags
+		if len(remove) > 0 {
+			log.Printf("[DEBUG] Removing tags: %s", remove)
+			k := make([]*string, len(remove))
+			for i, t := range remove {
+				k[i] = t.Key
+			}
+
+			_, err := conn.RemoveTags(&emr.RemoveTagsInput{
+				ResourceId: aws.String(d.Id()),
+				TagKeys:    k,
+			})
+			if err != nil {
+				return err
+			}
+		}
+		if len(create) > 0 {
+			log.Printf("[DEBUG] Creating tags: %s", create)
+			_, err := conn.AddTags(&emr.AddTagsInput{
+				ResourceId: aws.String(d.Id()),
+				Tags:       create,
+			})
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }
 

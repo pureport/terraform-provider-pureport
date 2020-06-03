@@ -59,6 +59,7 @@ func (p *hunkChangesParser) parseDiffLines(h *diffpkg.Hunk) {
 
 		lineStr := string(line)
 
+		//nolint:gocritic
 		if strings.HasPrefix(lineStr, "-") {
 			dl.typ = diffLineDeleted
 			dl.data = strings.TrimPrefix(lineStr, "-")
@@ -195,7 +196,7 @@ func (p *hunkChangesParser) parse(h *diffpkg.Hunk) []Change {
 			continue
 		}
 
-		// no deletions, only additions
+		// no deletions, only addings
 		p.handleAddedOnlyLines(addedLines)
 	}
 

@@ -15,7 +15,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsDynamoDbTable() *schema.Resource {
@@ -254,12 +253,7 @@ func resourceAwsDynamoDbTable() *schema.Resource {
 						"enabled": {
 							Type:     schema.TypeBool,
 							Required: true,
-						},
-						"kms_key_arn": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Computed:     true,
-							ValidateFunc: validateArn,
+							ForceNew: true,
 						},
 					},
 				},
@@ -274,18 +268,6 @@ func resourceAwsDynamoDbTable() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 						"enabled": {
 							Type:     schema.TypeBool,
-							Required: true,
-						},
-					},
-				},
-			},
-			"replica": {
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"region_name": {
-							Type:     schema.TypeString,
 							Required: true,
 						},
 					},
@@ -307,7 +289,7 @@ func resourceAwsDynamoDbTableCreate(d *schema.ResourceData, meta interface{}) er
 
 	log.Printf("[DEBUG] Creating DynamoDB table with key schema: %#v", keySchemaMap)
 
-	tags := keyvaluetags.New(d.Get("tags").(map[string]interface{})).IgnoreAws().DynamodbTags()
+	tags := tagsFromMapDynamoDb(d.Get("tags").(map[string]interface{}))
 
 	req := &dynamodb.CreateTableInput{
 		TableName:   aws.String(d.Get("name").(string)),
@@ -362,7 +344,13 @@ func resourceAwsDynamoDbTableCreate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if v, ok := d.GetOk("server_side_encryption"); ok {
-		req.SSESpecification = expandDynamoDbEncryptAtRestOptions(v.([]interface{}))
+		options := v.([]interface{})
+		if options[0] == nil {
+			return fmt.Errorf("At least one field is expected inside server_side_encryption")
+		}
+
+		s := options[0].(map[string]interface{})
+		req.SSESpecification = expandDynamoDbEncryptAtRestOptions(s)
 	}
 
 	var output *dynamodb.CreateTableOutput
@@ -413,7 +401,7 @@ func resourceAwsDynamoDbTableCreate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if requiresTagging {
-		if err := keyvaluetags.DynamodbUpdateTags(conn, d.Get("arn").(string), nil, tags); err != nil {
+		if err := setTagsDynamoDb(conn, d); err != nil {
 			return fmt.Errorf("error adding DynamoDB Table (%s) tags: %s", d.Id(), err)
 		}
 	}
@@ -427,12 +415,6 @@ func resourceAwsDynamoDbTableCreate(d *schema.ResourceData, meta interface{}) er
 	if d.Get("point_in_time_recovery.0.enabled").(bool) {
 		if err := updateDynamoDbPITR(d, conn); err != nil {
 			return fmt.Errorf("error enabling DynamoDB Table (%s) point in time recovery: %s", d.Id(), err)
-		}
-	}
-
-	if v := d.Get("replica").(*schema.Set); v.Len() > 0 {
-		if err := createDynamoDbReplicas(d.Id(), v.List(), d.Timeout(schema.TimeoutCreate), conn); err != nil {
-			return fmt.Errorf("error creating DynamoDB Table (%s) replicas: %s", d.Id(), err)
 		}
 	}
 
@@ -579,21 +561,6 @@ func resourceAwsDynamoDbTableUpdate(d *schema.ResourceData, meta interface{}) er
 		}
 	}
 
-	if d.HasChange("server_side_encryption") {
-		// "ValidationException: One or more parameter values were invalid: Server-Side Encryption modification must be the only operation in the request".
-		_, err := conn.UpdateTable(&dynamodb.UpdateTableInput{
-			TableName:        aws.String(d.Id()),
-			SSESpecification: expandDynamoDbEncryptAtRestOptions(d.Get("server_side_encryption").([]interface{})),
-		})
-		if err != nil {
-			return fmt.Errorf("error updating DynamoDB Table (%s) SSE: %s", d.Id(), err)
-		}
-
-		if err := waitForDynamoDbSSEUpdateToBeCompleted(d.Id(), d.Timeout(schema.TimeoutUpdate), conn); err != nil {
-			return fmt.Errorf("error waiting for DynamoDB Table (%s) SSE update: %s", d.Id(), err)
-		}
-	}
-
 	if d.HasChange("ttl") {
 		if err := updateDynamoDbTimeToLive(d.Id(), d.Get("ttl").([]interface{}), conn); err != nil {
 			return fmt.Errorf("error updating DynamoDB Table (%s) time to live: %s", d.Id(), err)
@@ -601,8 +568,7 @@ func resourceAwsDynamoDbTableUpdate(d *schema.ResourceData, meta interface{}) er
 	}
 
 	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-		if err := keyvaluetags.DynamodbUpdateTags(conn, d.Get("arn").(string), o, n); err != nil {
+		if err := setTagsDynamoDb(conn, d); err != nil {
 			return fmt.Errorf("error updating DynamoDB Table (%s) tags: %s", d.Id(), err)
 		}
 	}
@@ -613,41 +579,11 @@ func resourceAwsDynamoDbTableUpdate(d *schema.ResourceData, meta interface{}) er
 		}
 	}
 
-	if d.HasChange("replica") {
-		if err := updateDynamoDbReplica(d, conn); err != nil {
-			return fmt.Errorf("error updating DynamoDB Table (%s) replica: %s", d.Id(), err)
-		}
-	}
-
 	return resourceAwsDynamoDbTableRead(d, meta)
-}
-
-func updateDynamoDbReplica(d *schema.ResourceData, conn *dynamodb.DynamoDB) error {
-	oRaw, nRaw := d.GetChange("replica")
-	o := oRaw.(*schema.Set)
-	n := nRaw.(*schema.Set)
-
-	removed := o.Difference(n).List()
-	added := n.Difference(o).List()
-
-	if len(added) > 0 {
-		if err := createDynamoDbReplicas(d.Id(), added, d.Timeout(schema.TimeoutUpdate), conn); err != nil {
-			return err
-		}
-	}
-
-	if len(removed) > 0 {
-		if err := deleteDynamoDbReplicas(d.Id(), removed, d.Timeout(schema.TimeoutUpdate), conn); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func resourceAwsDynamoDbTableRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).dynamodbconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	result, err := conn.DescribeTable(&dynamodb.DescribeTableInput{
 		TableName: aws.String(d.Id()),
@@ -677,15 +613,11 @@ func resourceAwsDynamoDbTableRead(d *schema.ResourceData, meta interface{}) erro
 		return fmt.Errorf("error setting ttl: %s", err)
 	}
 
-	tags, err := keyvaluetags.DynamodbListTags(conn, d.Get("arn").(string))
-
-	if err != nil && !isAWSErr(err, "UnknownOperationException", "Tagging is not currently supported in DynamoDB Local.") {
-		return fmt.Errorf("error listing tags for DynamoDB Table (%s): %s", d.Get("arn").(string), err)
+	tags, err := readDynamoDbTableTags(d.Get("arn").(string), conn)
+	if err != nil {
+		return err
 	}
-
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
+	d.Set("tags", tags)
 
 	pitrOut, err := conn.DescribeContinuousBackups(&dynamodb.DescribeContinuousBackupsInput{
 		TableName: aws.String(d.Id()),
@@ -702,12 +634,6 @@ func resourceAwsDynamoDbTableDelete(d *schema.ResourceData, meta interface{}) er
 	conn := meta.(*AWSClient).dynamodbconn
 
 	log.Printf("[DEBUG] DynamoDB delete table: %s", d.Id())
-
-	if replicas := d.Get("replica").(*schema.Set).List(); len(replicas) > 0 {
-		if err := deleteDynamoDbReplicas(d.Id(), replicas, d.Timeout(schema.TimeoutDelete), conn); err != nil {
-			return fmt.Errorf("error deleting DynamoDB Table (%s) replicas: %s", d.Id(), err)
-		}
-	}
 
 	err := deleteAwsDynamoDbTable(d.Id(), conn)
 	if err != nil {
@@ -751,81 +677,12 @@ func deleteAwsDynamoDbTable(tableName string, conn *dynamodb.DynamoDB) error {
 		}
 		return nil
 	})
-
 	if isResourceTimeoutError(err) {
 		_, err = conn.DeleteTable(input)
 	}
-
-	return err
-}
-
-func deleteDynamoDbReplicas(tableName string, tfList []interface{}, timeout time.Duration, conn *dynamodb.DynamoDB) error {
-	var ops []*dynamodb.ReplicationGroupUpdate
-	var regionNames []string
-
-	for _, tfMapRaw := range tfList {
-		tfMap, ok := tfMapRaw.(map[string]interface{})
-
-		if !ok {
-			continue
-		}
-
-		var regionName string
-
-		if v, ok := tfMap["region_name"].(string); ok {
-			regionName = v
-		}
-
-		if regionName == "" {
-			continue
-		}
-
-		ops = append(ops, &dynamodb.ReplicationGroupUpdate{
-			Delete: &dynamodb.DeleteReplicationGroupMemberAction{
-				RegionName: aws.String(regionName),
-			},
-		})
-		regionNames = append(regionNames, regionName)
-	}
-
-	if len(ops) == 0 {
-		return nil
-	}
-
-	input := &dynamodb.UpdateTableInput{
-		TableName:      aws.String(tableName),
-		ReplicaUpdates: ops,
-	}
-
-	err := resource.Retry(20*time.Minute, func() *resource.RetryError {
-		_, err := conn.UpdateTable(input)
-		if err != nil {
-			if isAWSErr(err, "ThrottlingException", "") {
-				return resource.RetryableError(err)
-			}
-			if isAWSErr(err, dynamodb.ErrCodeLimitExceededException, "can be created, updated, or deleted simultaneously") {
-				return resource.RetryableError(err)
-			}
-
-			return resource.NonRetryableError(err)
-		}
-		return nil
-	})
-
-	if isResourceTimeoutError(err) {
-		_, err = conn.UpdateTable(input)
-	}
-
 	if err != nil {
-		return fmt.Errorf("error deleting DynamoDB Table (%s) replicas: %s", tableName, err)
+		return fmt.Errorf("Error deleting DynamoDB table: %s", err)
 	}
-
-	for _, regionName := range regionNames {
-		if err := waitForDynamoDbReplicaDeleteToBeCompleted(tableName, regionName, timeout, conn); err != nil {
-			return fmt.Errorf("error waiting for DynamoDB Table (%s) replica (%s) deletion: %s", tableName, regionName, err)
-		}
-	}
-
 	return nil
 }
 
@@ -863,157 +720,6 @@ func waitForDynamodbTableDeletion(conn *dynamodb.DynamoDB, tableName string, tim
 	_, err := stateConf.WaitForState()
 
 	return err
-}
-
-func waitForDynamoDbReplicaUpdateToBeCompleted(tableName string, region string, timeout time.Duration, conn *dynamodb.DynamoDB) error {
-	stateConf := &resource.StateChangeConf{
-		Pending: []string{
-			dynamodb.ReplicaStatusCreating,
-			dynamodb.ReplicaStatusUpdating,
-			dynamodb.ReplicaStatusDeleting,
-		},
-		Target: []string{
-			dynamodb.ReplicaStatusActive,
-		},
-		Timeout: timeout,
-		Refresh: func() (interface{}, string, error) {
-			result, err := conn.DescribeTable(&dynamodb.DescribeTableInput{
-				TableName: aws.String(tableName),
-			})
-			if err != nil {
-				return 42, "", err
-			}
-			log.Printf("[DEBUG] DynamoDB replicas: %s", result.Table.Replicas)
-
-			var targetReplica *dynamodb.ReplicaDescription
-
-			for _, replica := range result.Table.Replicas {
-				if aws.StringValue(replica.RegionName) == region {
-					targetReplica = replica
-					break
-				}
-			}
-
-			if targetReplica == nil {
-				return result, dynamodb.ReplicaStatusCreating, nil
-			}
-
-			return result, aws.StringValue(targetReplica.ReplicaStatus), nil
-		},
-	}
-	_, err := stateConf.WaitForState()
-
-	return err
-}
-
-func waitForDynamoDbReplicaDeleteToBeCompleted(tableName string, region string, timeout time.Duration, conn *dynamodb.DynamoDB) error {
-	stateConf := &resource.StateChangeConf{
-		Pending: []string{
-			dynamodb.ReplicaStatusCreating,
-			dynamodb.ReplicaStatusUpdating,
-			dynamodb.ReplicaStatusDeleting,
-			dynamodb.ReplicaStatusActive,
-		},
-		Target:  []string{""},
-		Timeout: timeout,
-		Refresh: func() (interface{}, string, error) {
-			result, err := conn.DescribeTable(&dynamodb.DescribeTableInput{
-				TableName: aws.String(tableName),
-			})
-			if err != nil {
-				return 42, "", err
-			}
-
-			log.Printf("[DEBUG] all replicas for waiting: %s", result.Table.Replicas)
-			var targetReplica *dynamodb.ReplicaDescription
-
-			for _, replica := range result.Table.Replicas {
-				if aws.StringValue(replica.RegionName) == region {
-					targetReplica = replica
-					break
-				}
-			}
-
-			if targetReplica == nil {
-				return result, "", nil
-			}
-
-			return result, aws.StringValue(targetReplica.ReplicaStatus), nil
-		},
-	}
-	_, err := stateConf.WaitForState()
-
-	return err
-}
-
-func createDynamoDbReplicas(tableName string, tfList []interface{}, timeout time.Duration, conn *dynamodb.DynamoDB) error {
-	var ops []*dynamodb.ReplicationGroupUpdate
-	var regionNames []string
-
-	for _, tfMapRaw := range tfList {
-		tfMap, ok := tfMapRaw.(map[string]interface{})
-
-		if !ok {
-			continue
-		}
-
-		var regionName string
-
-		if v, ok := tfMap["region_name"].(string); ok {
-			regionName = v
-		}
-
-		if regionName == "" {
-			continue
-		}
-
-		ops = append(ops, &dynamodb.ReplicationGroupUpdate{
-			Create: &dynamodb.CreateReplicationGroupMemberAction{
-				RegionName: aws.String(regionName),
-			},
-		})
-		regionNames = append(regionNames, regionName)
-	}
-
-	if len(ops) == 0 {
-		return nil
-	}
-
-	input := &dynamodb.UpdateTableInput{
-		TableName:      aws.String(tableName),
-		ReplicaUpdates: ops,
-	}
-
-	err := resource.Retry(20*time.Minute, func() *resource.RetryError {
-		_, err := conn.UpdateTable(input)
-		if err != nil {
-			if isAWSErr(err, "ThrottlingException", "") {
-				return resource.RetryableError(err)
-			}
-			if isAWSErr(err, dynamodb.ErrCodeLimitExceededException, "can be created, updated, or deleted simultaneously") {
-				return resource.RetryableError(err)
-			}
-
-			return resource.NonRetryableError(err)
-		}
-		return nil
-	})
-
-	if isResourceTimeoutError(err) {
-		_, err = conn.UpdateTable(input)
-	}
-
-	if err != nil {
-		return fmt.Errorf("error creating DynamoDB Table (%s) replicas: %s", tableName, err)
-	}
-
-	for _, regionName := range regionNames {
-		if err := waitForDynamoDbReplicaUpdateToBeCompleted(tableName, regionName, timeout, conn); err != nil {
-			return fmt.Errorf("error waiting for DynamoDB Table (%s) replica (%s) creation: %s", tableName, regionName, err)
-		}
-	}
-
-	return nil
 }
 
 func updateDynamoDbTimeToLive(tableName string, ttlList []interface{}, conn *dynamodb.DynamoDB) error {
@@ -1075,6 +781,23 @@ func updateDynamoDbPITR(d *schema.ResourceData, conn *dynamodb.DynamoDB) error {
 	}
 
 	return nil
+}
+
+func readDynamoDbTableTags(arn string, conn *dynamodb.DynamoDB) (map[string]string, error) {
+	output, err := conn.ListTagsOfResource(&dynamodb.ListTagsOfResourceInput{
+		ResourceArn: aws.String(arn),
+	})
+
+	// Do not fail if interfacing with dynamodb-local
+	if err != nil && !isAWSErr(err, "UnknownOperationException", "Tagging is not currently supported in DynamoDB Local.") {
+		return nil, fmt.Errorf("Error reading tags from dynamodb resource: %s", err)
+	}
+
+	result := tagsToMapDynamoDb(output.Tags)
+
+	// TODO Read NextToken if available
+
+	return result, nil
 }
 
 // Waiters
@@ -1243,38 +966,6 @@ func waitForDynamoDbTtlUpdateToBeCompleted(tableName string, toEnable bool, conn
 	}
 
 	_, err := stateConf.WaitForState()
-	return err
-}
-
-func waitForDynamoDbSSEUpdateToBeCompleted(tableName string, timeout time.Duration, conn *dynamodb.DynamoDB) error {
-	stateConf := &resource.StateChangeConf{
-		Pending: []string{
-			dynamodb.SSEStatusDisabling,
-			dynamodb.SSEStatusEnabling,
-			dynamodb.SSEStatusUpdating,
-		},
-		Target: []string{
-			dynamodb.SSEStatusDisabled,
-			dynamodb.SSEStatusEnabled,
-		},
-		Timeout: timeout,
-		Refresh: func() (interface{}, string, error) {
-			result, err := conn.DescribeTable(&dynamodb.DescribeTableInput{
-				TableName: aws.String(tableName),
-			})
-			if err != nil {
-				return 42, "", err
-			}
-
-			// Disabling SSE returns null SSEDescription.
-			if result.Table.SSEDescription == nil {
-				return result, dynamodb.SSEStatusDisabled, nil
-			}
-			return result, aws.StringValue(result.Table.SSEDescription.Status), nil
-		},
-	}
-	_, err := stateConf.WaitForState()
-
 	return err
 }
 

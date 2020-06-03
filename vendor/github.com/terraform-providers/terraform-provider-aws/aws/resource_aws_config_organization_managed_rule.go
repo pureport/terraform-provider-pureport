@@ -53,7 +53,7 @@ func resourceAwsConfigOrganizationManagedRule() *schema.Resource {
 				DiffSuppressFunc: suppressEquivalentJsonDiffs,
 				ValidateFunc: validation.All(
 					validation.StringLenBetween(0, 2048),
-					validation.StringIsJSON,
+					validation.ValidateJsonString,
 				),
 			},
 			"maximum_execution_frequency": {

@@ -2,12 +2,12 @@ package aws
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/servicediscovery"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/service/servicediscovery/waiter"
 )
 
 func resourceAwsServiceDiscoveryHttpNamespace() *schema.Resource {
@@ -54,34 +54,24 @@ func resourceAwsServiceDiscoveryHttpNamespaceCreate(d *schema.ResourceData, meta
 		input.Description = aws.String(v.(string))
 	}
 
-	output, err := conn.CreateHttpNamespace(input)
-
+	resp, err := conn.CreateHttpNamespace(input)
 	if err != nil {
-		return fmt.Errorf("error creating Service Discovery HTTP Namespace (%s): %w", name, err)
+		return fmt.Errorf("error creating Service Discovery HTTP Namespace (%s): %s", name, err)
 	}
 
-	if output == nil || output.OperationId == nil {
-		return fmt.Errorf("error creating Service Discovery HTTP Namespace (%s): creation response missing Operation ID", name)
+	stateConf := &resource.StateChangeConf{
+		Pending: []string{servicediscovery.OperationStatusSubmitted, servicediscovery.OperationStatusPending},
+		Target:  []string{servicediscovery.OperationStatusSuccess},
+		Refresh: servicediscoveryOperationRefreshStatusFunc(conn, *resp.OperationId),
+		Timeout: 5 * time.Minute,
 	}
 
-	operationOutput, err := waiter.OperationSuccess(conn, aws.StringValue(output.OperationId))
-
+	opresp, err := stateConf.WaitForState()
 	if err != nil {
-		return fmt.Errorf("error waiting for Service Discovery HTTP Namespace (%s) creation: %w", name, err)
+		return fmt.Errorf("error waiting for Service Discovery HTTP Namespace (%s) creation: %s", name, err)
 	}
 
-	if operationOutput == nil || operationOutput.Operation == nil {
-		return fmt.Errorf("error creating Service Discovery HTTP Namespace (%s): operation response missing Operation information", name)
-	}
-
-	namespaceID, ok := operationOutput.Operation.Targets[servicediscovery.OperationTargetTypeNamespace]
-
-	if !ok {
-		return fmt.Errorf("error creating Service Discovery HTTP Namespace (%s): operation response missing Namespace ID", name)
-	}
-
-	d.SetId(aws.StringValue(namespaceID))
-
+	d.SetId(*opresp.(*servicediscovery.GetOperationOutput).Operation.Targets["NAMESPACE"])
 	return resourceAwsServiceDiscoveryHttpNamespaceRead(d, meta)
 }
 
@@ -115,20 +105,25 @@ func resourceAwsServiceDiscoveryHttpNamespaceDelete(d *schema.ResourceData, meta
 		Id: aws.String(d.Id()),
 	}
 
-	output, err := conn.DeleteNamespace(input)
-
-	if isAWSErr(err, servicediscovery.ErrCodeNamespaceNotFound, "") {
-		return nil
-	}
-
+	resp, err := conn.DeleteNamespace(input)
 	if err != nil {
-		return fmt.Errorf("error deleting Service Discovery HTTP Namespace (%s): %w", d.Id(), err)
+		if isAWSErr(err, servicediscovery.ErrCodeNamespaceNotFound, "") {
+			d.SetId("")
+			return nil
+		}
+		return fmt.Errorf("error deleting Service Discovery HTTP Namespace (%s): %s", d.Id(), err)
 	}
 
-	if output != nil && output.OperationId != nil {
-		if _, err := waiter.OperationSuccess(conn, aws.StringValue(output.OperationId)); err != nil {
-			return fmt.Errorf("error waiting for Service Discovery HTTP Namespace (%s) deletion: %w", d.Id(), err)
-		}
+	stateConf := &resource.StateChangeConf{
+		Pending: []string{servicediscovery.OperationStatusSubmitted, servicediscovery.OperationStatusPending},
+		Target:  []string{servicediscovery.OperationStatusSuccess},
+		Refresh: servicediscoveryOperationRefreshStatusFunc(conn, *resp.OperationId),
+		Timeout: 5 * time.Minute,
+	}
+
+	_, err = stateConf.WaitForState()
+	if err != nil {
+		return fmt.Errorf("error waiting for Service Discovery HTTP Namespace (%s) deletion: %s", d.Id(), err)
 	}
 
 	return nil

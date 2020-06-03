@@ -17,6 +17,7 @@ func dataSourceAwsEcsCluster() *schema.Resource {
 			"cluster_name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"arn": {

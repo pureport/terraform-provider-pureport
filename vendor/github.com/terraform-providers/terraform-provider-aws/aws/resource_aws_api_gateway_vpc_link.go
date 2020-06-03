@@ -33,7 +33,7 @@ func resourceAwsApiGatewayVpcLink() *schema.Resource {
 				Optional: true,
 			},
 			"target_arns": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				MaxItems: 1,
 				Required: true,
 				ForceNew: true,
@@ -49,12 +49,12 @@ func resourceAwsApiGatewayVpcLink() *schema.Resource {
 }
 
 func resourceAwsApiGatewayVpcLinkCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	tags := keyvaluetags.New(d.Get("tags").(map[string]interface{})).IgnoreAws().ApigatewayTags()
 
 	input := &apigateway.CreateVpcLinkInput{
 		Name:       aws.String(d.Get("name").(string)),
-		TargetArns: expandStringList(d.Get("target_arns").([]interface{})),
+		TargetArns: expandStringList(d.Get("target_arns").(*schema.Set).List()),
 		Tags:       tags,
 	}
 	if v, ok := d.GetOk("description"); ok {
@@ -86,8 +86,7 @@ func resourceAwsApiGatewayVpcLinkCreate(d *schema.ResourceData, meta interface{}
 }
 
 func resourceAwsApiGatewayVpcLinkRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
+	conn := meta.(*AWSClient).apigateway
 
 	input := &apigateway.GetVpcLinkInput{
 		VpcLinkId: aws.String(d.Id()),
@@ -103,7 +102,7 @@ func resourceAwsApiGatewayVpcLinkRead(d *schema.ResourceData, meta interface{}) 
 		return err
 	}
 
-	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(resp.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(resp.Tags).IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -122,7 +121,7 @@ func resourceAwsApiGatewayVpcLinkRead(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceAwsApiGatewayVpcLinkUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 
 	operations := make([]*apigateway.PatchOperation, 0)
 
@@ -181,7 +180,7 @@ func resourceAwsApiGatewayVpcLinkUpdate(d *schema.ResourceData, meta interface{}
 }
 
 func resourceAwsApiGatewayVpcLinkDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 
 	input := &apigateway.DeleteVpcLinkInput{
 		VpcLinkId: aws.String(d.Id()),

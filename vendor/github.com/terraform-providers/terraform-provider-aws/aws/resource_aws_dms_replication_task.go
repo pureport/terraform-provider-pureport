@@ -12,7 +12,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsDmsReplicationTask() *schema.Resource {
@@ -60,7 +59,7 @@ func resourceAwsDmsReplicationTask() *schema.Resource {
 			"replication_task_settings": {
 				Type:             schema.TypeString,
 				Optional:         true,
-				ValidateFunc:     validation.StringIsJSON,
+				ValidateFunc:     validation.ValidateJsonString,
 				DiffSuppressFunc: suppressEquivalentJsonDiffs,
 			},
 			"source_endpoint_arn": {
@@ -72,10 +71,13 @@ func resourceAwsDmsReplicationTask() *schema.Resource {
 			"table_mappings": {
 				Type:             schema.TypeString,
 				Required:         true,
-				ValidateFunc:     validation.StringIsJSON,
+				ValidateFunc:     validation.ValidateJsonString,
 				DiffSuppressFunc: suppressEquivalentJsonDiffs,
 			},
-			"tags": tagsSchema(),
+			"tags": {
+				Type:     schema.TypeMap,
+				Optional: true,
+			},
 			"target_endpoint_arn": {
 				Type:         schema.TypeString,
 				Required:     true,
@@ -95,7 +97,7 @@ func resourceAwsDmsReplicationTaskCreate(d *schema.ResourceData, meta interface{
 		ReplicationTaskIdentifier: aws.String(d.Get("replication_task_id").(string)),
 		SourceEndpointArn:         aws.String(d.Get("source_endpoint_arn").(string)),
 		TableMappings:             aws.String(d.Get("table_mappings").(string)),
-		Tags:                      keyvaluetags.New(d.Get("tags").(map[string]interface{})).IgnoreAws().DatabasemigrationserviceTags(),
+		Tags:                      dmsTagsFromMap(d.Get("tags").(map[string]interface{})),
 		TargetEndpointArn:         aws.String(d.Get("target_endpoint_arn").(string)),
 	}
 
@@ -141,7 +143,6 @@ func resourceAwsDmsReplicationTaskCreate(d *schema.ResourceData, meta interface{
 
 func resourceAwsDmsReplicationTaskRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).dmsconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	response, err := conn.DescribeReplicationTasks(&dms.DescribeReplicationTasksInput{
 		Filters: []*dms.Filter{
@@ -165,15 +166,13 @@ func resourceAwsDmsReplicationTaskRead(d *schema.ResourceData, meta interface{})
 		return err
 	}
 
-	tags, err := keyvaluetags.DatabasemigrationserviceListTags(conn, d.Get("replication_task_arn").(string))
-
+	tagsResp, err := conn.ListTagsForResource(&dms.ListTagsForResourceInput{
+		ResourceArn: aws.String(d.Get("replication_task_arn").(string)),
+	})
 	if err != nil {
-		return fmt.Errorf("error listing tags for DMS Replication Task (%s): %s", d.Get("replication_task_arn").(string), err)
+		return err
 	}
-
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
+	d.Set("tags", dmsTagsToMap(tagsResp.TagList))
 
 	return nil
 }
@@ -211,11 +210,9 @@ func resourceAwsDmsReplicationTaskUpdate(d *schema.ResourceData, meta interface{
 	}
 
 	if d.HasChange("tags") {
-		arn := d.Get("replication_task_arn").(string)
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.DatabasemigrationserviceUpdateTags(conn, arn, o, n); err != nil {
-			return fmt.Errorf("error updating DMS Replication Task (%s) tags: %s", arn, err)
+		err := dmsSetTags(d.Get("replication_task_arn").(string), d, meta)
+		if err != nil {
+			return err
 		}
 	}
 

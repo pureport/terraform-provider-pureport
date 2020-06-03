@@ -64,13 +64,13 @@ func resourceAwsAthenaDatabase() *schema.Resource {
 	}
 }
 
-func expandAthenaResultConfiguration(bucket string, encryptionConfigurationList []interface{}) *athena.ResultConfiguration {
+func expandAthenaResultConfiguration(bucket string, encryptionConfigurationList []interface{}) (*athena.ResultConfiguration, error) {
 	resultConfig := athena.ResultConfiguration{
 		OutputLocation: aws.String("s3://" + bucket),
 	}
 
 	if len(encryptionConfigurationList) <= 0 {
-		return &resultConfig
+		return &resultConfig, nil
 	}
 
 	data := encryptionConfigurationList[0].(map[string]interface{})
@@ -87,15 +87,20 @@ func expandAthenaResultConfiguration(bucket string, encryptionConfigurationList 
 
 	resultConfig.EncryptionConfiguration = &encryptionConfig
 
-	return &resultConfig
+	return &resultConfig, nil
 }
 
 func resourceAwsAthenaDatabaseCreate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).athenaconn
 
+	resultConfig, err := expandAthenaResultConfiguration(d.Get("bucket").(string), d.Get("encryption_configuration").([]interface{}))
+	if err != nil {
+		return err
+	}
+
 	input := &athena.StartQueryExecutionInput{
 		QueryString:         aws.String(fmt.Sprintf("create database `%s`;", d.Get("name").(string))),
-		ResultConfiguration: expandAthenaResultConfiguration(d.Get("bucket").(string), d.Get("encryption_configuration").([]interface{})),
+		ResultConfiguration: resultConfig,
 	}
 
 	resp, err := conn.StartQueryExecution(input)
@@ -113,9 +118,14 @@ func resourceAwsAthenaDatabaseCreate(d *schema.ResourceData, meta interface{}) e
 func resourceAwsAthenaDatabaseRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).athenaconn
 
+	resultConfig, err := expandAthenaResultConfiguration(d.Get("bucket").(string), d.Get("encryption_configuration").([]interface{}))
+	if err != nil {
+		return err
+	}
+
 	input := &athena.StartQueryExecutionInput{
 		QueryString:         aws.String(fmt.Sprint("show databases;")),
-		ResultConfiguration: expandAthenaResultConfiguration(d.Get("bucket").(string), d.Get("encryption_configuration").([]interface{})),
+		ResultConfiguration: resultConfig,
 	}
 
 	resp, err := conn.StartQueryExecution(input)
@@ -136,6 +146,11 @@ func resourceAwsAthenaDatabaseUpdate(d *schema.ResourceData, meta interface{}) e
 func resourceAwsAthenaDatabaseDelete(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).athenaconn
 
+	resultConfig, err := expandAthenaResultConfiguration(d.Get("bucket").(string), d.Get("encryption_configuration").([]interface{}))
+	if err != nil {
+		return err
+	}
+
 	name := d.Get("name").(string)
 
 	queryString := fmt.Sprintf("drop database `%s`", name)
@@ -146,7 +161,7 @@ func resourceAwsAthenaDatabaseDelete(d *schema.ResourceData, meta interface{}) e
 
 	input := &athena.StartQueryExecutionInput{
 		QueryString:         aws.String(queryString),
-		ResultConfiguration: expandAthenaResultConfiguration(d.Get("bucket").(string), d.Get("encryption_configuration").([]interface{})),
+		ResultConfiguration: resultConfig,
 	}
 
 	resp, err := conn.StartQueryExecution(input)

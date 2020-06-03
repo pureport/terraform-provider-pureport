@@ -273,9 +273,7 @@ func expandGlueS3Encryption(m map[string]interface{}) *glue.S3Encryption {
 	}
 
 	if v, ok := m["kms_key_arn"]; ok {
-		if v.(string) != "" {
-			s3Encryption.KmsKeyArn = aws.String(v.(string))
-		}
+		s3Encryption.KmsKeyArn = aws.String(v.(string))
 	}
 
 	return s3Encryption

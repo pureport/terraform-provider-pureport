@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func dataSourceAwsVpcDhcpOptions() *schema.Resource {
@@ -57,7 +56,6 @@ func dataSourceAwsVpcDhcpOptions() *schema.Resource {
 
 func dataSourceAwsVpcDhcpOptionsRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	input := &ec2.DescribeDhcpOptionsInput{}
 
@@ -124,7 +122,7 @@ func dataSourceAwsVpcDhcpOptionsRead(d *schema.ResourceData, meta interface{}) e
 		}
 	}
 
-	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(output.DhcpOptions[0].Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", d.Set("tags", tagsToMap(output.DhcpOptions[0].Tags))); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 	d.Set("owner_id", output.DhcpOptions[0].OwnerId)

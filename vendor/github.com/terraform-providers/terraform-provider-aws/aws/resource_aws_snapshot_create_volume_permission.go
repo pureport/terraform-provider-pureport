@@ -2,7 +2,6 @@ package aws
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
@@ -14,6 +13,7 @@ import (
 
 func resourceAwsSnapshotCreateVolumePermission() *schema.Resource {
 	return &schema.Resource{
+		Exists: resourceAwsSnapshotCreateVolumePermissionExists,
 		Create: resourceAwsSnapshotCreateVolumePermissionCreate,
 		Read:   resourceAwsSnapshotCreateVolumePermissionRead,
 		Delete: resourceAwsSnapshotCreateVolumePermissionDelete,
@@ -31,6 +31,16 @@ func resourceAwsSnapshotCreateVolumePermission() *schema.Resource {
 			},
 		},
 	}
+}
+
+func resourceAwsSnapshotCreateVolumePermissionExists(d *schema.ResourceData, meta interface{}) (bool, error) {
+	conn := meta.(*AWSClient).ec2conn
+
+	snapshotID, accountID, err := resourceAwsSnapshotCreateVolumePermissionParseID(d.Id())
+	if err != nil {
+		return false, err
+	}
+	return hasCreateVolumePermission(conn, snapshotID, accountID)
 }
 
 func resourceAwsSnapshotCreateVolumePermissionCreate(d *schema.ResourceData, meta interface{}) error {
@@ -73,23 +83,6 @@ func resourceAwsSnapshotCreateVolumePermissionCreate(d *schema.ResourceData, met
 }
 
 func resourceAwsSnapshotCreateVolumePermissionRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).ec2conn
-
-	snapshotID, accountID, err := resourceAwsSnapshotCreateVolumePermissionParseID(d.Id())
-	if err != nil {
-		return err
-	}
-
-	exists, err := hasCreateVolumePermission(conn, snapshotID, accountID)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		log.Printf("[WARN] snapshot createVolumePermission (%s) not found, removing from state", d.Id())
-		d.SetId("")
-		return nil
-	}
-
 	return nil
 }
 

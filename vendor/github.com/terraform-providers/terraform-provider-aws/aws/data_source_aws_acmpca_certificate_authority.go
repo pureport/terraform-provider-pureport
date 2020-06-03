@@ -3,7 +3,6 @@ package aws
 import (
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/acmpca"
@@ -95,7 +94,6 @@ func dataSourceAwsAcmpcaCertificateAuthority() *schema.Resource {
 
 func dataSourceAwsAcmpcaCertificateAuthorityRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).acmpcaconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 	certificateAuthorityArn := d.Get("arn").(string)
 
 	describeCertificateAuthorityInput := &acmpca.DescribeCertificateAuthorityInput{
@@ -115,8 +113,8 @@ func dataSourceAwsAcmpcaCertificateAuthorityRead(d *schema.ResourceData, meta in
 	certificateAuthority := describeCertificateAuthorityOutput.CertificateAuthority
 
 	d.Set("arn", certificateAuthority.Arn)
-	d.Set("not_after", aws.TimeValue(certificateAuthority.NotAfter).Format(time.RFC3339))
-	d.Set("not_before", aws.TimeValue(certificateAuthority.NotBefore).Format(time.RFC3339))
+	d.Set("not_after", certificateAuthority.NotAfter)
+	d.Set("not_before", certificateAuthority.NotBefore)
 
 	if err := d.Set("revocation_configuration", flattenAcmpcaRevocationConfiguration(certificateAuthority.RevocationConfiguration)); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
@@ -170,7 +168,7 @@ func dataSourceAwsAcmpcaCertificateAuthorityRead(d *schema.ResourceData, meta in
 		return fmt.Errorf("error listing tags for ACMPCA Certificate Authority (%s): %s", certificateAuthorityArn, err)
 	}
 
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tags.IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 

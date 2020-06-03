@@ -1284,8 +1284,7 @@ func (c *IAM) CreateOpenIDConnectProviderRequest(input *CreateOpenIDConnectProvi
 //    * A list of client IDs (also known as audiences) that identify the application
 //    or applications that are allowed to authenticate using the OIDC provider
 //
-//    * A list of thumbprints of one or more server certificates that the IdP
-//    uses
+//    * A list of thumbprints of the server certificate(s) that the IdP uses
 //
 // You get all of this information from the OIDC IdP that you want to use to
 // access AWS.
@@ -5302,9 +5301,7 @@ func (c *IAM) GenerateServiceLastAccessedDetailsRequest(input *GenerateServiceLa
 //    * GetServiceLastAccessedDetails – Use this operation for users, groups,
 //    roles, or policies to list every AWS service that the resource could access
 //    using permissions policies. For each service, the response includes information
-//    about the most recent access attempt. The JobId returned by GenerateServiceLastAccessedDetail
-//    must be used by the same role within a session, or by the same user when
-//    used to call GetServiceLastAccessedDetail.
+//    about the most recent access attempt.
 //
 //    * GetServiceLastAccessedDetailsWithEntities – Use this operation for
 //    groups and policies to list information about the associated entities
@@ -5586,12 +5583,10 @@ func (c *IAM) GetAccountAuthorizationDetailsPagesWithContext(ctx aws.Context, in
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetAccountAuthorizationDetailsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetAccountAuthorizationDetailsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -6183,12 +6178,10 @@ func (c *IAM) GetGroupPagesWithContext(ctx aws.Context, input *GetGroupInput, fn
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetGroupOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetGroupOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -7980,12 +7973,10 @@ func (c *IAM) ListAccessKeysPagesWithContext(ctx aws.Context, input *ListAccessK
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListAccessKeysOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAccessKeysOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8121,12 +8112,10 @@ func (c *IAM) ListAccountAliasesPagesWithContext(ctx aws.Context, input *ListAcc
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListAccountAliasesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAccountAliasesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8278,12 +8267,10 @@ func (c *IAM) ListAttachedGroupPoliciesPagesWithContext(ctx aws.Context, input *
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListAttachedGroupPoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAttachedGroupPoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8435,12 +8422,10 @@ func (c *IAM) ListAttachedRolePoliciesPagesWithContext(ctx aws.Context, input *L
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListAttachedRolePoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAttachedRolePoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8592,12 +8577,10 @@ func (c *IAM) ListAttachedUserPoliciesPagesWithContext(ctx aws.Context, input *L
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListAttachedUserPoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListAttachedUserPoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8746,12 +8729,10 @@ func (c *IAM) ListEntitiesForPolicyPagesWithContext(ctx aws.Context, input *List
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListEntitiesForPolicyOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListEntitiesForPolicyOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8899,12 +8880,10 @@ func (c *IAM) ListGroupPoliciesPagesWithContext(ctx aws.Context, input *ListGrou
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListGroupPoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListGroupPoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -9039,12 +9018,10 @@ func (c *IAM) ListGroupsPagesWithContext(ctx aws.Context, input *ListGroupsInput
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListGroupsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListGroupsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -9183,12 +9160,10 @@ func (c *IAM) ListGroupsForUserPagesWithContext(ctx aws.Context, input *ListGrou
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListGroupsForUserOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListGroupsForUserOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -9325,12 +9300,10 @@ func (c *IAM) ListInstanceProfilesPagesWithContext(ctx aws.Context, input *ListI
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListInstanceProfilesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListInstanceProfilesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -9471,12 +9444,10 @@ func (c *IAM) ListInstanceProfilesForRolePagesWithContext(ctx aws.Context, input
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListInstanceProfilesForRoleOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListInstanceProfilesForRoleOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -9618,12 +9589,10 @@ func (c *IAM) ListMFADevicesPagesWithContext(ctx aws.Context, input *ListMFADevi
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListMFADevicesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListMFADevicesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -9849,12 +9818,10 @@ func (c *IAM) ListPoliciesPagesWithContext(ctx aws.Context, input *ListPoliciesI
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListPoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -10118,12 +10085,10 @@ func (c *IAM) ListPolicyVersionsPagesWithContext(ctx aws.Context, input *ListPol
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListPolicyVersionsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPolicyVersionsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -10270,12 +10235,10 @@ func (c *IAM) ListRolePoliciesPagesWithContext(ctx aws.Context, input *ListRoleP
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListRolePoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListRolePoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -10499,12 +10462,10 @@ func (c *IAM) ListRolesPagesWithContext(ctx aws.Context, input *ListRolesInput, 
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListRolesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListRolesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -10729,12 +10690,10 @@ func (c *IAM) ListSSHPublicKeysPagesWithContext(ctx aws.Context, input *ListSSHP
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListSSHPublicKeysOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListSSHPublicKeysOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -10875,12 +10834,10 @@ func (c *IAM) ListServerCertificatesPagesWithContext(ctx aws.Context, input *Lis
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListServerCertificatesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListServerCertificatesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -11116,12 +11073,10 @@ func (c *IAM) ListSigningCertificatesPagesWithContext(ctx aws.Context, input *Li
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListSigningCertificatesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListSigningCertificatesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -11267,12 +11222,10 @@ func (c *IAM) ListUserPoliciesPagesWithContext(ctx aws.Context, input *ListUserP
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListUserPoliciesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListUserPoliciesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -11496,12 +11449,10 @@ func (c *IAM) ListUsersPagesWithContext(ctx aws.Context, input *ListUsersInput, 
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListUsersOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListUsersOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -11633,12 +11584,10 @@ func (c *IAM) ListVirtualMFADevicesPagesWithContext(ctx aws.Context, input *List
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListVirtualMFADevicesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListVirtualMFADevicesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -12924,14 +12873,13 @@ func (c *IAM) SimulateCustomPolicyRequest(input *SimulateCustomPolicyInput) (req
 // The simulation does not perform the API operations; it only checks the authorization
 // to determine if the simulated policies allow or deny the operations.
 //
-// If you want to simulate existing policies that are attached to an IAM user,
-// group, or role, use SimulatePrincipalPolicy instead.
+// If you want to simulate existing policies attached to an IAM user, group,
+// or role, use SimulatePrincipalPolicy instead.
 //
-// Context keys are variables that are maintained by AWS and its services and
-// which provide details about the context of an API query request. You can
-// use the Condition element of an IAM policy to evaluate context keys. To get
-// the list of context keys that the policies require for correct simulation,
-// use GetContextKeysForCustomPolicy.
+// Context keys are variables maintained by AWS and its services that provide
+// details about the context of an API query request. You can use the Condition
+// element of an IAM policy to evaluate context keys. To get the list of context
+// keys that the policies require for correct simulation, use GetContextKeysForCustomPolicy.
 //
 // If the output is long, you can use MaxItems and Marker parameters to paginate
 // the results.
@@ -13017,12 +12965,10 @@ func (c *IAM) SimulateCustomPolicyPagesWithContext(ctx aws.Context, input *Simul
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*SimulatePolicyResponse), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*SimulatePolicyResponse), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -13189,12 +13135,10 @@ func (c *IAM) SimulatePrincipalPolicyPagesWithContext(ctx aws.Context, input *Si
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*SimulatePolicyResponse), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*SimulatePolicyResponse), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -15509,7 +15453,7 @@ type AccessKey struct {
 	// calls, while Inactive means it is not.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the IAM user that the access key is associated with.
 	//
@@ -15651,7 +15595,7 @@ type AccessKeyMetadata struct {
 
 	// The status of the access key. Active means that the key is valid for API
 	// calls; Inactive means it is not.
-	Status *string `type:"string" enum:"StatusType"`
+	Status *string `type:"string" enum:"statusType"`
 
 	// The name of the IAM user that the key is associated with.
 	UserName *string `min:"1" type:"string"`
@@ -16218,7 +16162,7 @@ func (s *AttachedPermissionsBoundary) SetPermissionsBoundaryType(v string) *Atta
 //
 // For more information about managed policies, refer to Managed Policies and
 // Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type AttachedPolicy struct {
 	_ struct{} `type:"structure"`
 
@@ -16343,7 +16287,7 @@ func (s ChangePasswordOutput) GoString() string {
 // evaluating the Condition elements of the input policies.
 //
 // This data type is used as an input parameter to SimulateCustomPolicy and
-// SimulatePrincipalPolicy.
+// SimulatePrincipalPolicy .
 type ContextEntry struct {
 	_ struct{} `type:"structure"`
 
@@ -19985,13 +19929,13 @@ type EntityInfo struct {
 
 	// The path to the entity (user or role). For more information about paths,
 	// see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	Path *string `min:"1" type:"string"`
 
 	// The type of entity (user or role).
 	//
 	// Type is a required field
-	Type *string `type:"string" required:"true" enum:"PolicyOwnerEntityType"`
+	Type *string `type:"string" required:"true" enum:"policyOwnerEntityType"`
 }
 
 // String returns the string representation
@@ -20092,24 +20036,12 @@ type EvaluationResult struct {
 	// EvalDecision is a required field
 	EvalDecision *string `type:"string" required:"true" enum:"PolicyEvaluationDecisionType"`
 
-	// Additional details about the results of the cross-account evaluation decision.
-	// This parameter is populated for only cross-account simulations. It contains
-	// a brief summary of how each policy type contributes to the final evaluation
-	// decision.
-	//
-	// If the simulation evaluates policies within the same account and includes
-	// a resource ARN, then the parameter is present but the response is empty.
-	// If the simulation evaluates policies within the same account and specifies
-	// all resources (*), then the parameter is not returned.
-	//
-	// When you make a cross-account request, AWS evaluates the request in the trusting
-	// account and the trusted account. The request is allowed only if both evaluations
-	// return true. For more information about how policies are evaluated, see Evaluating
-	// Policies Within a Single Account (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics).
-	//
-	// If an AWS Organizations SCP included in the evaluation denies access, the
-	// simulation ends. In this case, policy evaluation does not proceed any further
-	// and this parameter is not returned.
+	// Additional details about the results of the evaluation decision. When there
+	// are both IAM policies and resource policies, this parameter explains how
+	// each set of policies contributes to the final evaluation decision. When simulating
+	// cross-account access to a resource, both the resource-based policy and the
+	// caller's IAM policy must grant access. See How IAM Roles Differ from Resource-based
+	// Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_compare-resource-policies.html)
 	EvalDecisionDetails map[string]*string `type:"map"`
 
 	// The ARN of the resource that the indicated API operation was tested on.
@@ -20135,10 +20067,6 @@ type EvaluationResult struct {
 	// affect the results of the simulation. Only applies if the simulated user's
 	// account is part of an organization.
 	OrganizationsDecisionDetail *OrganizationsDecisionDetail `type:"structure"`
-
-	// Contains information about the effect that a permissions boundary has on
-	// a policy simulation when the boundary is applied to an IAM entity.
-	PermissionsBoundaryDecisionDetail *PermissionsBoundaryDecisionDetail `type:"structure"`
 
 	// The individual results of the simulation of the API operation specified in
 	// EvalActionName on each resource.
@@ -20194,12 +20122,6 @@ func (s *EvaluationResult) SetMissingContextValues(v []*string) *EvaluationResul
 // SetOrganizationsDecisionDetail sets the OrganizationsDecisionDetail field's value.
 func (s *EvaluationResult) SetOrganizationsDecisionDetail(v *OrganizationsDecisionDetail) *EvaluationResult {
 	s.OrganizationsDecisionDetail = v
-	return s
-}
-
-// SetPermissionsBoundaryDecisionDetail sets the PermissionsBoundaryDecisionDetail field's value.
-func (s *EvaluationResult) SetPermissionsBoundaryDecisionDetail(v *PermissionsBoundaryDecisionDetail) *EvaluationResult {
-	s.PermissionsBoundaryDecisionDetail = v
 	return s
 }
 
@@ -20383,10 +20305,8 @@ func (s *GenerateServiceLastAccessedDetailsInput) SetArn(v string) *GenerateServ
 type GenerateServiceLastAccessedDetailsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The JobId that you can use in the GetServiceLastAccessedDetails or GetServiceLastAccessedDetailsWithEntities
-	// operations. The JobId returned by GenerateServiceLastAccessedDetail must
-	// be used by the same role within a session, or by the same user when used
-	// to call GetServiceLastAccessedDetail.
+	// The job ID that you can use in the GetServiceLastAccessedDetails or GetServiceLastAccessedDetailsWithEntities
+	// operations.
 	JobId *string `min:"36" type:"string"`
 }
 
@@ -21456,7 +21376,7 @@ type GetOrganizationsAccessReportInput struct {
 	// The key that is used to sort the results. If you choose the namespace key,
 	// the results are returned in alphabetical order. If you choose the time key,
 	// the results are sorted numerically by the date and time.
-	SortKey *string `type:"string" enum:"SortKeyType"`
+	SortKey *string `type:"string" enum:"sortKeyType"`
 }
 
 // String returns the string representation
@@ -21553,7 +21473,7 @@ type GetOrganizationsAccessReportOutput struct {
 	// The status of the job.
 	//
 	// JobStatus is a required field
-	JobStatus *string `type:"string" required:"true" enum:"JobStatusType"`
+	JobStatus *string `type:"string" required:"true" enum:"jobStatusType"`
 
 	// When IsTruncated is true, this element is present and contains the value
 	// to use for the Marker parameter in a subsequent pagination request.
@@ -22076,7 +21996,7 @@ type GetSSHPublicKeyInput struct {
 	// PEM format, use PEM.
 	//
 	// Encoding is a required field
-	Encoding *string `type:"string" required:"true" enum:"EncodingType"`
+	Encoding *string `type:"string" required:"true" enum:"encodingType"`
 
 	// The unique identifier for the SSH public key.
 	//
@@ -22249,9 +22169,7 @@ type GetServiceLastAccessedDetailsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the request generated by the GenerateServiceLastAccessedDetails
-	// operation. The JobId returned by GenerateServiceLastAccessedDetail must be
-	// used by the same role within a session, or by the same user when used to
-	// call GetServiceLastAccessedDetail.
+	// operation.
 	//
 	// JobId is a required field
 	JobId *string `min:"36" type:"string" required:"true"`
@@ -22356,7 +22274,7 @@ type GetServiceLastAccessedDetailsOutput struct {
 	// The status of the job.
 	//
 	// JobStatus is a required field
-	JobStatus *string `type:"string" required:"true" enum:"JobStatusType"`
+	JobStatus *string `type:"string" required:"true" enum:"jobStatusType"`
 
 	// When IsTruncated is true, this element is present and contains the value
 	// to use for the Marker parameter in a subsequent pagination request.
@@ -22563,7 +22481,7 @@ type GetServiceLastAccessedDetailsWithEntitiesOutput struct {
 	// The status of the job.
 	//
 	// JobStatus is a required field
-	JobStatus *string `type:"string" required:"true" enum:"JobStatusType"`
+	JobStatus *string `type:"string" required:"true" enum:"jobStatusType"`
 
 	// When IsTruncated is true, this element is present and contains the value
 	// to use for the Marker parameter in a subsequent pagination request.
@@ -22914,7 +22832,7 @@ type Group struct {
 
 	// The Amazon Resource Name (ARN) specifying the group. For more information
 	// about ARNs and how to use them in policies, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Arn is a required field
 	Arn *string `min:"20" type:"string" required:"true"`
@@ -22927,7 +22845,7 @@ type Group struct {
 
 	// The stable and unique string identifying the group. For more information
 	// about IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// GroupId is a required field
 	GroupId *string `min:"16" type:"string" required:"true"`
@@ -22939,7 +22857,7 @@ type Group struct {
 
 	// The path to the group. For more information about paths, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Path is a required field
 	Path *string `min:"1" type:"string" required:"true"`
@@ -23008,7 +22926,7 @@ type GroupDetail struct {
 
 	// The stable and unique string identifying the group. For more information
 	// about IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	GroupId *string `min:"16" type:"string"`
 
 	// The friendly name that identifies the group.
@@ -23019,7 +22937,7 @@ type GroupDetail struct {
 
 	// The path to the group. For more information about paths, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	Path *string `min:"1" type:"string"`
 }
 
@@ -23092,7 +23010,7 @@ type InstanceProfile struct {
 	// The Amazon Resource Name (ARN) specifying the instance profile. For more
 	// information about ARNs and how to use them in policies, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Arn is a required field
 	Arn *string `min:"20" type:"string" required:"true"`
@@ -23104,7 +23022,7 @@ type InstanceProfile struct {
 
 	// The stable and unique string identifying the instance profile. For more information
 	// about IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// InstanceProfileId is a required field
 	InstanceProfileId *string `min:"16" type:"string" required:"true"`
@@ -23116,7 +23034,7 @@ type InstanceProfile struct {
 
 	// The path to the instance profile. For more information about paths, see IAM
 	// Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Path is a required field
 	Path *string `min:"1" type:"string" required:"true"`
@@ -25095,7 +25013,7 @@ type ListPoliciesInput struct {
 	//
 	// This parameter is optional. If it is not included, or if it is set to All,
 	// all policies are returned.
-	Scope *string `type:"string" enum:"PolicyScopeType"`
+	Scope *string `type:"string" enum:"policyScopeType"`
 }
 
 // String returns the string representation
@@ -26626,7 +26544,7 @@ type ListVirtualMFADevicesInput struct {
 	// The status (Unassigned or Assigned) of the devices to list. If you do not
 	// specify an AssignmentStatus, the operation defaults to Any, which lists both
 	// assigned and unassigned virtual MFA devices.,
-	AssignmentStatus *string `type:"string" enum:"AssignmentStatusType"`
+	AssignmentStatus *string `type:"string" enum:"assignmentStatusType"`
 
 	// Use this parameter only when paginating results and only after you receive
 	// a response indicating that the results are truncated. Set it to the value
@@ -26851,7 +26769,7 @@ func (s *MFADevice) SetUserName(v string) *MFADevice {
 //
 // For more information about managed policies, see Managed Policies and Inline
 // Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type ManagedPolicyDetail struct {
 	_ struct{} `type:"structure"`
 
@@ -26875,7 +26793,7 @@ type ManagedPolicyDetail struct {
 	//
 	// For more information about policy versions, see Versioning for Managed Policies
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	DefaultVersionId *string `type:"string"`
 
 	// A friendly description of the policy.
@@ -26887,7 +26805,7 @@ type ManagedPolicyDetail struct {
 	// The path to the policy.
 	//
 	// For more information about paths, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	Path *string `min:"1" type:"string"`
 
 	// The number of entities (users and roles) for which the policy is used as
@@ -26901,7 +26819,7 @@ type ManagedPolicyDetail struct {
 	// The stable and unique string identifying the policy.
 	//
 	// For more information about IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	PolicyId *string `min:"16" type:"string"`
 
 	// The friendly name (not ARN) identifying the policy.
@@ -27168,38 +27086,6 @@ func (s *PasswordPolicy) SetRequireUppercaseCharacters(v bool) *PasswordPolicy {
 	return s
 }
 
-// Contains information about the effect that a permissions boundary has on
-// a policy simulation when the boundary is applied to an IAM entity.
-type PermissionsBoundaryDecisionDetail struct {
-	_ struct{} `type:"structure"`
-
-	// Specifies whether an action is allowed by a permissions boundary that is
-	// applied to an IAM entity (user or role). A value of true means that the permissions
-	// boundary does not deny the action. This means that the policy includes an
-	// Allow statement that matches the request. In this case, if an identity-based
-	// policy also allows the action, the request is allowed. A value of false means
-	// that either the requested action is not allowed (implicitly denied) or that
-	// the action is explicitly denied by the permissions boundary. In both of these
-	// cases, the action is not allowed, regardless of the identity-based policy.
-	AllowedByPermissionsBoundary *bool `type:"boolean"`
-}
-
-// String returns the string representation
-func (s PermissionsBoundaryDecisionDetail) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s PermissionsBoundaryDecisionDetail) GoString() string {
-	return s.String()
-}
-
-// SetAllowedByPermissionsBoundary sets the AllowedByPermissionsBoundary field's value.
-func (s *PermissionsBoundaryDecisionDetail) SetAllowedByPermissionsBoundary(v bool) *PermissionsBoundaryDecisionDetail {
-	s.AllowedByPermissionsBoundary = &v
-	return s
-}
-
 // Contains information about a managed policy.
 //
 // This data type is used as a response element in the CreatePolicy, GetPolicy,
@@ -27207,7 +27093,7 @@ func (s *PermissionsBoundaryDecisionDetail) SetAllowedByPermissionsBoundary(v bo
 //
 // For more information about managed policies, refer to Managed Policies and
 // Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type Policy struct {
 	_ struct{} `type:"structure"`
 
@@ -27241,7 +27127,7 @@ type Policy struct {
 	// The path to the policy.
 	//
 	// For more information about paths, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	Path *string `min:"1" type:"string"`
 
 	// The number of entities (users and roles) for which the policy is used to
@@ -27255,7 +27141,7 @@ type Policy struct {
 	// The stable and unique string identifying the policy.
 	//
 	// For more information about IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	PolicyId *string `min:"16" type:"string"`
 
 	// The friendly name (not ARN) identifying the policy.
@@ -27404,7 +27290,7 @@ type PolicyGrantingServiceAccess struct {
 	// This field is null for managed policies. For more information about these
 	// policy types, see Managed Policies and Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html)
 	// in the IAM User Guide.
-	EntityType *string `type:"string" enum:"PolicyOwnerEntityType"`
+	EntityType *string `type:"string" enum:"policyOwnerEntityType"`
 
 	// The Amazon Resource Name (ARN). ARNs are unique identifiers for AWS resources.
 	//
@@ -27423,7 +27309,7 @@ type PolicyGrantingServiceAccess struct {
 	// in the IAM User Guide.
 	//
 	// PolicyType is a required field
-	PolicyType *string `type:"string" required:"true" enum:"PolicyType"`
+	PolicyType *string `type:"string" required:"true" enum:"policyType"`
 }
 
 // String returns the string representation
@@ -27473,7 +27359,7 @@ func (s *PolicyGrantingServiceAccess) SetPolicyType(v string) *PolicyGrantingSer
 //
 // For more information about managed policies, refer to Managed Policies and
 // Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type PolicyGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -27515,7 +27401,7 @@ func (s *PolicyGroup) SetGroupName(v string) *PolicyGroup {
 //
 // For more information about managed policies, refer to Managed Policies and
 // Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type PolicyRole struct {
 	_ struct{} `type:"structure"`
 
@@ -27557,7 +27443,7 @@ func (s *PolicyRole) SetRoleName(v string) *PolicyRole {
 //
 // For more information about managed policies, refer to Managed Policies and
 // Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type PolicyUser struct {
 	_ struct{} `type:"structure"`
 
@@ -27600,7 +27486,7 @@ func (s *PolicyUser) SetUserName(v string) *PolicyUser {
 //
 // For more information about managed policies, refer to Managed Policies and
 // Inline Policies (https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html)
-// in the IAM User Guide.
+// in the Using IAM guide.
 type PolicyVersion struct {
 	_ struct{} `type:"structure"`
 
@@ -28527,10 +28413,11 @@ func (s *ResetServiceSpecificCredentialOutput) SetServiceSpecificCredential(v *S
 type ResourceSpecificResult struct {
 	_ struct{} `type:"structure"`
 
-	// Additional details about the results of the evaluation decision on a single
-	// resource. This parameter is returned only for cross-account simulations.
-	// This parameter explains how each policy type contributes to the resource-specific
-	// evaluation decision.
+	// Additional details about the results of the evaluation decision. When there
+	// are both IAM policies and resource policies, this parameter explains how
+	// each set of policies contributes to the final evaluation decision. When simulating
+	// cross-account access to a resource, both the resource-based policy and the
+	// caller's IAM policy must grant access.
 	EvalDecisionDetails map[string]*string `type:"map"`
 
 	// The result of the simulation of the simulated API operation on the resource
@@ -28560,10 +28447,6 @@ type ResourceSpecificResult struct {
 	// the context keys used by a set of policies, you can call GetContextKeysForCustomPolicy
 	// or GetContextKeysForPrincipalPolicy.
 	MissingContextValues []*string `type:"list"`
-
-	// Contains information about the effect that a permissions boundary has on
-	// a policy simulation when that boundary is applied to an IAM entity.
-	PermissionsBoundaryDecisionDetail *PermissionsBoundaryDecisionDetail `type:"structure"`
 }
 
 // String returns the string representation
@@ -28603,12 +28486,6 @@ func (s *ResourceSpecificResult) SetMatchedStatements(v []*Statement) *ResourceS
 // SetMissingContextValues sets the MissingContextValues field's value.
 func (s *ResourceSpecificResult) SetMissingContextValues(v []*string) *ResourceSpecificResult {
 	s.MissingContextValues = v
-	return s
-}
-
-// SetPermissionsBoundaryDecisionDetail sets the PermissionsBoundaryDecisionDetail field's value.
-func (s *ResourceSpecificResult) SetPermissionsBoundaryDecisionDetail(v *PermissionsBoundaryDecisionDetail) *ResourceSpecificResult {
-	s.PermissionsBoundaryDecisionDetail = v
 	return s
 }
 
@@ -28762,7 +28639,7 @@ type Role struct {
 
 	// The path to the role. For more information about paths, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Path is a required field
 	Path *string `min:"1" type:"string" required:"true"`
@@ -28776,19 +28653,10 @@ type Role struct {
 
 	// The stable and unique string identifying the role. For more information about
 	// IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// RoleId is a required field
 	RoleId *string `min:"16" type:"string" required:"true"`
-
-	// Contains information about the last time that an IAM role was used. This
-	// includes the date and time and the Region in which the role was last used.
-	// Activity is only reported for the trailing 400 days. This period can be shorter
-	// if your Region began supporting these features within the last year. The
-	// role might have been used more than 400 days ago. For more information, see
-	// Regions Where Data Is Tracked (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period)
-	// in the IAM User Guide.
-	RoleLastUsed *RoleLastUsed `type:"structure"`
 
 	// The friendly name that identifies the role.
 	//
@@ -28859,12 +28727,6 @@ func (s *Role) SetRoleId(v string) *Role {
 	return s
 }
 
-// SetRoleLastUsed sets the RoleLastUsed field's value.
-func (s *Role) SetRoleLastUsed(v *RoleLastUsed) *Role {
-	s.RoleLastUsed = v
-	return s
-}
-
 // SetRoleName sets the RoleName field's value.
 func (s *Role) SetRoleName(v string) *Role {
 	s.RoleName = &v
@@ -28907,7 +28769,7 @@ type RoleDetail struct {
 
 	// The path to the role. For more information about paths, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	Path *string `min:"1" type:"string"`
 
 	// The ARN of the policy used to set the permissions boundary for the role.
@@ -28919,17 +28781,8 @@ type RoleDetail struct {
 
 	// The stable and unique string identifying the role. For more information about
 	// IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	RoleId *string `min:"16" type:"string"`
-
-	// Contains information about the last time that an IAM role was used. This
-	// includes the date and time and the Region in which the role was last used.
-	// Activity is only reported for the trailing 400 days. This period can be shorter
-	// if your Region began supporting these features within the last year. The
-	// role might have been used more than 400 days ago. For more information, see
-	// Regions Where Data Is Tracked (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period)
-	// in the IAM User Guide.
-	RoleLastUsed *RoleLastUsed `type:"structure"`
 
 	// The friendly name that identifies the role.
 	RoleName *string `min:"1" type:"string"`
@@ -29002,12 +28855,6 @@ func (s *RoleDetail) SetRoleId(v string) *RoleDetail {
 	return s
 }
 
-// SetRoleLastUsed sets the RoleLastUsed field's value.
-func (s *RoleDetail) SetRoleLastUsed(v *RoleLastUsed) *RoleDetail {
-	s.RoleLastUsed = v
-	return s
-}
-
 // SetRoleName sets the RoleName field's value.
 func (s *RoleDetail) SetRoleName(v string) *RoleDetail {
 	s.RoleName = &v
@@ -29023,54 +28870,6 @@ func (s *RoleDetail) SetRolePolicyList(v []*PolicyDetail) *RoleDetail {
 // SetTags sets the Tags field's value.
 func (s *RoleDetail) SetTags(v []*Tag) *RoleDetail {
 	s.Tags = v
-	return s
-}
-
-// Contains information about the last time that an IAM role was used. This
-// includes the date and time and the Region in which the role was last used.
-// Activity is only reported for the trailing 400 days. This period can be shorter
-// if your Region began supporting these features within the last year. The
-// role might have been used more than 400 days ago. For more information, see
-// Regions Where Data Is Tracked (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period)
-// in the IAM User Guide.
-//
-// This data type is returned as a response element in the GetRole and GetAccountAuthorizationDetails
-// operations.
-type RoleLastUsed struct {
-	_ struct{} `type:"structure"`
-
-	// The date and time, in ISO 8601 date-time format (http://www.iso.org/iso/iso8601)
-	// that the role was last used.
-	//
-	// This field is null if the role has not been used within the IAM tracking
-	// period. For more information about the tracking period, see Regions Where
-	// Data Is Tracked (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period)
-	// in the IAM User Guide.
-	LastUsedDate *time.Time `type:"timestamp"`
-
-	// The name of the AWS Region in which the role was last used.
-	Region *string `type:"string"`
-}
-
-// String returns the string representation
-func (s RoleLastUsed) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s RoleLastUsed) GoString() string {
-	return s.String()
-}
-
-// SetLastUsedDate sets the LastUsedDate field's value.
-func (s *RoleLastUsed) SetLastUsedDate(v time.Time) *RoleLastUsed {
-	s.LastUsedDate = &v
-	return s
-}
-
-// SetRegion sets the Region field's value.
-func (s *RoleLastUsed) SetRegion(v string) *RoleLastUsed {
-	s.Region = &v
 	return s
 }
 
@@ -29180,7 +28979,7 @@ type SSHPublicKey struct {
 	// key cannot be used.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The date and time, in ISO 8601 date-time format (http://www.iso.org/iso/iso8601),
 	// when the SSH public key was uploaded.
@@ -29254,7 +29053,7 @@ type SSHPublicKeyMetadata struct {
 	// key cannot be used.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The date and time, in ISO 8601 date-time format (http://www.iso.org/iso/iso8601),
 	// when the SSH public key was uploaded.
@@ -29363,7 +29162,7 @@ type ServerCertificateMetadata struct {
 	// The Amazon Resource Name (ARN) specifying the server certificate. For more
 	// information about ARNs and how to use them in policies, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Arn is a required field
 	Arn *string `min:"20" type:"string" required:"true"`
@@ -29373,14 +29172,14 @@ type ServerCertificateMetadata struct {
 
 	// The path to the server certificate. For more information about paths, see
 	// IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Path is a required field
 	Path *string `min:"1" type:"string" required:"true"`
 
 	// The stable and unique string identifying the server certificate. For more
 	// information about IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// ServerCertificateId is a required field
 	ServerCertificateId *string `min:"16" type:"string" required:"true"`
@@ -29565,7 +29364,7 @@ type ServiceSpecificCredential struct {
 	// is valid for API calls, while Inactive means it is not.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the IAM user associated with the service-specific credential.
 	//
@@ -29654,7 +29453,7 @@ type ServiceSpecificCredentialMetadata struct {
 	// is valid for API calls, while Inactive means it is not.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the IAM user associated with the service-specific credential.
 	//
@@ -29799,7 +29598,7 @@ type SetSecurityTokenServicePreferencesInput struct {
 	// in the IAM User Guide.
 	//
 	// GlobalEndpointTokenVersion is a required field
-	GlobalEndpointTokenVersion *string `type:"string" required:"true" enum:"GlobalEndpointTokenVersion"`
+	GlobalEndpointTokenVersion *string `type:"string" required:"true" enum:"globalEndpointTokenVersion"`
 }
 
 // String returns the string representation
@@ -29866,7 +29665,7 @@ type SigningCertificate struct {
 	// for API calls, while Inactive means it is not.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The date when the signing certificate was uploaded.
 	UploadDate *time.Time `type:"timestamp"`
@@ -29958,27 +29757,6 @@ type SimulateCustomPolicyInput struct {
 	// Marker contains a value to include in the subsequent call that tells the
 	// service where to continue from.
 	MaxItems *int64 `min:"1" type:"integer"`
-
-	// The IAM permissions boundary policy to simulate. The permissions boundary
-	// sets the maximum permissions that an IAM entity can have. You can input only
-	// one permissions boundary when you pass a policy to this operation. For more
-	// information about permissions boundaries, see Permissions Boundaries for
-	// IAM Entities (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html)
-	// in the IAM User Guide. The policy input is specified as a string that contains
-	// the complete, valid JSON text of a permissions boundary policy.
-	//
-	// The regex pattern (http://wikipedia.org/wiki/regex) used to validate this
-	// parameter is a string of characters consisting of the following:
-	//
-	//    * Any printable ASCII character ranging from the space character (\u0020)
-	//    through the end of the ASCII character range
-	//
-	//    * The printable characters in the Basic Latin and Latin-1 Supplement character
-	//    set (through \u00FF)
-	//
-	//    * The special characters tab (\u0009), line feed (\u000A), and carriage
-	//    return (\u000D)
-	PermissionsBoundaryPolicyInputList []*string `type:"list"`
 
 	// A list of policy documents to include in the simulation. Each document is
 	// specified as a string containing the complete, valid JSON text of an IAM
@@ -30171,12 +29949,6 @@ func (s *SimulateCustomPolicyInput) SetMaxItems(v int64) *SimulateCustomPolicyIn
 	return s
 }
 
-// SetPermissionsBoundaryPolicyInputList sets the PermissionsBoundaryPolicyInputList field's value.
-func (s *SimulateCustomPolicyInput) SetPermissionsBoundaryPolicyInputList(v []*string) *SimulateCustomPolicyInput {
-	s.PermissionsBoundaryPolicyInputList = v
-	return s
-}
-
 // SetPolicyInputList sets the PolicyInputList field's value.
 func (s *SimulateCustomPolicyInput) SetPolicyInputList(v []*string) *SimulateCustomPolicyInput {
 	s.PolicyInputList = v
@@ -30307,30 +30079,6 @@ type SimulatePrincipalPolicyInput struct {
 	// Marker contains a value to include in the subsequent call that tells the
 	// service where to continue from.
 	MaxItems *int64 `min:"1" type:"integer"`
-
-	// The IAM permissions boundary policy to simulate. The permissions boundary
-	// sets the maximum permissions that the entity can have. You can input only
-	// one permissions boundary when you pass a policy to this operation. An IAM
-	// entity can only have one permissions boundary in effect at a time. For example,
-	// if a permissions boundary is attached to an entity and you pass in a different
-	// permissions boundary policy using this parameter, then the new permission
-	// boundary policy is used for the simulation. For more information about permissions
-	// boundaries, see Permissions Boundaries for IAM Entities (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html)
-	// in the IAM User Guide. The policy input is specified as a string containing
-	// the complete, valid JSON text of a permissions boundary policy.
-	//
-	// The regex pattern (http://wikipedia.org/wiki/regex) used to validate this
-	// parameter is a string of characters consisting of the following:
-	//
-	//    * Any printable ASCII character ranging from the space character (\u0020)
-	//    through the end of the ASCII character range
-	//
-	//    * The printable characters in the Basic Latin and Latin-1 Supplement character
-	//    set (through \u00FF)
-	//
-	//    * The special characters tab (\u0009), line feed (\u000A), and carriage
-	//    return (\u000D)
-	PermissionsBoundaryPolicyInputList []*string `type:"list"`
 
 	// An optional list of additional policy documents to include in the simulation.
 	// Each document is specified as a string containing the complete, valid JSON
@@ -30521,12 +30269,6 @@ func (s *SimulatePrincipalPolicyInput) SetMarker(v string) *SimulatePrincipalPol
 // SetMaxItems sets the MaxItems field's value.
 func (s *SimulatePrincipalPolicyInput) SetMaxItems(v int64) *SimulatePrincipalPolicyInput {
 	s.MaxItems = &v
-	return s
-}
-
-// SetPermissionsBoundaryPolicyInputList sets the PermissionsBoundaryPolicyInputList field's value.
-func (s *SimulatePrincipalPolicyInput) SetPermissionsBoundaryPolicyInputList(v []*string) *SimulatePrincipalPolicyInput {
-	s.PermissionsBoundaryPolicyInputList = v
 	return s
 }
 
@@ -31022,7 +30764,7 @@ type UpdateAccessKeyInput struct {
 	// cannot be used.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the user whose key you want to update.
 	//
@@ -31904,7 +31646,7 @@ type UpdateSSHPublicKeyInput struct {
 	// that the key cannot be used.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the IAM user associated with the SSH public key.
 	//
@@ -32095,7 +31837,7 @@ type UpdateServiceSpecificCredentialInput struct {
 	// The status to be assigned to the service-specific credential.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the IAM user associated with the service-specific credential.
 	// If you do not specify this value, then the operation assumes the user whose
@@ -32188,7 +31930,7 @@ type UpdateSigningCertificateInput struct {
 	// be used.
 	//
 	// Status is a required field
-	Status *string `type:"string" required:"true" enum:"StatusType"`
+	Status *string `type:"string" required:"true" enum:"statusType"`
 
 	// The name of the IAM user the signing certificate belongs to.
 	//
@@ -32750,7 +32492,7 @@ type User struct {
 
 	// The Amazon Resource Name (ARN) that identifies the user. For more information
 	// about ARNs and how to use ARNs in policies, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Arn is a required field
 	Arn *string `min:"20" type:"string" required:"true"`
@@ -32765,7 +32507,7 @@ type User struct {
 	// when the user's password was last used to sign in to an AWS website. For
 	// a list of AWS websites that capture a user's last sign-in time, see the Credential
 	// Reports (https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html)
-	// topic in the IAM User Guide. If a password is used more than once in a five-minute
+	// topic in the Using IAM guide. If a password is used more than once in a five-minute
 	// span, only the first use is returned in this field. If the field is null
 	// (no value), then it indicates that they never signed in with a password.
 	// This can be because:
@@ -32776,7 +32518,7 @@ type User struct {
 	//    information on October 20, 2014.
 	//
 	// A null value does not mean that the user never had a password. Also, if the
-	// user does not currently have a password but had one in the past, then this
+	// user does not currently have a password, but had one in the past, then this
 	// field contains the date and time the most recent password was used.
 	//
 	// This value is returned only in the GetUser and ListUsers operations.
@@ -32784,7 +32526,7 @@ type User struct {
 
 	// The path to the user. For more information about paths, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// Path is a required field
 	Path *string `min:"1" type:"string" required:"true"`
@@ -32803,7 +32545,7 @@ type User struct {
 
 	// The stable and unique string identifying the user. For more information about
 	// IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	//
 	// UserId is a required field
 	UserId *string `min:"16" type:"string" required:"true"`
@@ -32899,7 +32641,7 @@ type UserDetail struct {
 
 	// The path to the user. For more information about paths, see IAM Identifiers
 	// (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	Path *string `min:"1" type:"string"`
 
 	// The ARN of the policy used to set the permissions boundary for the user.
@@ -32916,7 +32658,7 @@ type UserDetail struct {
 
 	// The stable and unique string identifying the user. For more information about
 	// IDs, see IAM Identifiers (https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html)
-	// in the IAM User Guide.
+	// in the Using IAM guide.
 	UserId *string `min:"16" type:"string"`
 
 	// The friendly name identifying the user.
@@ -33067,17 +32809,6 @@ func (s *VirtualMFADevice) SetUser(v *User) *VirtualMFADevice {
 }
 
 const (
-	// AssignmentStatusTypeAssigned is a AssignmentStatusType enum value
-	AssignmentStatusTypeAssigned = "Assigned"
-
-	// AssignmentStatusTypeUnassigned is a AssignmentStatusType enum value
-	AssignmentStatusTypeUnassigned = "Unassigned"
-
-	// AssignmentStatusTypeAny is a AssignmentStatusType enum value
-	AssignmentStatusTypeAny = "Any"
-)
-
-const (
 	// ContextKeyTypeEnumString is a ContextKeyTypeEnum enum value
 	ContextKeyTypeEnumString = "string"
 
@@ -33130,14 +32861,6 @@ const (
 )
 
 const (
-	// EncodingTypeSsh is a EncodingType enum value
-	EncodingTypeSsh = "SSH"
-
-	// EncodingTypePem is a EncodingType enum value
-	EncodingTypePem = "PEM"
-)
-
-const (
 	// EntityTypeUser is a EntityType enum value
 	EntityTypeUser = "User"
 
@@ -33155,25 +32878,6 @@ const (
 )
 
 const (
-	// GlobalEndpointTokenVersionV1token is a GlobalEndpointTokenVersion enum value
-	GlobalEndpointTokenVersionV1token = "v1Token"
-
-	// GlobalEndpointTokenVersionV2token is a GlobalEndpointTokenVersion enum value
-	GlobalEndpointTokenVersionV2token = "v2Token"
-)
-
-const (
-	// JobStatusTypeInProgress is a JobStatusType enum value
-	JobStatusTypeInProgress = "IN_PROGRESS"
-
-	// JobStatusTypeCompleted is a JobStatusType enum value
-	JobStatusTypeCompleted = "COMPLETED"
-
-	// JobStatusTypeFailed is a JobStatusType enum value
-	JobStatusTypeFailed = "FAILED"
-)
-
-const (
 	// PermissionsBoundaryAttachmentTypePermissionsBoundaryPolicy is a PermissionsBoundaryAttachmentType enum value
 	PermissionsBoundaryAttachmentTypePermissionsBoundaryPolicy = "PermissionsBoundaryPolicy"
 )
@@ -33187,28 +32891,6 @@ const (
 
 	// PolicyEvaluationDecisionTypeImplicitDeny is a PolicyEvaluationDecisionType enum value
 	PolicyEvaluationDecisionTypeImplicitDeny = "implicitDeny"
-)
-
-const (
-	// PolicyOwnerEntityTypeUser is a PolicyOwnerEntityType enum value
-	PolicyOwnerEntityTypeUser = "USER"
-
-	// PolicyOwnerEntityTypeRole is a PolicyOwnerEntityType enum value
-	PolicyOwnerEntityTypeRole = "ROLE"
-
-	// PolicyOwnerEntityTypeGroup is a PolicyOwnerEntityType enum value
-	PolicyOwnerEntityTypeGroup = "GROUP"
-)
-
-const (
-	// PolicyScopeTypeAll is a PolicyScopeType enum value
-	PolicyScopeTypeAll = "All"
-
-	// PolicyScopeTypeAws is a PolicyScopeType enum value
-	PolicyScopeTypeAws = "AWS"
-
-	// PolicyScopeTypeLocal is a PolicyScopeType enum value
-	PolicyScopeTypeLocal = "Local"
 )
 
 const (
@@ -33232,14 +32914,6 @@ const (
 
 	// PolicySourceTypeNone is a PolicySourceType enum value
 	PolicySourceTypeNone = "none"
-)
-
-const (
-	// PolicyTypeInline is a PolicyType enum value
-	PolicyTypeInline = "INLINE"
-
-	// PolicyTypeManaged is a PolicyType enum value
-	PolicyTypeManaged = "MANAGED"
 )
 
 // The policy usage type that indicates whether the policy is used as a permissions
@@ -33273,103 +32947,171 @@ const (
 )
 
 const (
-	// SortKeyTypeServiceNamespaceAscending is a SortKeyType enum value
+	// AssignmentStatusTypeAssigned is a assignmentStatusType enum value
+	AssignmentStatusTypeAssigned = "Assigned"
+
+	// AssignmentStatusTypeUnassigned is a assignmentStatusType enum value
+	AssignmentStatusTypeUnassigned = "Unassigned"
+
+	// AssignmentStatusTypeAny is a assignmentStatusType enum value
+	AssignmentStatusTypeAny = "Any"
+)
+
+const (
+	// EncodingTypeSsh is a encodingType enum value
+	EncodingTypeSsh = "SSH"
+
+	// EncodingTypePem is a encodingType enum value
+	EncodingTypePem = "PEM"
+)
+
+const (
+	// GlobalEndpointTokenVersionV1token is a globalEndpointTokenVersion enum value
+	GlobalEndpointTokenVersionV1token = "v1Token"
+
+	// GlobalEndpointTokenVersionV2token is a globalEndpointTokenVersion enum value
+	GlobalEndpointTokenVersionV2token = "v2Token"
+)
+
+const (
+	// JobStatusTypeInProgress is a jobStatusType enum value
+	JobStatusTypeInProgress = "IN_PROGRESS"
+
+	// JobStatusTypeCompleted is a jobStatusType enum value
+	JobStatusTypeCompleted = "COMPLETED"
+
+	// JobStatusTypeFailed is a jobStatusType enum value
+	JobStatusTypeFailed = "FAILED"
+)
+
+const (
+	// PolicyOwnerEntityTypeUser is a policyOwnerEntityType enum value
+	PolicyOwnerEntityTypeUser = "USER"
+
+	// PolicyOwnerEntityTypeRole is a policyOwnerEntityType enum value
+	PolicyOwnerEntityTypeRole = "ROLE"
+
+	// PolicyOwnerEntityTypeGroup is a policyOwnerEntityType enum value
+	PolicyOwnerEntityTypeGroup = "GROUP"
+)
+
+const (
+	// PolicyScopeTypeAll is a policyScopeType enum value
+	PolicyScopeTypeAll = "All"
+
+	// PolicyScopeTypeAws is a policyScopeType enum value
+	PolicyScopeTypeAws = "AWS"
+
+	// PolicyScopeTypeLocal is a policyScopeType enum value
+	PolicyScopeTypeLocal = "Local"
+)
+
+const (
+	// PolicyTypeInline is a policyType enum value
+	PolicyTypeInline = "INLINE"
+
+	// PolicyTypeManaged is a policyType enum value
+	PolicyTypeManaged = "MANAGED"
+)
+
+const (
+	// SortKeyTypeServiceNamespaceAscending is a sortKeyType enum value
 	SortKeyTypeServiceNamespaceAscending = "SERVICE_NAMESPACE_ASCENDING"
 
-	// SortKeyTypeServiceNamespaceDescending is a SortKeyType enum value
+	// SortKeyTypeServiceNamespaceDescending is a sortKeyType enum value
 	SortKeyTypeServiceNamespaceDescending = "SERVICE_NAMESPACE_DESCENDING"
 
-	// SortKeyTypeLastAuthenticatedTimeAscending is a SortKeyType enum value
+	// SortKeyTypeLastAuthenticatedTimeAscending is a sortKeyType enum value
 	SortKeyTypeLastAuthenticatedTimeAscending = "LAST_AUTHENTICATED_TIME_ASCENDING"
 
-	// SortKeyTypeLastAuthenticatedTimeDescending is a SortKeyType enum value
+	// SortKeyTypeLastAuthenticatedTimeDescending is a sortKeyType enum value
 	SortKeyTypeLastAuthenticatedTimeDescending = "LAST_AUTHENTICATED_TIME_DESCENDING"
 )
 
 const (
-	// StatusTypeActive is a StatusType enum value
+	// StatusTypeActive is a statusType enum value
 	StatusTypeActive = "Active"
 
-	// StatusTypeInactive is a StatusType enum value
+	// StatusTypeInactive is a statusType enum value
 	StatusTypeInactive = "Inactive"
 )
 
 const (
-	// SummaryKeyTypeUsers is a SummaryKeyType enum value
+	// SummaryKeyTypeUsers is a summaryKeyType enum value
 	SummaryKeyTypeUsers = "Users"
 
-	// SummaryKeyTypeUsersQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeUsersQuota is a summaryKeyType enum value
 	SummaryKeyTypeUsersQuota = "UsersQuota"
 
-	// SummaryKeyTypeGroups is a SummaryKeyType enum value
+	// SummaryKeyTypeGroups is a summaryKeyType enum value
 	SummaryKeyTypeGroups = "Groups"
 
-	// SummaryKeyTypeGroupsQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeGroupsQuota is a summaryKeyType enum value
 	SummaryKeyTypeGroupsQuota = "GroupsQuota"
 
-	// SummaryKeyTypeServerCertificates is a SummaryKeyType enum value
+	// SummaryKeyTypeServerCertificates is a summaryKeyType enum value
 	SummaryKeyTypeServerCertificates = "ServerCertificates"
 
-	// SummaryKeyTypeServerCertificatesQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeServerCertificatesQuota is a summaryKeyType enum value
 	SummaryKeyTypeServerCertificatesQuota = "ServerCertificatesQuota"
 
-	// SummaryKeyTypeUserPolicySizeQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeUserPolicySizeQuota is a summaryKeyType enum value
 	SummaryKeyTypeUserPolicySizeQuota = "UserPolicySizeQuota"
 
-	// SummaryKeyTypeGroupPolicySizeQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeGroupPolicySizeQuota is a summaryKeyType enum value
 	SummaryKeyTypeGroupPolicySizeQuota = "GroupPolicySizeQuota"
 
-	// SummaryKeyTypeGroupsPerUserQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeGroupsPerUserQuota is a summaryKeyType enum value
 	SummaryKeyTypeGroupsPerUserQuota = "GroupsPerUserQuota"
 
-	// SummaryKeyTypeSigningCertificatesPerUserQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeSigningCertificatesPerUserQuota is a summaryKeyType enum value
 	SummaryKeyTypeSigningCertificatesPerUserQuota = "SigningCertificatesPerUserQuota"
 
-	// SummaryKeyTypeAccessKeysPerUserQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeAccessKeysPerUserQuota is a summaryKeyType enum value
 	SummaryKeyTypeAccessKeysPerUserQuota = "AccessKeysPerUserQuota"
 
-	// SummaryKeyTypeMfadevices is a SummaryKeyType enum value
+	// SummaryKeyTypeMfadevices is a summaryKeyType enum value
 	SummaryKeyTypeMfadevices = "MFADevices"
 
-	// SummaryKeyTypeMfadevicesInUse is a SummaryKeyType enum value
+	// SummaryKeyTypeMfadevicesInUse is a summaryKeyType enum value
 	SummaryKeyTypeMfadevicesInUse = "MFADevicesInUse"
 
-	// SummaryKeyTypeAccountMfaenabled is a SummaryKeyType enum value
+	// SummaryKeyTypeAccountMfaenabled is a summaryKeyType enum value
 	SummaryKeyTypeAccountMfaenabled = "AccountMFAEnabled"
 
-	// SummaryKeyTypeAccountAccessKeysPresent is a SummaryKeyType enum value
+	// SummaryKeyTypeAccountAccessKeysPresent is a summaryKeyType enum value
 	SummaryKeyTypeAccountAccessKeysPresent = "AccountAccessKeysPresent"
 
-	// SummaryKeyTypeAccountSigningCertificatesPresent is a SummaryKeyType enum value
+	// SummaryKeyTypeAccountSigningCertificatesPresent is a summaryKeyType enum value
 	SummaryKeyTypeAccountSigningCertificatesPresent = "AccountSigningCertificatesPresent"
 
-	// SummaryKeyTypeAttachedPoliciesPerGroupQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeAttachedPoliciesPerGroupQuota is a summaryKeyType enum value
 	SummaryKeyTypeAttachedPoliciesPerGroupQuota = "AttachedPoliciesPerGroupQuota"
 
-	// SummaryKeyTypeAttachedPoliciesPerRoleQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeAttachedPoliciesPerRoleQuota is a summaryKeyType enum value
 	SummaryKeyTypeAttachedPoliciesPerRoleQuota = "AttachedPoliciesPerRoleQuota"
 
-	// SummaryKeyTypeAttachedPoliciesPerUserQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeAttachedPoliciesPerUserQuota is a summaryKeyType enum value
 	SummaryKeyTypeAttachedPoliciesPerUserQuota = "AttachedPoliciesPerUserQuota"
 
-	// SummaryKeyTypePolicies is a SummaryKeyType enum value
+	// SummaryKeyTypePolicies is a summaryKeyType enum value
 	SummaryKeyTypePolicies = "Policies"
 
-	// SummaryKeyTypePoliciesQuota is a SummaryKeyType enum value
+	// SummaryKeyTypePoliciesQuota is a summaryKeyType enum value
 	SummaryKeyTypePoliciesQuota = "PoliciesQuota"
 
-	// SummaryKeyTypePolicySizeQuota is a SummaryKeyType enum value
+	// SummaryKeyTypePolicySizeQuota is a summaryKeyType enum value
 	SummaryKeyTypePolicySizeQuota = "PolicySizeQuota"
 
-	// SummaryKeyTypePolicyVersionsInUse is a SummaryKeyType enum value
+	// SummaryKeyTypePolicyVersionsInUse is a summaryKeyType enum value
 	SummaryKeyTypePolicyVersionsInUse = "PolicyVersionsInUse"
 
-	// SummaryKeyTypePolicyVersionsInUseQuota is a SummaryKeyType enum value
+	// SummaryKeyTypePolicyVersionsInUseQuota is a summaryKeyType enum value
 	SummaryKeyTypePolicyVersionsInUseQuota = "PolicyVersionsInUseQuota"
 
-	// SummaryKeyTypeVersionsPerPolicyQuota is a SummaryKeyType enum value
+	// SummaryKeyTypeVersionsPerPolicyQuota is a summaryKeyType enum value
 	SummaryKeyTypeVersionsPerPolicyQuota = "VersionsPerPolicyQuota"
 
-	// SummaryKeyTypeGlobalEndpointTokenVersion is a SummaryKeyType enum value
+	// SummaryKeyTypeGlobalEndpointTokenVersion is a summaryKeyType enum value
 	SummaryKeyTypeGlobalEndpointTokenVersion = "GlobalEndpointTokenVersion"
 )

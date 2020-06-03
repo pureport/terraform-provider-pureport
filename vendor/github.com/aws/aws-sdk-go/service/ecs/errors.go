@@ -2,10 +2,6 @@
 
 package ecs
 
-import (
-	"github.com/aws/aws-sdk-go/private/protocol"
-)
-
 const (
 
 	// ErrCodeAccessDeniedException for service response error code
@@ -73,12 +69,6 @@ const (
 	// API request.
 	ErrCodeInvalidParameterException = "InvalidParameterException"
 
-	// ErrCodeLimitExceededException for service response error code
-	// "LimitExceededException".
-	//
-	// The limit for the resource has been exceeded.
-	ErrCodeLimitExceededException = "LimitExceededException"
-
 	// ErrCodeMissingVersionException for service response error code
 	// "MissingVersionException".
 	//
@@ -108,12 +98,6 @@ const (
 	//
 	// The specified platform version does not exist.
 	ErrCodePlatformUnknownException = "PlatformUnknownException"
-
-	// ErrCodeResourceInUseException for service response error code
-	// "ResourceInUseException".
-	//
-	// The specified resource is in-use and cannot be removed.
-	ErrCodeResourceInUseException = "ResourceInUseException"
 
 	// ErrCodeResourceNotFoundException for service response error code
 	// "ResourceNotFoundException".
@@ -152,9 +136,9 @@ const (
 	// ErrCodeTaskSetNotFoundException for service response error code
 	// "TaskSetNotFoundException".
 	//
-	// The specified task set could not be found. You can view your available task
-	// sets with DescribeTaskSets. Task sets are specific to each cluster, service
-	// and Region.
+	// The specified task set could not be found. You can view your available container
+	// instances with DescribeTaskSets. Task sets are specific to each cluster,
+	// service and Region.
 	ErrCodeTaskSetNotFoundException = "TaskSetNotFoundException"
 
 	// ErrCodeUnsupportedFeatureException for service response error code
@@ -173,29 +157,3 @@ const (
 	// it resumes where it stopped previously.
 	ErrCodeUpdateInProgressException = "UpdateInProgressException"
 )
-
-var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"AccessDeniedException":                          newErrorAccessDeniedException,
-	"AttributeLimitExceededException":                newErrorAttributeLimitExceededException,
-	"BlockedException":                               newErrorBlockedException,
-	"ClientException":                                newErrorClientException,
-	"ClusterContainsContainerInstancesException":     newErrorClusterContainsContainerInstancesException,
-	"ClusterContainsServicesException":               newErrorClusterContainsServicesException,
-	"ClusterContainsTasksException":                  newErrorClusterContainsTasksException,
-	"ClusterNotFoundException":                       newErrorClusterNotFoundException,
-	"InvalidParameterException":                      newErrorInvalidParameterException,
-	"LimitExceededException":                         newErrorLimitExceededException,
-	"MissingVersionException":                        newErrorMissingVersionException,
-	"NoUpdateAvailableException":                     newErrorNoUpdateAvailableException,
-	"PlatformTaskDefinitionIncompatibilityException": newErrorPlatformTaskDefinitionIncompatibilityException,
-	"PlatformUnknownException":                       newErrorPlatformUnknownException,
-	"ResourceInUseException":                         newErrorResourceInUseException,
-	"ResourceNotFoundException":                      newErrorResourceNotFoundException,
-	"ServerException":                                newErrorServerException,
-	"ServiceNotActiveException":                      newErrorServiceNotActiveException,
-	"ServiceNotFoundException":                       newErrorServiceNotFoundException,
-	"TargetNotFoundException":                        newErrorTargetNotFoundException,
-	"TaskSetNotFoundException":                       newErrorTaskSetNotFoundException,
-	"UnsupportedFeatureException":                    newErrorUnsupportedFeatureException,
-	"UpdateInProgressException":                      newErrorUpdateInProgressException,
-}

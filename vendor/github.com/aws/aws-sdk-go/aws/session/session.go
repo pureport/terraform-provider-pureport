@@ -555,20 +555,7 @@ func mergeConfigSrcs(cfg, userCfg *aws.Config,
 	}
 
 	// Regional Endpoint flag for STS endpoint resolving
-	mergeSTSRegionalEndpointConfig(cfg, []endpoints.STSRegionalEndpoint{
-		userCfg.STSRegionalEndpoint,
-		envCfg.STSRegionalEndpoint,
-		sharedCfg.STSRegionalEndpoint,
-		endpoints.LegacySTSEndpoint,
-	})
-
-	// Regional Endpoint flag for S3 endpoint resolving
-	mergeS3UsEast1RegionalEndpointConfig(cfg, []endpoints.S3UsEast1RegionalEndpoint{
-		userCfg.S3UsEast1RegionalEndpoint,
-		envCfg.S3UsEast1RegionalEndpoint,
-		sharedCfg.S3UsEast1RegionalEndpoint,
-		endpoints.LegacyS3UsEast1Endpoint,
-	})
+	mergeSTSRegionalEndpointConfig(cfg, envCfg, sharedCfg)
 
 	// Configure credentials if not already set by the user when creating the
 	// Session.
@@ -580,33 +567,23 @@ func mergeConfigSrcs(cfg, userCfg *aws.Config,
 		cfg.Credentials = creds
 	}
 
-	cfg.S3UseARNRegion = userCfg.S3UseARNRegion
-	if cfg.S3UseARNRegion == nil {
-		cfg.S3UseARNRegion = &envCfg.S3UseARNRegion
-	}
-	if cfg.S3UseARNRegion == nil {
-		cfg.S3UseARNRegion = &sharedCfg.S3UseARNRegion
-	}
-
 	return nil
 }
 
-func mergeSTSRegionalEndpointConfig(cfg *aws.Config, values []endpoints.STSRegionalEndpoint) {
-	for _, v := range values {
-		if v != endpoints.UnsetSTSEndpoint {
-			cfg.STSRegionalEndpoint = v
-			break
-		}
-	}
-}
+// mergeSTSRegionalEndpointConfig function merges the STSRegionalEndpoint into cfg from
+// envConfig and SharedConfig with envConfig being given precedence over SharedConfig
+func mergeSTSRegionalEndpointConfig(cfg *aws.Config, envCfg envConfig, sharedCfg sharedConfig) error {
 
-func mergeS3UsEast1RegionalEndpointConfig(cfg *aws.Config, values []endpoints.S3UsEast1RegionalEndpoint) {
-	for _, v := range values {
-		if v != endpoints.UnsetS3UsEast1Endpoint {
-			cfg.S3UsEast1RegionalEndpoint = v
-			break
-		}
+	cfg.STSRegionalEndpoint = envCfg.STSRegionalEndpoint
+
+	if cfg.STSRegionalEndpoint == endpoints.UnsetSTSEndpoint {
+		cfg.STSRegionalEndpoint = sharedCfg.STSRegionalEndpoint
 	}
+
+	if cfg.STSRegionalEndpoint == endpoints.UnsetSTSEndpoint {
+		cfg.STSRegionalEndpoint = endpoints.LegacySTSEndpoint
+	}
+	return nil
 }
 
 func initHandlers(s *Session) {
@@ -642,22 +619,15 @@ func (s *Session) ClientConfig(service string, cfgs ...*aws.Config) client.Confi
 
 	region := aws.StringValue(s.Config.Region)
 	resolved, err := s.resolveEndpoint(service, region, s.Config)
-	if err != nil {
-		s.Handlers.Validate.PushBack(func(r *request.Request) {
-			if len(r.ClientInfo.Endpoint) != 0 {
-				// Error occurred while resolving endpoint, but the request
-				// being invoked has had an endpoint specified after the client
-				// was created.
-				return
-			}
-			r.Error = err
-		})
+	if err != nil && s.Config.Logger != nil {
+		s.Config.Logger.Log(fmt.Sprintf(
+			"ERROR: unable to resolve endpoint for service %q, region %q, err: %v",
+			service, region, err))
 	}
 
 	return client.Config{
 		Config:             s.Config,
 		Handlers:           s.Handlers,
-		PartitionID:        resolved.PartitionID,
 		Endpoint:           resolved.URL,
 		SigningRegion:      resolved.SigningRegion,
 		SigningNameDerived: resolved.SigningNameDerived,
@@ -682,11 +652,6 @@ func (s *Session) resolveEndpoint(service, region string, cfg *aws.Config) (endp
 			// provided in envConfig or sharedConfig with envConfig getting
 			// precedence.
 			opt.STSRegionalEndpoint = cfg.STSRegionalEndpoint
-
-			// Support for S3UsEast1RegionalEndpoint where the S3UsEast1RegionalEndpoint is
-			// provided in envConfig or sharedConfig with envConfig getting
-			// precedence.
-			opt.S3UsEast1RegionalEndpoint = cfg.S3UsEast1RegionalEndpoint
 
 			// Support the condition where the service is modeled but its
 			// endpoint metadata is not available.

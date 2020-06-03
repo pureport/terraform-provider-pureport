@@ -26,7 +26,7 @@ func resourceAwsSesActiveReceiptRuleSet() *schema.Resource {
 }
 
 func resourceAwsSesActiveReceiptRuleSetUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).sesconn
+	conn := meta.(*AWSClient).sesConn
 
 	ruleSetName := d.Get("rule_set_name").(string)
 
@@ -45,17 +45,12 @@ func resourceAwsSesActiveReceiptRuleSetUpdate(d *schema.ResourceData, meta inter
 }
 
 func resourceAwsSesActiveReceiptRuleSetRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).sesconn
+	conn := meta.(*AWSClient).sesConn
 
 	describeOpts := &ses.DescribeActiveReceiptRuleSetInput{}
 
 	response, err := conn.DescribeActiveReceiptRuleSet(describeOpts)
 	if err != nil {
-		if isAWSErr(err, ses.ErrCodeRuleSetDoesNotExistException, "") {
-			log.Printf("[WARN] SES Receipt Rule Set (%s) belonging to SES Active Receipt Rule Set not found, removing from state", d.Id())
-			d.SetId("")
-			return nil
-		}
 		return err
 	}
 
@@ -70,7 +65,7 @@ func resourceAwsSesActiveReceiptRuleSetRead(d *schema.ResourceData, meta interfa
 }
 
 func resourceAwsSesActiveReceiptRuleSetDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).sesconn
+	conn := meta.(*AWSClient).sesConn
 
 	deleteOpts := &ses.SetActiveReceiptRuleSetInput{
 		RuleSetName: nil,

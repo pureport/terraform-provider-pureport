@@ -81,6 +81,12 @@ func resourceAwsElasticacheParameterGroupCreate(d *schema.ResourceData, meta int
 		return fmt.Errorf("Error creating Cache Parameter Group: %s", err)
 	}
 
+	d.Partial(true)
+	d.SetPartial("name")
+	d.SetPartial("family")
+	d.SetPartial("description")
+	d.Partial(false)
+
 	d.SetId(*resp.CacheParameterGroup.CacheParameterGroupName)
 	log.Printf("[INFO] Cache Parameter Group ID: %s", d.Id())
 
@@ -126,6 +132,8 @@ func resourceAwsElasticacheParameterGroupRead(d *schema.ResourceData, meta inter
 
 func resourceAwsElasticacheParameterGroupUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).elasticacheconn
+
+	d.Partial(true)
 
 	if d.HasChange("parameter") {
 		o, n := d.GetChange("parameter")
@@ -298,7 +306,11 @@ func resourceAwsElasticacheParameterGroupUpdate(d *schema.ResourceData, meta int
 				return fmt.Errorf("Error modifying Cache Parameter Group: %s", err)
 			}
 		}
+
+		d.SetPartial("parameter")
 	}
+
+	d.Partial(false)
 
 	return resourceAwsElasticacheParameterGroupRead(d, meta)
 }

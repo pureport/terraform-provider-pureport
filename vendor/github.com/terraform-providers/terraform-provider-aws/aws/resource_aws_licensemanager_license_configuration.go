@@ -105,7 +105,6 @@ func resourceAwsLicenseManagerLicenseConfigurationCreate(d *schema.ResourceData,
 
 func resourceAwsLicenseManagerLicenseConfigurationRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).licensemanagerconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	resp, err := conn.GetLicenseConfiguration(&licensemanager.GetLicenseConfigurationInput{
 		LicenseConfigurationArn: aws.String(d.Id()),
@@ -129,7 +128,7 @@ func resourceAwsLicenseManagerLicenseConfigurationRead(d *schema.ResourceData, m
 	}
 	d.Set("name", resp.Name)
 
-	if err := d.Set("tags", keyvaluetags.LicensemanagerKeyValueTags(resp.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.LicensemanagerKeyValueTags(resp.Tags).IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -139,13 +138,19 @@ func resourceAwsLicenseManagerLicenseConfigurationRead(d *schema.ResourceData, m
 func resourceAwsLicenseManagerLicenseConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).licensemanagerconn
 
+	d.Partial(true)
+
 	if d.HasChange("tags") {
 		o, n := d.GetChange("tags")
 
 		if err := keyvaluetags.LicensemanagerUpdateTags(conn, d.Id(), o, n); err != nil {
 			return fmt.Errorf("error updating License Manager License Configuration (%s) tags: %s", d.Id(), err)
 		}
+
+		d.SetPartial("tags")
 	}
+
+	d.Partial(false)
 
 	opts := &licensemanager.UpdateLicenseConfigurationInput{
 		LicenseConfigurationArn: aws.String(d.Id()),
