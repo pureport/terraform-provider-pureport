@@ -351,6 +351,9 @@ func TestResourceOracleConnection_basic(t *testing.T) {
 	})
 }
 
+/**
+ * Disabling test for now
+ * Related Issue: https://github.com/hashicorp/terraform-plugin-sdk/issues/175
 func TestResourceOracleConnection_invalid_ha(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		IsUnitTest: true,
@@ -365,6 +368,7 @@ func TestResourceOracleConnection_invalid_ha(t *testing.T) {
 		},
 	})
 }
+*/
 
 func testAccCheckResourceOracleConnection(name string, instance *client.OracleFastConnectConnection) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
