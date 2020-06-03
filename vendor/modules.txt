@@ -13,7 +13,7 @@ cloud.google.com/go/bigtable
 cloud.google.com/go/bigtable/internal/option
 # cloud.google.com/go/storage v1.0.0
 cloud.google.com/go/storage
-# github.com/Azure/azure-sdk-for-go v36.2.0+incompatible
+# github.com/Azure/azure-sdk-for-go v38.1.0+incompatible
 github.com/Azure/azure-sdk-for-go/profiles/2017-03-09/resources/mgmt/resources
 github.com/Azure/azure-sdk-for-go/services/analysisservices/mgmt/2017-08-01/analysisservices
 github.com/Azure/azure-sdk-for-go/services/apimanagement/mgmt/2018-01-01/apimanagement
@@ -37,7 +37,7 @@ github.com/Azure/azure-sdk-for-go/services/devspaces/mgmt/2019-04-01/devspaces
 github.com/Azure/azure-sdk-for-go/services/devtestlabs/mgmt/2016-05-15/dtl
 github.com/Azure/azure-sdk-for-go/services/dns/mgmt/2018-05-01/dns
 github.com/Azure/azure-sdk-for-go/services/eventhub/mgmt/2017-04-01/eventhub
-github.com/Azure/azure-sdk-for-go/services/frontdoor/mgmt/2019-04-01/frontdoor
+github.com/Azure/azure-sdk-for-go/services/frontdoor/mgmt/2019-11-01/frontdoor
 github.com/Azure/azure-sdk-for-go/services/graphrbac/1.6/graphrbac
 github.com/Azure/azure-sdk-for-go/services/healthcareapis/mgmt/2019-09-16/healthcareapis
 github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault
@@ -67,13 +67,12 @@ github.com/Azure/azure-sdk-for-go/services/preview/resources/mgmt/2018-03-01-pre
 github.com/Azure/azure-sdk-for-go/services/preview/security/mgmt/v1.0/security
 github.com/Azure/azure-sdk-for-go/services/preview/servicebus/mgmt/2018-01-01-preview/servicebus
 github.com/Azure/azure-sdk-for-go/services/preview/sql/mgmt/2017-03-01-preview/sql
-github.com/Azure/azure-sdk-for-go/services/preview/sql/mgmt/2017-10-01-preview/sql
-github.com/Azure/azure-sdk-for-go/services/preview/sql/mgmt/2018-06-01-preview/sql
+github.com/Azure/azure-sdk-for-go/services/preview/sql/mgmt/v3.0/sql
 github.com/Azure/azure-sdk-for-go/services/privatedns/mgmt/2018-09-01/privatedns
 github.com/Azure/azure-sdk-for-go/services/provisioningservices/mgmt/2018-01-22/iothub
 github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2016-06-01/recoveryservices
-github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2017-07-01/backup
 github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2018-01-10/siterecovery
+github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2019-05-13/backup
 github.com/Azure/azure-sdk-for-go/services/redis/mgmt/2018-03-01/redis
 github.com/Azure/azure-sdk-for-go/services/relay/mgmt/2017-04-01/relay
 github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2016-02-01/resources
@@ -763,10 +762,13 @@ github.com/stretchr/testify/mock
 github.com/terraform-providers/terraform-provider-aws/aws
 github.com/terraform-providers/terraform-provider-aws/aws/internal/flatmap
 github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags
-# github.com/terraform-providers/terraform-provider-azurerm v1.40.0
+# github.com/terraform-providers/terraform-provider-azuread v0.6.1-0.20191007035844-361c0a206ad4
+github.com/terraform-providers/terraform-provider-azuread/azuread/helpers/tf
+# github.com/terraform-providers/terraform-provider-azurerm v1.44.0
 ## explicit
 github.com/terraform-providers/terraform-provider-azurerm/azurerm
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/azure
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/common
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/kubernetes
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/set
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/suppress
@@ -779,10 +781,12 @@ github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/locks
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/provider
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/analysisservices
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/analysisservices/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/analysisservices/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/apimanagement
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/apimanagement/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/appconfiguration
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/appconfiguration/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/appconfiguration/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/applicationinsights
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/applicationinsights/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/authorization
@@ -791,27 +795,34 @@ github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/servi
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/automation/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/batch
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/batch/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/batch/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/bot
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/bot/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cdn
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cdn/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cdn/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cognitive
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cognitive/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cognitive/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/common
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/compute
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/compute/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/compute/parse
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/compute/validate
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/containers
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/containers/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cosmos
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/cosmos/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/databricks
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/databricks/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/databricks/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/datafactory
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/datafactory/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/datalake
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/datalake/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/devspace
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/devspace/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/devspace/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/devtestlabs
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/devtestlabs/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/dns
@@ -828,6 +839,7 @@ github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/servi
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/hdinsight/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/healthcare
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/healthcare/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/healthcare/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/iothub
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/iothub/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/keyvault
@@ -842,10 +854,12 @@ github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/servi
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/managementgroup/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/maps
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/maps/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/maps/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/mariadb
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/mariadb/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/media
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/media/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/media/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/monitor
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/monitor/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/msi
@@ -858,6 +872,8 @@ github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/servi
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/netapp/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/network
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/network/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/network/parse
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/network/validate
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/notificationhub
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/notificationhub/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/policy
@@ -880,14 +896,17 @@ github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/servi
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/scheduler/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/search
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/search/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/search/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/securitycenter
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/securitycenter/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/servicebus
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/servicebus/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/servicefabric
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/servicefabric/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/servicefabric/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/signalr
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/signalr/client
+github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/signalr/parse
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/sql
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/sql/client
 github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/storage
