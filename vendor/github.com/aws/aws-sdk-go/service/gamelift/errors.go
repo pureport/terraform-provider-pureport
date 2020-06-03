@@ -2,10 +2,6 @@
 
 package gamelift
 
-import (
-	"github.com/aws/aws-sdk-go/private/protocol"
-)
-
 const (
 
 	// ErrCodeConflictException for service response error code
@@ -82,22 +78,6 @@ const (
 	// should not retry such requests.
 	ErrCodeNotFoundException = "NotFoundException"
 
-	// ErrCodeOutOfCapacityException for service response error code
-	// "OutOfCapacityException".
-	//
-	// The specified game server group has no available game servers to fulfill
-	// a ClaimGameServer request. Clients can retry such requests immediately or
-	// after a waiting period.
-	ErrCodeOutOfCapacityException = "OutOfCapacityException"
-
-	// ErrCodeTaggingFailedException for service response error code
-	// "TaggingFailedException".
-	//
-	// The requested tagging operation did not succeed. This may be due to invalid
-	// tag format or the maximum tag limit may have been exceeded. Resolve the issue
-	// before retrying.
-	ErrCodeTaggingFailedException = "TaggingFailedException"
-
 	// ErrCodeTerminalRoutingStrategyException for service response error code
 	// "TerminalRoutingStrategyException".
 	//
@@ -117,24 +97,6 @@ const (
 	// ErrCodeUnsupportedRegionException for service response error code
 	// "UnsupportedRegionException".
 	//
-	// The requested operation is not supported in the Region specified.
+	// The requested operation is not supported in the region specified.
 	ErrCodeUnsupportedRegionException = "UnsupportedRegionException"
 )
-
-var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"ConflictException":                    newErrorConflictException,
-	"FleetCapacityExceededException":       newErrorFleetCapacityExceededException,
-	"GameSessionFullException":             newErrorGameSessionFullException,
-	"IdempotentParameterMismatchException": newErrorIdempotentParameterMismatchException,
-	"InternalServiceException":             newErrorInternalServiceException,
-	"InvalidFleetStatusException":          newErrorInvalidFleetStatusException,
-	"InvalidGameSessionStatusException":    newErrorInvalidGameSessionStatusException,
-	"InvalidRequestException":              newErrorInvalidRequestException,
-	"LimitExceededException":               newErrorLimitExceededException,
-	"NotFoundException":                    newErrorNotFoundException,
-	"OutOfCapacityException":               newErrorOutOfCapacityException,
-	"TaggingFailedException":               newErrorTaggingFailedException,
-	"TerminalRoutingStrategyException":     newErrorTerminalRoutingStrategyException,
-	"UnauthorizedException":                newErrorUnauthorizedException,
-	"UnsupportedRegionException":           newErrorUnsupportedRegionException,
-}

@@ -7,12 +7,10 @@ import (
 	"strconv"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/arn"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/apigateway"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsApiGatewayUsagePlan() *schema.Resource {
@@ -55,7 +53,7 @@ func resourceAwsApiGatewayUsagePlan() *schema.Resource {
 			},
 
 			"quota_settings": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
@@ -85,7 +83,7 @@ func resourceAwsApiGatewayUsagePlan() *schema.Resource {
 			},
 
 			"throttle_settings": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
@@ -109,17 +107,12 @@ func resourceAwsApiGatewayUsagePlan() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"tags": tagsSchema(),
-			"arn": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 		},
 	}
 }
 
 func resourceAwsApiGatewayUsagePlanCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Print("[DEBUG] Creating API Gateway Usage Plan")
 
 	params := &apigateway.CreateUsagePlanInput{
@@ -155,7 +148,7 @@ func resourceAwsApiGatewayUsagePlanCreate(d *schema.ResourceData, meta interface
 	}
 
 	if v, ok := d.GetOk("quota_settings"); ok {
-		settings := v.([]interface{})
+		settings := v.(*schema.Set).List()
 		q, ok := settings[0].(map[string]interface{})
 
 		if errors := validateApiGatewayUsagePlanQuotaSettings(q); len(errors) > 0 {
@@ -184,7 +177,7 @@ func resourceAwsApiGatewayUsagePlanCreate(d *schema.ResourceData, meta interface
 	}
 
 	if v, ok := d.GetOk("throttle_settings"); ok {
-		settings := v.([]interface{})
+		settings := v.(*schema.Set).List()
 		q, ok := settings[0].(map[string]interface{})
 
 		if !ok {
@@ -202,10 +195,6 @@ func resourceAwsApiGatewayUsagePlanCreate(d *schema.ResourceData, meta interface
 		}
 
 		params.Throttle = ts
-	}
-
-	if v, ok := d.GetOk("tags"); ok {
-		params.Tags = keyvaluetags.New(v.(map[string]interface{})).IgnoreAws().ApigatewayTags()
 	}
 
 	up, err := conn.CreateUsagePlan(params)
@@ -239,9 +228,7 @@ func resourceAwsApiGatewayUsagePlanCreate(d *schema.ResourceData, meta interface
 }
 
 func resourceAwsApiGatewayUsagePlanRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
-
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Reading API Gateway Usage Plan: %s", d.Id())
 
 	up, err := conn.GetUsagePlan(&apigateway.GetUsagePlanInput{
@@ -255,18 +242,6 @@ func resourceAwsApiGatewayUsagePlanRead(d *schema.ResourceData, meta interface{}
 		}
 		return err
 	}
-
-	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(up.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
-
-	arn := arn.ARN{
-		Partition: meta.(*AWSClient).partition,
-		Service:   "apigateway",
-		Region:    meta.(*AWSClient).region,
-		Resource:  fmt.Sprintf("/usageplans/%s", d.Id()),
-	}.String()
-	d.Set("arn", arn)
 
 	d.Set("name", up.Name)
 	d.Set("description", up.Description)
@@ -294,7 +269,7 @@ func resourceAwsApiGatewayUsagePlanRead(d *schema.ResourceData, meta interface{}
 }
 
 func resourceAwsApiGatewayUsagePlanUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Print("[DEBUG] Updating API Gateway Usage Plan")
 
 	operations := make([]*apigateway.PatchOperation, 0)
@@ -363,7 +338,10 @@ func resourceAwsApiGatewayUsagePlanUpdate(d *schema.ResourceData, meta interface
 
 	if d.HasChange("throttle_settings") {
 		o, n := d.GetChange("throttle_settings")
-		diff := n.([]interface{})
+
+		os := o.(*schema.Set)
+		ns := n.(*schema.Set)
+		diff := ns.Difference(os).List()
 
 		// Handle Removal
 		if len(diff) == 0 {
@@ -408,7 +386,10 @@ func resourceAwsApiGatewayUsagePlanUpdate(d *schema.ResourceData, meta interface
 
 	if d.HasChange("quota_settings") {
 		o, n := d.GetChange("quota_settings")
-		diff := n.([]interface{})
+
+		os := o.(*schema.Set)
+		ns := n.(*schema.Set)
+		diff := ns.Difference(os).List()
 
 		// Handle Removal
 		if len(diff) == 0 {
@@ -465,13 +446,6 @@ func resourceAwsApiGatewayUsagePlanUpdate(d *schema.ResourceData, meta interface
 		}
 	}
 
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-		if err := keyvaluetags.ApigatewayUpdateTags(conn, d.Get("arn").(string), o, n); err != nil {
-			return fmt.Errorf("error updating tags: %s", err)
-		}
-	}
-
 	params := &apigateway.UpdateUsagePlanInput{
 		UsagePlanId:     aws.String(d.Id()),
 		PatchOperations: operations,
@@ -486,7 +460,7 @@ func resourceAwsApiGatewayUsagePlanUpdate(d *schema.ResourceData, meta interface
 }
 
 func resourceAwsApiGatewayUsagePlanDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 
 	// Removing existing api stages associated
 	if apistages, ok := d.GetOk("api_stages"); ok {

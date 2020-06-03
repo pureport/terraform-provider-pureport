@@ -91,13 +91,13 @@ func resourceAwsSqsQueue() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Computed:         true,
-				ValidateFunc:     validation.StringIsJSON,
+				ValidateFunc:     validation.ValidateJsonString,
 				DiffSuppressFunc: suppressEquivalentAwsPolicyDiffs,
 			},
 			"redrive_policy": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringIsJSON,
+				ValidateFunc: validation.ValidateJsonString,
 				StateFunc: func(v interface{}) string {
 					json, _ := structure.NormalizeJsonString(v)
 					return json
@@ -277,7 +277,6 @@ func resourceAwsSqsQueueUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAwsSqsQueueRead(d *schema.ResourceData, meta interface{}) error {
 	sqsconn := meta.(*AWSClient).sqsconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	attributeOutput, err := sqsconn.GetQueueAttributes(&sqs.GetQueueAttributesInput{
 		QueueUrl:       aws.String(d.Id()),
@@ -427,7 +426,7 @@ func resourceAwsSqsQueueRead(d *schema.ResourceData, meta interface{}) error {
 		}
 	}
 
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tags.IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 

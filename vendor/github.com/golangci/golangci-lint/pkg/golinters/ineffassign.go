@@ -42,7 +42,7 @@ func NewIneffassign() *goanalysis.Linter {
 
 			res := make([]goanalysis.Issue, 0, len(issues))
 			for _, i := range issues {
-				res = append(res, goanalysis.NewIssue(&result.Issue{
+				res = append(res, goanalysis.NewIssue(&result.Issue{ //nolint:scopelint
 					Pos:        i.Pos,
 					Text:       fmt.Sprintf("ineffectual assignment to %s", formatCode(i.IdentName, lintCtx.Cfg)),
 					FromLinter: ineffassignName,

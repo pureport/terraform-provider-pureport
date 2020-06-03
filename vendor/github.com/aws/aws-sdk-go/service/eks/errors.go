@@ -2,10 +2,6 @@
 
 package eks
 
-import (
-	"github.com/aws/aws-sdk-go/private/protocol"
-)
-
 const (
 
 	// ErrCodeBadRequestException for service response error code
@@ -60,8 +56,7 @@ const (
 	// "ResourceNotFoundException".
 	//
 	// The specified resource could not be found. You can view your available clusters
-	// with ListClusters. You can view your available managed node groups with ListNodegroups.
-	// Amazon EKS clusters and node groups are Region-specific.
+	// with ListClusters. Amazon EKS clusters are Region-specific.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeServerException for service response error code
@@ -85,17 +80,3 @@ const (
 	// your cluster.
 	ErrCodeUnsupportedAvailabilityZoneException = "UnsupportedAvailabilityZoneException"
 )
-
-var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"BadRequestException":                  newErrorBadRequestException,
-	"ClientException":                      newErrorClientException,
-	"InvalidParameterException":            newErrorInvalidParameterException,
-	"InvalidRequestException":              newErrorInvalidRequestException,
-	"NotFoundException":                    newErrorNotFoundException,
-	"ResourceInUseException":               newErrorResourceInUseException,
-	"ResourceLimitExceededException":       newErrorResourceLimitExceededException,
-	"ResourceNotFoundException":            newErrorResourceNotFoundException,
-	"ServerException":                      newErrorServerException,
-	"ServiceUnavailableException":          newErrorServiceUnavailableException,
-	"UnsupportedAvailabilityZoneException": newErrorUnsupportedAvailabilityZoneException,
-}

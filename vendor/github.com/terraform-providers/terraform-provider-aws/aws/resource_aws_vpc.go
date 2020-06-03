@@ -34,7 +34,7 @@ func resourceAwsVpc() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
-				ValidateFunc: validation.IsCIDRNetwork(16, 28),
+				ValidateFunc: validation.CIDRNetwork(16, 28),
 			},
 
 			"instance_tenancy": {
@@ -145,6 +145,10 @@ func resourceAwsVpcCreate(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(*vpc.VpcId)
 	log.Printf("[INFO] VPC ID: %s", d.Id())
 
+	// Set partial mode and say that we setup the cidr block
+	d.Partial(true)
+	d.SetPartial("cidr_block")
+
 	// Wait for the VPC to become available
 	log.Printf(
 		"[DEBUG] Waiting for VPC (%s) to become available",
@@ -182,6 +186,8 @@ func resourceAwsVpcCreate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.ModifyVpcAttribute(input); err != nil {
 			return fmt.Errorf("error enabling VPC (%s) DNS hostnames: %s", d.Id(), err)
 		}
+
+		d.SetPartial("enable_dns_hostnames")
 	}
 
 	// By default, only the enableDnsSupport attribute is set to true in a VPC created any other way.
@@ -198,6 +204,8 @@ func resourceAwsVpcCreate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.ModifyVpcAttribute(input); err != nil {
 			return fmt.Errorf("error disabling VPC (%s) DNS support: %s", d.Id(), err)
 		}
+
+		d.SetPartial("enable_dns_support")
 	}
 
 	if d.Get("enable_classiclink").(bool) {
@@ -208,6 +216,8 @@ func resourceAwsVpcCreate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.EnableVpcClassicLink(input); err != nil {
 			return fmt.Errorf("error enabling VPC (%s) ClassicLink: %s", d.Id(), err)
 		}
+
+		d.SetPartial("enable_classiclink")
 	}
 
 	if d.Get("enable_classiclink_dns_support").(bool) {
@@ -218,20 +228,46 @@ func resourceAwsVpcCreate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.EnableVpcClassicLinkDnsSupport(input); err != nil {
 			return fmt.Errorf("error enabling VPC (%s) ClassicLink DNS support: %s", d.Id(), err)
 		}
+
+		d.SetPartial("enable_classiclink_dns_support")
 	}
 
 	if v := d.Get("tags").(map[string]interface{}); len(v) > 0 {
-		if err := keyvaluetags.Ec2CreateTags(conn, d.Id(), v); err != nil {
+		// Handle EC2 eventual consistency on creation
+		err := resource.Retry(5*time.Minute, func() *resource.RetryError {
+			err := keyvaluetags.Ec2UpdateTags(conn, d.Id(), nil, v)
+
+			if isAWSErr(err, "InvalidVpcID.NotFound", "") {
+				return resource.RetryableError(err)
+			}
+
+			if err != nil {
+				return resource.NonRetryableError(err)
+			}
+
+			return nil
+		})
+
+		if isResourceTimeoutError(err) {
+			err = keyvaluetags.Ec2UpdateTags(conn, d.Id(), nil, v)
+		}
+
+		if err != nil {
 			return fmt.Errorf("error adding tags: %s", err)
 		}
+
+		d.SetPartial("tags")
 	}
+
+	d.Partial(false)
 
 	return resourceAwsVpcRead(d, meta)
 }
 
 func resourceAwsVpcRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
+	ignoreTags := meta.(*AWSClient).ignoreTags
+	ignoreTagPrefixes := meta.(*AWSClient).ignoreTagPrefixes
 
 	// Refresh the VPC state
 	vpcRaw, _, err := VPCStateRefreshFunc(conn, d.Id())()
@@ -260,7 +296,7 @@ func resourceAwsVpcRead(d *schema.ResourceData, meta interface{}) error {
 	}.String()
 	d.Set("arn", arn)
 
-	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(vpc.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(vpc.Tags).IgnoreAws().IgnorePrefixes(ignoreTagPrefixes).Ignore(ignoreTags).Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -363,6 +399,8 @@ func resourceAwsVpcRead(d *schema.ResourceData, meta interface{}) error {
 func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
 
+	// Turn on partial mode
+	d.Partial(true)
 	vpcid := d.Id()
 	if d.HasChange("enable_dns_hostnames") {
 		val := d.Get("enable_dns_hostnames").(bool)
@@ -379,6 +417,8 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.ModifyVpcAttribute(modifyOpts); err != nil {
 			return err
 		}
+
+		d.SetPartial("enable_dns_hostnames")
 	}
 
 	_, hasEnableDnsSupportOption := d.GetOk("enable_dns_support")
@@ -398,6 +438,8 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.ModifyVpcAttribute(modifyOpts); err != nil {
 			return err
 		}
+
+		d.SetPartial("enable_dns_support")
 	}
 
 	if d.HasChange("enable_classiclink") {
@@ -423,6 +465,8 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 				return err
 			}
 		}
+
+		d.SetPartial("enable_classiclink")
 	}
 
 	if d.HasChange("enable_classiclink_dns_support") {
@@ -448,6 +492,8 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 				return err
 			}
 		}
+
+		d.SetPartial("enable_classiclink_dns_support")
 	}
 
 	if d.HasChange("assign_generated_ipv6_cidr_block") {
@@ -487,6 +533,8 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 				return fmt.Errorf("error waiting for EC2 VPC (%s) IPv6 CIDR to become disassociated: %s", d.Id(), err)
 			}
 		}
+
+		d.SetPartial("assign_generated_ipv6_cidr_block")
 	}
 
 	if d.HasChange("instance_tenancy") {
@@ -500,6 +548,8 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 		if _, err := conn.ModifyVpcTenancy(modifyOpts); err != nil {
 			return err
 		}
+
+		d.SetPartial("instance_tenancy")
 	}
 
 	if d.HasChange("tags") {
@@ -508,8 +558,11 @@ func resourceAwsVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 		if err := keyvaluetags.Ec2UpdateTags(conn, d.Id(), o, n); err != nil {
 			return fmt.Errorf("error updating tags: %s", err)
 		}
+
+		d.SetPartial("tags")
 	}
 
+	d.Partial(false)
 	return resourceAwsVpcRead(d, meta)
 }
 

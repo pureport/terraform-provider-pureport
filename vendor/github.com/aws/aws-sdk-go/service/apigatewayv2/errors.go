@@ -2,15 +2,7 @@
 
 package apigatewayv2
 
-import (
-	"github.com/aws/aws-sdk-go/private/protocol"
-)
-
 const (
-
-	// ErrCodeAccessDeniedException for service response error code
-	// "AccessDeniedException".
-	ErrCodeAccessDeniedException = "AccessDeniedException"
 
 	// ErrCodeBadRequestException for service response error code
 	// "BadRequestException".
@@ -40,11 +32,3 @@ const (
 	// A limit has been exceeded. See the accompanying error message for details.
 	ErrCodeTooManyRequestsException = "TooManyRequestsException"
 )
-
-var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"AccessDeniedException":    newErrorAccessDeniedException,
-	"BadRequestException":      newErrorBadRequestException,
-	"ConflictException":        newErrorConflictException,
-	"NotFoundException":        newErrorNotFoundException,
-	"TooManyRequestsException": newErrorTooManyRequestsException,
-}

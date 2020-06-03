@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/arn"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/apigateway"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -113,7 +114,6 @@ func resourceAwsApiGatewayStage() *schema.Resource {
 			"variables": {
 				Type:     schema.TypeMap,
 				Optional: true,
-				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"tags": tagsSchema(),
 			"xray_tracing_enabled": {
@@ -129,7 +129,9 @@ func resourceAwsApiGatewayStage() *schema.Resource {
 }
 
 func resourceAwsApiGatewayStageCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
+
+	d.Partial(true)
 
 	input := apigateway.CreateStageInput{
 		RestApiId:    aws.String(d.Get("rest_api_id").(string)),
@@ -173,6 +175,13 @@ func resourceAwsApiGatewayStageCreate(d *schema.ResourceData, meta interface{}) 
 
 	d.SetId(fmt.Sprintf("ags-%s-%s", d.Get("rest_api_id").(string), d.Get("stage_name").(string)))
 
+	d.SetPartial("rest_api_id")
+	d.SetPartial("stage_name")
+	d.SetPartial("deployment_id")
+	d.SetPartial("description")
+	d.SetPartial("variables")
+	d.SetPartial("xray_tracing_enabled")
+
 	if waitForCache && *out.CacheClusterStatus != apigateway.CacheClusterStatusNotAvailable {
 		stateConf := &resource.StateChangeConf{
 			Pending: []string{
@@ -193,6 +202,10 @@ func resourceAwsApiGatewayStageCreate(d *schema.ResourceData, meta interface{}) 
 		}
 	}
 
+	d.SetPartial("cache_cluster_enabled")
+	d.SetPartial("cache_cluster_size")
+	d.Partial(false)
+
 	if _, ok := d.GetOk("client_certificate_id"); ok {
 		return resourceAwsApiGatewayStageUpdate(d, meta)
 	}
@@ -203,8 +216,7 @@ func resourceAwsApiGatewayStageCreate(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceAwsApiGatewayStageRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
+	conn := meta.(*AWSClient).apigateway
 
 	log.Printf("[DEBUG] Reading API Gateway Stage %s", d.Id())
 	restApiId := d.Get("rest_api_id").(string)
@@ -214,17 +226,14 @@ func resourceAwsApiGatewayStageRead(d *schema.ResourceData, meta interface{}) er
 		StageName: aws.String(stageName),
 	}
 	stage, err := conn.GetStage(&input)
-
-	if isAWSErr(err, apigateway.ErrCodeNotFoundException, "") {
-		log.Printf("[WARN] API Gateway Stage (%s) not found, removing from state", d.Id())
-		d.SetId("")
-		return nil
-	}
-
 	if err != nil {
-		return fmt.Errorf("error getting API Gateway REST API (%s) Stage (%s): %w", restApiId, stageName, err)
+		if awsErr, ok := err.(awserr.Error); ok && awsErr.Code() == apigateway.ErrCodeNotFoundException {
+			log.Printf("[WARN] API Gateway Stage (%s) not found, removing from state", d.Id())
+			d.SetId("")
+			return nil
+		}
+		return err
 	}
-
 	log.Printf("[DEBUG] Received API Gateway Stage: %s", stage)
 
 	if err := d.Set("access_log_settings", flattenApiGatewayStageAccessLogSettings(stage.AccessLogSettings)); err != nil {
@@ -246,7 +255,7 @@ func resourceAwsApiGatewayStageRead(d *schema.ResourceData, meta interface{}) er
 	d.Set("documentation_version", stage.DocumentationVersion)
 	d.Set("xray_tracing_enabled", stage.TracingEnabled)
 
-	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(stage.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(stage.Tags).IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -262,7 +271,8 @@ func resourceAwsApiGatewayStageRead(d *schema.ResourceData, meta interface{}) er
 		return fmt.Errorf("error setting variables: %s", err)
 	}
 
-	d.Set("invoke_url", buildApiGatewayInvokeURL(meta.(*AWSClient), restApiId, stageName))
+	region := meta.(*AWSClient).region
+	d.Set("invoke_url", buildApiGatewayInvokeURL(restApiId, region, stageName))
 
 	executionArn := arn.ARN{
 		Partition: meta.(*AWSClient).partition,
@@ -277,7 +287,9 @@ func resourceAwsApiGatewayStageRead(d *schema.ResourceData, meta interface{}) er
 }
 
 func resourceAwsApiGatewayStageUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
+
+	d.Partial(true)
 
 	stageArn := arn.ARN{
 		Partition: meta.(*AWSClient).partition,
@@ -384,6 +396,12 @@ func resourceAwsApiGatewayStageUpdate(d *schema.ResourceData, meta interface{}) 
 		return fmt.Errorf("Updating API Gateway Stage failed: %s", err)
 	}
 
+	d.SetPartial("client_certificate_id")
+	d.SetPartial("deployment_id")
+	d.SetPartial("description")
+	d.SetPartial("xray_tracing_enabled")
+	d.SetPartial("variables")
+
 	if waitForCache && *out.CacheClusterStatus != apigateway.CacheClusterStatusNotAvailable {
 		stateConf := &resource.StateChangeConf{
 			Pending: []string{
@@ -407,6 +425,10 @@ func resourceAwsApiGatewayStageUpdate(d *schema.ResourceData, meta interface{}) 
 			return err
 		}
 	}
+
+	d.SetPartial("cache_cluster_enabled")
+	d.SetPartial("cache_cluster_size")
+	d.Partial(false)
 
 	return resourceAwsApiGatewayStageRead(d, meta)
 }
@@ -459,20 +481,15 @@ func apiGatewayStageCacheRefreshFunc(conn *apigateway.APIGateway, apiId, stageNa
 }
 
 func resourceAwsApiGatewayStageDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Deleting API Gateway Stage: %s", d.Id())
 	input := apigateway.DeleteStageInput{
 		RestApiId: aws.String(d.Get("rest_api_id").(string)),
 		StageName: aws.String(d.Get("stage_name").(string)),
 	}
 	_, err := conn.DeleteStage(&input)
-
-	if isAWSErr(err, apigateway.ErrCodeNotFoundException, "") {
-		return nil
-	}
-
 	if err != nil {
-		return fmt.Errorf("error deleting API Gateway REST API (%s) Stage (%s): %w", d.Get("rest_api_id").(string), d.Get("stage_name").(string), err)
+		return fmt.Errorf("Deleting API Gateway Stage failed: %s", err)
 	}
 
 	return nil

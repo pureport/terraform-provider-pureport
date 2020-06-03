@@ -3,6 +3,7 @@ package aws
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/rds"
@@ -29,11 +30,6 @@ func dataSourceAwsRdsCluster() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Computed: true,
 				Set:      schema.HashString,
-			},
-
-			"backtrack_window": {
-				Type:     schema.TypeInt,
-				Computed: true,
 			},
 
 			"backup_retention_period": {
@@ -124,6 +120,12 @@ func dataSourceAwsRdsCluster() *schema.Resource {
 			"preferred_maintenance_window": {
 				Type:     schema.TypeString,
 				Computed: true,
+				StateFunc: func(val interface{}) string {
+					if val == nil {
+						return ""
+					}
+					return strings.ToLower(val.(string))
+				},
 			},
 
 			"port": {
@@ -165,7 +167,6 @@ func dataSourceAwsRdsCluster() *schema.Resource {
 
 func dataSourceAwsRdsClusterRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).rdsconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	dbClusterIdentifier := d.Get("cluster_identifier").(string)
 
@@ -270,7 +271,7 @@ func dataSourceAwsRdsClusterRead(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("error listing tags for RDS Cluster (%s): %s", *arn, err)
 	}
 
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tags.IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 

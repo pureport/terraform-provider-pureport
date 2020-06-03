@@ -86,7 +86,6 @@ func resourceAwsSagemakerEndpointCreate(d *schema.ResourceData, meta interface{}
 
 func resourceAwsSagemakerEndpointRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).sagemakerconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	describeInput := &sagemaker.DescribeEndpointInput{
 		EndpointName: aws.String(d.Id()),
@@ -123,7 +122,7 @@ func resourceAwsSagemakerEndpointRead(d *schema.ResourceData, meta interface{}) 
 		return fmt.Errorf("error listing tags for Sagemaker Endpoint (%s): %s", d.Id(), err)
 	}
 
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", tags.IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -133,6 +132,8 @@ func resourceAwsSagemakerEndpointRead(d *schema.ResourceData, meta interface{}) 
 func resourceAwsSagemakerEndpointUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).sagemakerconn
 
+	d.Partial(true)
+
 	if d.HasChange("tags") {
 		o, n := d.GetChange("tags")
 
@@ -140,6 +141,7 @@ func resourceAwsSagemakerEndpointUpdate(d *schema.ResourceData, meta interface{}
 			return fmt.Errorf("error updating Sagemaker Endpoint (%s) tags: %s", d.Id(), err)
 		}
 	}
+	d.SetPartial("tags")
 
 	if d.HasChange("endpoint_config_name") {
 		modifyOpts := &sagemaker.UpdateEndpointInput{
@@ -151,6 +153,7 @@ func resourceAwsSagemakerEndpointUpdate(d *schema.ResourceData, meta interface{}
 		if _, err := conn.UpdateEndpoint(modifyOpts); err != nil {
 			return fmt.Errorf("error updating SageMaker Endpoint (%s): %s", d.Id(), err)
 		}
+		d.SetPartial("endpoint_config_name")
 
 		describeInput := &sagemaker.DescribeEndpointInput{
 			EndpointName: aws.String(d.Id()),
@@ -161,6 +164,8 @@ func resourceAwsSagemakerEndpointUpdate(d *schema.ResourceData, meta interface{}
 			return fmt.Errorf("error waiting for SageMaker Endpoint (%s) to be in service: %s", d.Id(), err)
 		}
 	}
+
+	d.Partial(false)
 
 	return resourceAwsSagemakerEndpointRead(d, meta)
 }

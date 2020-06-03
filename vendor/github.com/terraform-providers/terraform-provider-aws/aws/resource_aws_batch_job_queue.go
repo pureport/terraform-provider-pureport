@@ -3,7 +3,6 @@ package aws
 import (
 	"fmt"
 	"log"
-	"sort"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -19,13 +18,6 @@ func resourceAwsBatchJobQueue() *schema.Resource {
 		Read:   resourceAwsBatchJobQueueRead,
 		Update: resourceAwsBatchJobQueueUpdate,
 		Delete: resourceAwsBatchJobQueueDelete,
-
-		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-				d.Set("arn", d.Id())
-				return []*schema.ResourceData{d}, nil
-			},
-		},
 
 		Schema: map[string]*schema.Schema{
 			"compute_environments": {
@@ -94,7 +86,7 @@ func resourceAwsBatchJobQueueCreate(d *schema.ResourceData, meta interface{}) er
 func resourceAwsBatchJobQueueRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).batchconn
 
-	jq, err := getJobQueue(conn, d.Id())
+	jq, err := getJobQueue(conn, d.Get("name").(string))
 	if err != nil {
 		return err
 	}
@@ -106,16 +98,10 @@ func resourceAwsBatchJobQueueRead(d *schema.ResourceData, meta interface{}) erro
 
 	d.Set("arn", jq.JobQueueArn)
 
-	computeEnvironments := make([]string, 0, len(jq.ComputeEnvironmentOrder))
-
-	sort.Slice(jq.ComputeEnvironmentOrder, func(i, j int) bool {
-		return aws.Int64Value(jq.ComputeEnvironmentOrder[i].Order) < aws.Int64Value(jq.ComputeEnvironmentOrder[j].Order)
-	})
-
+	computeEnvironments := make([]string, len(jq.ComputeEnvironmentOrder))
 	for _, computeEnvironmentOrder := range jq.ComputeEnvironmentOrder {
-		computeEnvironments = append(computeEnvironments, aws.StringValue(computeEnvironmentOrder.ComputeEnvironment))
+		computeEnvironments[aws.Int64Value(computeEnvironmentOrder.Order)] = aws.StringValue(computeEnvironmentOrder.ComputeEnvironment)
 	}
-
 	if err := d.Set("compute_environments", computeEnvironments); err != nil {
 		return fmt.Errorf("error setting compute_environments: %s", err)
 	}

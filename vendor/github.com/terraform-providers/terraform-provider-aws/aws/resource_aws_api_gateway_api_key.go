@@ -89,7 +89,7 @@ func resourceAwsApiGatewayApiKey() *schema.Resource {
 }
 
 func resourceAwsApiGatewayApiKeyCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Creating API Gateway API Key")
 
 	apiKey, err := conn.CreateApiKey(&apigateway.CreateApiKeyInput{
@@ -109,9 +109,7 @@ func resourceAwsApiGatewayApiKeyCreate(d *schema.ResourceData, meta interface{})
 }
 
 func resourceAwsApiGatewayApiKeyRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
-
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Reading API Gateway API Key: %s", d.Id())
 
 	apiKey, err := conn.GetApiKey(&apigateway.GetApiKeyInput{
@@ -128,7 +126,7 @@ func resourceAwsApiGatewayApiKeyRead(d *schema.ResourceData, meta interface{}) e
 		return err
 	}
 
-	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(apiKey.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.ApigatewayKeyValueTags(apiKey.Tags).IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -182,7 +180,7 @@ func resourceAwsApiGatewayApiKeyUpdateOperations(d *schema.ResourceData) []*apig
 }
 
 func resourceAwsApiGatewayApiKeyUpdate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 
 	log.Printf("[DEBUG] Updating API Gateway API Key: %s", d.Id())
 
@@ -205,7 +203,7 @@ func resourceAwsApiGatewayApiKeyUpdate(d *schema.ResourceData, meta interface{})
 }
 
 func resourceAwsApiGatewayApiKeyDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AWSClient).apigatewayconn
+	conn := meta.(*AWSClient).apigateway
 	log.Printf("[DEBUG] Deleting API Gateway API Key: %s", d.Id())
 
 	_, err := conn.DeleteApiKey(&apigateway.DeleteApiKeyInput{

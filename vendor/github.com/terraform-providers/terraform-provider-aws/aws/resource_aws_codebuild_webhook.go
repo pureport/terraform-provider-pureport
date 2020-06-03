@@ -53,7 +53,6 @@ func resourceAwsCodeBuildWebhook() *schema.Resource {
 											codebuild.WebhookFilterTypeBaseRef,
 											codebuild.WebhookFilterTypeFilePath,
 											codebuild.WebhookFilterTypeHeadRef,
-											codebuild.WebhookFilterTypeCommitMessage,
 										}, false),
 									},
 									"exclude_matched_pattern": {

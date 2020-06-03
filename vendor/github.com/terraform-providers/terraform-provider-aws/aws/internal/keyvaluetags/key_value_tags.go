@@ -1,16 +1,11 @@
-//go:generate go run -tags generate generators/servicetags/main.go
-//go:generate go run -tags generate generators/listtags/main.go
-//go:generate go run -tags generate generators/createtags/main.go
-//go:generate go run -tags generate generators/updatetags/main.go
+//go:generate go run generators/listtags/main.go
+//go:generate go run generators/servicetags/main.go
+//go:generate go run generators/updatetags/main.go
 
 package keyvaluetags
 
 import (
-	"fmt"
-	"net/url"
 	"strings"
-
-	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 )
 
 const (
@@ -19,12 +14,6 @@ const (
 	NameTagKey                   = `Name`
 	RdsTagKeyPrefix              = `rds:`
 )
-
-// IgnoreConfig contains various options for removing resource tags.
-type IgnoreConfig struct {
-	Keys        KeyValueTags
-	KeyPrefixes KeyValueTags
-}
 
 // KeyValueTags is a standard implementation for AWS key-value resource tags.
 // The AWS Go SDK is split into multiple service packages, each service with
@@ -41,18 +30,6 @@ func (tags KeyValueTags) IgnoreAws() KeyValueTags {
 			result[k] = v
 		}
 	}
-
-	return result
-}
-
-// IgnoreConfig returns any tags not removed by a given configuration.
-func (tags KeyValueTags) IgnoreConfig(config *IgnoreConfig) KeyValueTags {
-	if config == nil {
-		return tags
-	}
-
-	result := tags.IgnorePrefixes(config.KeyPrefixes)
-	result = result.Ignore(config.Keys)
 
 	return result
 }
@@ -199,60 +176,6 @@ func (tags KeyValueTags) Updated(newTags KeyValueTags) KeyValueTags {
 	}
 
 	return result
-}
-
-// Chunks returns a slice of KeyValueTags, each of the specified size.
-func (tags KeyValueTags) Chunks(size int) []KeyValueTags {
-	result := []KeyValueTags{}
-
-	i := 0
-	var chunk KeyValueTags
-	for k, v := range tags {
-		if i%size == 0 {
-			chunk = make(KeyValueTags)
-			result = append(result, chunk)
-		}
-
-		chunk[k] = v
-
-		i++
-	}
-
-	return result
-}
-
-// ContainsAll returns whether or not all the target tags are contained.
-func (tags KeyValueTags) ContainsAll(target KeyValueTags) bool {
-	for key, value := range target {
-		if v, ok := tags[key]; !ok || *v != *value {
-			return false
-		}
-	}
-
-	return true
-}
-
-// Hash returns a stable hash value.
-// The returned value may be negative (i.e. not suitable for a 'Set' function).
-func (tags KeyValueTags) Hash() int {
-	hash := 0
-
-	for k, v := range tags {
-		hash = hash ^ hashcode.String(fmt.Sprintf("%s-%s", k, *v))
-	}
-
-	return hash
-}
-
-// UrlEncode returns the KeyValueTags encoded as URL Query parameters.
-func (tags KeyValueTags) UrlEncode() string {
-	values := url.Values{}
-
-	for k, v := range tags {
-		values.Add(k, *v)
-	}
-
-	return values.Encode()
 }
 
 // New creates KeyValueTags from common Terraform Provider SDK types.

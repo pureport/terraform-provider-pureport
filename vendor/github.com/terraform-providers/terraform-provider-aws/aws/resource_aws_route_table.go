@@ -7,12 +7,11 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsRouteTable() *schema.Resource {
@@ -50,15 +49,13 @@ func resourceAwsRouteTable() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"cidr_block": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.IsCIDR,
+							Type:     schema.TypeString,
+							Optional: true,
 						},
 
 						"ipv6_cidr_block": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.IsCIDR,
+							Type:     schema.TypeString,
+							Optional: true,
 						},
 
 						"egress_only_gateway_id": {
@@ -144,18 +141,11 @@ func resourceAwsRouteTableCreate(d *schema.ResourceData, meta interface{}) error
 			d.Id(), err)
 	}
 
-	if v := d.Get("tags").(map[string]interface{}); len(v) > 0 {
-		if err := keyvaluetags.Ec2CreateTags(conn, d.Id(), v); err != nil {
-			return fmt.Errorf("error adding tags: %s", err)
-		}
-	}
-
 	return resourceAwsRouteTableUpdate(d, meta)
 }
 
 func resourceAwsRouteTableRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	rtRaw, _, err := resourceAwsRouteTableStateRefreshFunc(conn, d.Id())()
 	if err != nil {
@@ -184,7 +174,7 @@ func resourceAwsRouteTableRead(d *schema.ResourceData, meta interface{}) error {
 			continue
 		}
 
-		if r.Origin != nil && *r.Origin == ec2.RouteOriginEnableVgwRoutePropagation {
+		if r.Origin != nil && *r.Origin == "EnableVgwRoutePropagation" {
 			continue
 		}
 
@@ -228,9 +218,8 @@ func resourceAwsRouteTableRead(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.Set("route", route)
 
-	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(rt.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
+	// Tags
+	d.Set("tags", tagsToMap(rt.Tags))
 
 	d.Set("owner_id", rt.OwnerId)
 
@@ -286,7 +275,8 @@ func resourceAwsRouteTableUpdate(d *schema.ResourceData, meta interface{}) error
 				// If we get a Gateway.NotAttached, it is usually some
 				// eventually consistency stuff. So we have to just wait a
 				// bit...
-				if isAWSErr(err, "Gateway.NotAttached", "") {
+				ec2err, ok := err.(awserr.Error)
+				if ok && ec2err.Code() == "Gateway.NotAttached" {
 					time.Sleep(20 * time.Second)
 					continue
 				}
@@ -413,12 +403,10 @@ func resourceAwsRouteTableUpdate(d *schema.ResourceData, meta interface{}) error
 		}
 	}
 
-	if d.HasChange("tags") && !d.IsNewResource() {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.Ec2UpdateTags(conn, d.Id(), o, n); err != nil {
-			return fmt.Errorf("error updating EC2 Route Table (%s) tags: %s", d.Id(), err)
-		}
+	if err := setTags(conn, d); err != nil {
+		return err
+	} else {
+		d.SetPartial("tags")
 	}
 
 	return resourceAwsRouteTableRead(d, meta)
@@ -448,7 +436,7 @@ func resourceAwsRouteTableDelete(d *schema.ResourceData, meta interface{}) error
 			// First check if the association ID is not found. If this
 			// is the case, then it was already disassociated somehow,
 			// and that is okay.
-			if isAWSErr(err, "InvalidAssociationID.NotFound", "") {
+			if ec2err, ok := err.(awserr.Error); ok && ec2err.Code() == "InvalidAssociationID.NotFound" {
 				err = nil
 			}
 		}
@@ -463,7 +451,8 @@ func resourceAwsRouteTableDelete(d *schema.ResourceData, meta interface{}) error
 		RouteTableId: aws.String(d.Id()),
 	})
 	if err != nil {
-		if isAWSErr(err, "InvalidRouteTableID.NotFound", "") {
+		ec2err, ok := err.(awserr.Error)
+		if ok && ec2err.Code() == "InvalidRouteTableID.NotFound" {
 			return nil
 		}
 
@@ -548,7 +537,7 @@ func resourceAwsRouteTableStateRefreshFunc(conn *ec2.EC2, id string) resource.St
 			RouteTableIds: []*string{aws.String(id)},
 		})
 		if err != nil {
-			if isAWSErr(err, "InvalidRouteTableID.NotFound", "") {
+			if ec2err, ok := err.(awserr.Error); ok && ec2err.Code() == "InvalidRouteTableID.NotFound" {
 				resp = nil
 			} else {
 				log.Printf("Error on RouteTableStateRefresh: %s", err)

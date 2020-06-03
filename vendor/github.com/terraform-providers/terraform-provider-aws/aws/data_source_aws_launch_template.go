@@ -19,7 +19,7 @@ func dataSourceAwsLaunchTemplate() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 			"description": {
 				Type:     schema.TypeString,
@@ -202,26 +202,6 @@ func dataSourceAwsLaunchTemplate() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"metadata_options": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"http_endpoint": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"http_tokens": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-						"http_put_response_hop_limit": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
-					},
-				},
-			},
 			"monitoring": {
 				Type:     schema.TypeList,
 				Computed: true,
@@ -240,7 +220,7 @@ func dataSourceAwsLaunchTemplate() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"associate_public_ip_address": {
-							Type:     schema.TypeString,
+							Type:     schema.TypeBool,
 							Computed: true,
 						},
 						"delete_on_termination": {
@@ -322,10 +302,6 @@ func dataSourceAwsLaunchTemplate() *schema.Resource {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
-						"partition_number": {
-							Type:     schema.TypeInt,
-							Computed: true,
-						},
 					},
 				},
 			},
@@ -360,44 +336,19 @@ func dataSourceAwsLaunchTemplate() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"hibernation_options": {
-				Type:     schema.TypeList,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"configured": {
-							Type:     schema.TypeBool,
-							Computed: true,
-						},
-					},
-				},
-			},
-			"tags":   tagsSchemaComputed(),
-			"filter": dataSourceFiltersSchema(),
+			"tags": tagsSchemaComputed(),
 		},
 	}
 }
 
 func dataSourceAwsLaunchTemplateRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
-	filters, filtersOk := d.GetOk("filter")
-	name, nameOk := d.GetOk("name")
-	tags, tagsOk := d.GetOk("tags")
+	log.Printf("[DEBUG] Reading launch template %s", d.Get("name"))
 
-	params := &ec2.DescribeLaunchTemplatesInput{}
-	if filtersOk {
-		params.Filters = buildAwsDataSourceFilters(filters.(*schema.Set))
-	}
-	if nameOk {
-		params.LaunchTemplateNames = []*string{aws.String(name.(string))}
-	}
-	if tagsOk {
-		params.Filters = append(params.Filters, ec2TagFiltersFromMap(tags.(map[string]interface{}))...)
-	}
-
-	dlt, err := conn.DescribeLaunchTemplates(params)
+	dlt, err := conn.DescribeLaunchTemplates(&ec2.DescribeLaunchTemplatesInput{
+		LaunchTemplateNames: []*string{aws.String(d.Get("name").(string))},
+	})
 
 	if isAWSErr(err, ec2.LaunchTemplateErrorCodeLaunchTemplateIdDoesNotExist, "") {
 		log.Printf("[WARN] launch template (%s) not found - removing from state", d.Id())
@@ -429,7 +380,7 @@ func dataSourceAwsLaunchTemplateRead(d *schema.ResourceData, meta interface{}) e
 	d.Set("name", lt.LaunchTemplateName)
 	d.Set("latest_version", lt.LatestVersionNumber)
 	d.Set("default_version", lt.DefaultVersionNumber)
-	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(lt.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(lt.Tags).IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -493,10 +444,6 @@ func dataSourceAwsLaunchTemplateRead(d *schema.ResourceData, meta interface{}) e
 		return fmt.Errorf("error setting instance_market_options: %s", err)
 	}
 
-	if err := d.Set("metadata_options", flattenLaunchTemplateInstanceMetadataOptions(ltData.MetadataOptions)); err != nil {
-		return fmt.Errorf("error setting metadata_options: %s", err)
-	}
-
 	if err := d.Set("monitoring", getMonitoring(ltData.Monitoring)); err != nil {
 		return fmt.Errorf("error setting monitoring: %s", err)
 	}
@@ -507,10 +454,6 @@ func dataSourceAwsLaunchTemplateRead(d *schema.ResourceData, meta interface{}) e
 
 	if err := d.Set("placement", getPlacement(ltData.Placement)); err != nil {
 		return fmt.Errorf("error setting placement: %s", err)
-	}
-
-	if err := d.Set("hibernation_options", flattenLaunchTemplateHibernationOptions(ltData.HibernationOptions)); err != nil {
-		return fmt.Errorf("error setting hibernation_options: %s", err)
 	}
 
 	if err := d.Set("tag_specifications", getTagSpecifications(ltData.TagSpecifications)); err != nil {

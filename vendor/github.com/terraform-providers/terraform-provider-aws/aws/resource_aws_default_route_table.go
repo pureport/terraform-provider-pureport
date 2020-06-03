@@ -7,8 +7,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsDefaultRouteTable() *schema.Resource {
@@ -17,12 +15,6 @@ func resourceAwsDefaultRouteTable() *schema.Resource {
 		Read:   resourceAwsDefaultRouteTableRead,
 		Update: resourceAwsRouteTableUpdate,
 		Delete: resourceAwsDefaultRouteTableDelete,
-		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-				d.Set("vpc_id", d.Id())
-				return []*schema.ResourceData{d}, nil
-			},
-		},
 
 		Schema: map[string]*schema.Schema{
 			"default_route_table_id": {
@@ -51,15 +43,13 @@ func resourceAwsDefaultRouteTable() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"cidr_block": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.IsCIDR,
+							Type:     schema.TypeString,
+							Optional: true,
 						},
 
 						"ipv6_cidr_block": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							ValidateFunc: validation.IsCIDR,
+							Type:     schema.TypeString,
+							Optional: true,
 						},
 
 						"egress_only_gateway_id": {
@@ -117,10 +107,12 @@ func resourceAwsDefaultRouteTableCreate(d *schema.ResourceData, meta interface{}
 	conn := meta.(*AWSClient).ec2conn
 	rtRaw, _, err := resourceAwsRouteTableStateRefreshFunc(conn, d.Id())()
 	if err != nil {
-		return fmt.Errorf("error reading EC2 Default Route Table (%s): %s", d.Id(), err)
+		return err
 	}
 	if rtRaw == nil {
-		return fmt.Errorf("error reading EC2 Default Route Table (%s): not found", d.Id())
+		log.Printf("[WARN] Default Route Table not found")
+		d.SetId("")
+		return nil
 	}
 
 	rt := rtRaw.(*ec2.RouteTable)
@@ -132,12 +124,6 @@ func resourceAwsDefaultRouteTableCreate(d *schema.ResourceData, meta interface{}
 	log.Printf("[DEBUG] Revoking default routes for Default Route Table for %s", d.Id())
 	if err := revokeAllRouteTableRules(d.Id(), meta); err != nil {
 		return err
-	}
-
-	if v := d.Get("tags").(map[string]interface{}); len(v) > 0 {
-		if err := keyvaluetags.Ec2CreateTags(conn, d.Id(), v); err != nil {
-			return fmt.Errorf("error adding tags: %s", err)
-		}
 	}
 
 	return resourceAwsRouteTableUpdate(d, meta)
@@ -165,9 +151,7 @@ func resourceAwsDefaultRouteTableRead(d *schema.ResourceData, meta interface{}) 
 	}
 
 	if len(resp.RouteTables) < 1 || resp.RouteTables[0] == nil {
-		log.Printf("[WARN] EC2 Default Route Table (%s) not found, removing from state", d.Id())
-		d.SetId("")
-		return nil
+		return fmt.Errorf("Default Route table not found")
 	}
 
 	rt := resp.RouteTables[0]

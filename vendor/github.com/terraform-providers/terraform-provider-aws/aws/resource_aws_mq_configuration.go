@@ -8,8 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/mq"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsMqConfiguration() *schema.Resource {
@@ -54,9 +52,6 @@ func resourceAwsMqConfiguration() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					mq.EngineTypeActivemq,
-				}, true),
 			},
 			"engine_version": {
 				Type:     schema.TypeString,
@@ -87,7 +82,7 @@ func resourceAwsMqConfigurationCreate(d *schema.ResourceData, meta interface{}) 
 	}
 
 	if v, ok := d.GetOk("tags"); ok {
-		input.Tags = keyvaluetags.New(v.(map[string]interface{})).IgnoreAws().MqTags()
+		input.Tags = tagsFromMapGeneric(v.(map[string]interface{}))
 	}
 
 	log.Printf("[INFO] Creating MQ Configuration: %s", input)
@@ -104,14 +99,13 @@ func resourceAwsMqConfigurationCreate(d *schema.ResourceData, meta interface{}) 
 
 func resourceAwsMqConfigurationRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).mqconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	log.Printf("[INFO] Reading MQ Configuration %s", d.Id())
 	out, err := conn.DescribeConfiguration(&mq.DescribeConfigurationInput{
 		ConfigurationId: aws.String(d.Id()),
 	})
 	if err != nil {
-		if isAWSErr(err, mq.ErrCodeNotFoundException, "") {
+		if isAWSErr(err, "NotFoundException", "") {
 			log.Printf("[WARN] MQ Configuration %q not found, removing from state", d.Id())
 			d.SetId("")
 			return nil
@@ -141,11 +135,7 @@ func resourceAwsMqConfigurationRead(d *schema.ResourceData, meta interface{}) er
 
 	d.Set("data", string(b))
 
-	if err := d.Set("tags", keyvaluetags.MqKeyValueTags(out.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
-
-	return nil
+	return getTagsMQ(conn, d, aws.StringValue(out.Arn))
 }
 
 func resourceAwsMqConfigurationUpdate(d *schema.ResourceData, meta interface{}) error {
@@ -168,12 +158,8 @@ func resourceAwsMqConfigurationUpdate(d *schema.ResourceData, meta interface{}) 
 		return err
 	}
 
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.MqUpdateTags(conn, d.Get("arn").(string), o, n); err != nil {
-			return fmt.Errorf("error updating MQ Broker (%s) tags: %s", d.Get("arn").(string), err)
-		}
+	if tagErr := setTagsMQ(conn, d, d.Get("arn").(string)); tagErr != nil {
+		return fmt.Errorf("error setting mq configuration tags: %s", err)
 	}
 
 	return resourceAwsMqConfigurationRead(d, meta)

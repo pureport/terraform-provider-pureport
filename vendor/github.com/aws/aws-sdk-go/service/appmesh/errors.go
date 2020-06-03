@@ -2,10 +2,6 @@
 
 package appmesh
 
-import (
-	"github.com/aws/aws-sdk-go/private/protocol"
-)
-
 const (
 
 	// ErrCodeBadRequestException for service response error code
@@ -39,7 +35,7 @@ const (
 	// "LimitExceededException".
 	//
 	// You have exceeded a service limit for your account. For more information,
-	// see Service Limits (https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html)
+	// see Service Limits (https://docs.aws.amazon.com/app-mesh/latest/userguide/service_limits.html)
 	// in the AWS App Mesh User Guide.
 	ErrCodeLimitExceededException = "LimitExceededException"
 
@@ -78,16 +74,3 @@ const (
 	// of tags in the request. None of the tags in this request were applied.
 	ErrCodeTooManyTagsException = "TooManyTagsException"
 )
-
-var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
-	"BadRequestException":          newErrorBadRequestException,
-	"ConflictException":            newErrorConflictException,
-	"ForbiddenException":           newErrorForbiddenException,
-	"InternalServerErrorException": newErrorInternalServerErrorException,
-	"LimitExceededException":       newErrorLimitExceededException,
-	"NotFoundException":            newErrorNotFoundException,
-	"ResourceInUseException":       newErrorResourceInUseException,
-	"ServiceUnavailableException":  newErrorServiceUnavailableException,
-	"TooManyRequestsException":     newErrorTooManyRequestsException,
-	"TooManyTagsException":         newErrorTooManyTagsException,
-}

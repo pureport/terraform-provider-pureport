@@ -20,9 +20,6 @@ func resourceAwsCloudWatchLogMetricFilter() *schema.Resource {
 		Read:   resourceAwsCloudWatchLogMetricFilterRead,
 		Update: resourceAwsCloudWatchLogMetricFilterUpdate,
 		Delete: resourceAwsCloudWatchLogMetricFilterDelete,
-		Importer: &schema.ResourceImporter{
-			State: resourceAwsCloudWatchLogMetricFilterImport,
-		},
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -88,13 +85,10 @@ func resourceAwsCloudWatchLogMetricFilter() *schema.Resource {
 func resourceAwsCloudWatchLogMetricFilterUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).cloudwatchlogsconn
 
-	name := d.Get("name").(string)
-	logGroupName := d.Get("log_group_name").(string)
-
 	input := cloudwatchlogs.PutMetricFilterInput{
-		FilterName:    aws.String(name),
+		FilterName:    aws.String(d.Get("name").(string)),
 		FilterPattern: aws.String(strings.TrimSpace(d.Get("pattern").(string))),
-		LogGroupName:  aws.String(logGroupName),
+		LogGroupName:  aws.String(d.Get("log_group_name").(string)),
 	}
 
 	transformations := d.Get("metric_transformation").([]interface{})
@@ -139,9 +133,7 @@ func resourceAwsCloudWatchLogMetricFilterRead(d *schema.ResourceData, meta inter
 
 	d.Set("name", mf.FilterName)
 	d.Set("pattern", mf.FilterPattern)
-	if err := d.Set("metric_transformation", flattenCloudWatchLogMetricTransformations(mf.MetricTransformations)); err != nil {
-		return fmt.Errorf("error setting metric_transformation: %s", err)
-	}
+	d.Set("metric_transformation", flattenCloudWatchLogMetricTransformations(mf.MetricTransformations))
 
 	return nil
 }
@@ -208,17 +200,4 @@ func resourceAwsCloudWatchLogMetricFilterDelete(d *schema.ResourceData, meta int
 	log.Println("[INFO] CloudWatch Log Metric Filter deleted")
 
 	return nil
-}
-
-func resourceAwsCloudWatchLogMetricFilterImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-	idParts := strings.Split(d.Id(), ":")
-	if len(idParts) != 2 || idParts[0] == "" || idParts[1] == "" {
-		return nil, fmt.Errorf("Unexpected format of ID (%q), expected <log_group_name>:<name>", d.Id())
-	}
-	logGroupName := idParts[0]
-	name := idParts[1]
-	d.Set("log_group_name", logGroupName)
-	d.Set("name", name)
-	d.SetId(name)
-	return []*schema.ResourceData{d}, nil
 }

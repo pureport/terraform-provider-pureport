@@ -3,13 +3,11 @@ package aws
 import (
 	"fmt"
 	"log"
-	"net"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -58,9 +56,6 @@ func resourceAwsRoute53HealthCheck() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					return net.ParseIP(old).Equal(net.ParseIP(new))
-				},
 			},
 			"fqdn": {
 				Type:     schema.TypeString,
@@ -118,22 +113,11 @@ func resourceAwsRoute53HealthCheck() *schema.Resource {
 			"insufficient_data_health_status": {
 				Type:     schema.TypeString,
 				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					route53.InsufficientDataHealthStatusHealthy,
-					route53.InsufficientDataHealthStatusLastKnownStatus,
-					route53.InsufficientDataHealthStatusUnhealthy,
-				}, true),
 			},
 			"reference_name": {
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
-				// The max length of the reference name is 64 characters for the API.
-				// Terraform appends a 37-character unique ID to the provided
-				// reference_name. This limits the length of the resource argument to 27.
-				//
-				// Example generated suffix: -terraform-20190122200019880700000001
-				ValidateFunc: validation.StringLenBetween(0, (64 - resource.UniqueIDSuffixLength - 11)),
 			},
 			"enable_sni": {
 				Type:     schema.TypeBool,
@@ -218,12 +202,8 @@ func resourceAwsRoute53HealthCheckUpdate(d *schema.ResourceData, meta interface{
 		return err
 	}
 
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.Route53UpdateTags(conn, d.Id(), route53.TagResourceTypeHealthcheck, o, n); err != nil {
-			return fmt.Errorf("error updating Route53 Health Check (%s) tags: %s", d.Id(), err)
-		}
+	if err := setTagsR53(conn, d, "healthcheck"); err != nil {
+		return err
 	}
 
 	return resourceAwsRoute53HealthCheckRead(d, meta)
@@ -328,8 +308,8 @@ func resourceAwsRoute53HealthCheckCreate(d *schema.ResourceData, meta interface{
 
 	d.SetId(*resp.HealthCheck.Id)
 
-	if err := keyvaluetags.Route53UpdateTags(conn, d.Id(), route53.TagResourceTypeHealthcheck, map[string]interface{}{}, d.Get("tags").(map[string]interface{})); err != nil {
-		return fmt.Errorf("error setting Route53 Health Check (%s) tags: %s", d.Id(), err)
+	if err := setTagsR53(conn, d, "healthcheck"); err != nil {
+		return err
 	}
 
 	return resourceAwsRoute53HealthCheckRead(d, meta)
@@ -337,7 +317,6 @@ func resourceAwsRoute53HealthCheckCreate(d *schema.ResourceData, meta interface{
 
 func resourceAwsRoute53HealthCheckRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).r53conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	read, err := conn.GetHealthCheck(&route53.GetHealthCheckInput{HealthCheckId: aws.String(d.Id())})
 	if err != nil {
@@ -380,14 +359,24 @@ func resourceAwsRoute53HealthCheckRead(d *schema.ResourceData, meta interface{})
 		d.Set("cloudwatch_alarm_region", updated.AlarmIdentifier.Region)
 	}
 
-	tags, err := keyvaluetags.Route53ListTags(conn, d.Id(), route53.TagResourceTypeHealthcheck)
-
-	if err != nil {
-		return fmt.Errorf("error listing tags for Route53 Health Check (%s): %s", d.Id(), err)
+	// read the tags
+	req := &route53.ListTagsForResourceInput{
+		ResourceId:   aws.String(d.Id()),
+		ResourceType: aws.String("healthcheck"),
 	}
 
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
+	resp, err := conn.ListTagsForResource(req)
+	if err != nil {
+		return err
+	}
+
+	var tags []*route53.Tag
+	if resp.ResourceTagSet != nil {
+		tags = resp.ResourceTagSet.Tags
+	}
+
+	if err := d.Set("tags", tagsToMapR53(tags)); err != nil {
+		return err
 	}
 
 	return nil

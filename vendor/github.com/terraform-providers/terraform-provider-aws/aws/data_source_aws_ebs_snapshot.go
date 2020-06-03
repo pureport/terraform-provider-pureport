@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func dataSourceAwsEbsSnapshot() *schema.Resource {
@@ -22,20 +21,24 @@ func dataSourceAwsEbsSnapshot() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
+				ForceNew: true,
 			},
 			"owners": {
 				Type:     schema.TypeList,
 				Optional: true,
+				ForceNew: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"snapshot_ids": {
 				Type:     schema.TypeList,
 				Optional: true,
+				ForceNew: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"restorable_by_user_ids": {
 				Type:     schema.TypeList,
 				Optional: true,
+				ForceNew: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			//Computed values returned
@@ -86,7 +89,6 @@ func dataSourceAwsEbsSnapshot() *schema.Resource {
 
 func dataSourceAwsEbsSnapshotRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).ec2conn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	restorableUsers, restorableUsersOk := d.GetOk("restorable_by_user_ids")
 	filters, filtersOk := d.GetOk("filter")
@@ -132,10 +134,10 @@ func dataSourceAwsEbsSnapshotRead(d *schema.ResourceData, meta interface{}) erro
 	}
 
 	//Single Snapshot found so set to state
-	return snapshotDescriptionAttributes(d, resp.Snapshots[0], ignoreTagsConfig)
+	return snapshotDescriptionAttributes(d, resp.Snapshots[0])
 }
 
-func snapshotDescriptionAttributes(d *schema.ResourceData, snapshot *ec2.Snapshot, ignoreTagsConfig *keyvaluetags.IgnoreConfig) error {
+func snapshotDescriptionAttributes(d *schema.ResourceData, snapshot *ec2.Snapshot) error {
 	d.SetId(*snapshot.SnapshotId)
 	d.Set("snapshot_id", snapshot.SnapshotId)
 	d.Set("volume_id", snapshot.VolumeId)
@@ -148,9 +150,6 @@ func snapshotDescriptionAttributes(d *schema.ResourceData, snapshot *ec2.Snapsho
 	d.Set("owner_id", snapshot.OwnerId)
 	d.Set("owner_alias", snapshot.OwnerAlias)
 
-	if err := d.Set("tags", keyvaluetags.Ec2KeyValueTags(snapshot.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
-	}
-
-	return nil
+	err := d.Set("tags", tagsToMap(snapshot.Tags))
+	return err
 }

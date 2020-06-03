@@ -32,6 +32,8 @@ type ClientOptions struct {
 	DisableCorrelationRequestID bool
 	DisableTerraformPartnerID   bool
 	Environment                 azure.Environment
+	Features                    features.UserFeatures
+	StorageUseAzureAD           bool
 
 	// TODO: remove me in 2.0
 	PollingDuration time.Duration

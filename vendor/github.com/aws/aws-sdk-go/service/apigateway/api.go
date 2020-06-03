@@ -3,7 +3,6 @@
 package apigateway
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -66,25 +65,25 @@ func (c *APIGateway) CreateApiKeyRequest(input *CreateApiKeyInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateApiKey for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -162,21 +161,21 @@ func (c *APIGateway) CreateAuthorizerRequest(input *CreateAuthorizerInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateAuthorizer for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -252,22 +251,22 @@ func (c *APIGateway) CreateBasePathMappingRequest(input *CreateBasePathMappingIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateBasePathMapping for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -344,29 +343,29 @@ func (c *APIGateway) CreateDeploymentRequest(input *CreateDeploymentInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateDeployment for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ServiceUnavailableException
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
 //   The requested service is not available. For details see the accompanying
 //   error message. Retry after the specified time period.
 //
@@ -440,25 +439,25 @@ func (c *APIGateway) CreateDocumentationPartRequest(input *CreateDocumentationPa
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateDocumentationPart for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -532,25 +531,25 @@ func (c *APIGateway) CreateDocumentationVersionRequest(input *CreateDocumentatio
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateDocumentationVersion for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -626,19 +625,19 @@ func (c *APIGateway) CreateDomainNameRequest(input *CreateDomainNameInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateDomainName for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -714,25 +713,25 @@ func (c *APIGateway) CreateModelRequest(input *CreateModelInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateModel for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -808,21 +807,21 @@ func (c *APIGateway) CreateRequestValidatorRequest(input *CreateRequestValidator
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateRequestValidator for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -898,25 +897,25 @@ func (c *APIGateway) CreateResourceRequest(input *CreateResourceInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateResource for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -992,18 +991,18 @@ func (c *APIGateway) CreateRestApiRequest(input *CreateRestApiInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateRestApi for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1080,25 +1079,25 @@ func (c *APIGateway) CreateStageRequest(input *CreateStageInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateStage for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1175,26 +1174,26 @@ func (c *APIGateway) CreateUsagePlanRequest(input *CreateUsagePlanInput) (req *r
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateUsagePlan for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
 func (c *APIGateway) CreateUsagePlan(input *CreateUsagePlanInput) (*UsagePlan, error) {
@@ -1269,22 +1268,22 @@ func (c *APIGateway) CreateUsagePlanKeyRequest(input *CreateUsagePlanKeyInput) (
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateUsagePlanKey for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1363,15 +1362,15 @@ func (c *APIGateway) CreateVpcLinkRequest(input *CreateVpcLinkInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation CreateVpcLink for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1448,14 +1447,14 @@ func (c *APIGateway) DeleteApiKeyRequest(input *DeleteApiKeyInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteApiKey for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1534,22 +1533,22 @@ func (c *APIGateway) DeleteAuthorizerRequest(input *DeleteAuthorizerInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteAuthorizer for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -1626,22 +1625,22 @@ func (c *APIGateway) DeleteBasePathMappingRequest(input *DeleteBasePathMappingIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteBasePathMapping for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1718,19 +1717,19 @@ func (c *APIGateway) DeleteClientCertificateRequest(input *DeleteClientCertifica
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteClientCertificate for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
 func (c *APIGateway) DeleteClientCertificate(input *DeleteClientCertificateInput) (*DeleteClientCertificateOutput, error) {
@@ -1807,18 +1806,18 @@ func (c *APIGateway) DeleteDeploymentRequest(input *DeleteDeploymentInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteDeployment for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -1893,22 +1892,22 @@ func (c *APIGateway) DeleteDocumentationPartRequest(input *DeleteDocumentationPa
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteDocumentationPart for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
@@ -1983,22 +1982,22 @@ func (c *APIGateway) DeleteDocumentationVersionRequest(input *DeleteDocumentatio
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteDocumentationVersion for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -2075,18 +2074,18 @@ func (c *APIGateway) DeleteDomainNameRequest(input *DeleteDomainNameInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteDomainName for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
@@ -2164,22 +2163,22 @@ func (c *APIGateway) DeleteGatewayResponseRequest(input *DeleteGatewayResponseIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteGatewayResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2256,18 +2255,18 @@ func (c *APIGateway) DeleteIntegrationRequest(input *DeleteIntegrationInput) (re
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteIntegration for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2344,22 +2343,22 @@ func (c *APIGateway) DeleteIntegrationResponseRequest(input *DeleteIntegrationRe
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteIntegrationResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2436,18 +2435,18 @@ func (c *APIGateway) DeleteMethodRequest(input *DeleteMethodInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteMethod for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2524,22 +2523,22 @@ func (c *APIGateway) DeleteMethodResponseRequest(input *DeleteMethodResponseInpu
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteMethodResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2616,22 +2615,22 @@ func (c *APIGateway) DeleteModelRequest(input *DeleteModelInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteModel for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2708,22 +2707,22 @@ func (c *APIGateway) DeleteRequestValidatorRequest(input *DeleteRequestValidator
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteRequestValidator for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -2800,22 +2799,22 @@ func (c *APIGateway) DeleteResourceRequest(input *DeleteResourceInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteResource for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -2892,18 +2891,18 @@ func (c *APIGateway) DeleteRestApiRequest(input *DeleteRestApiInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteRestApi for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
@@ -2980,18 +2979,18 @@ func (c *APIGateway) DeleteStageRequest(input *DeleteStageInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteStage for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
@@ -3068,19 +3067,19 @@ func (c *APIGateway) DeleteUsagePlanRequest(input *DeleteUsagePlanInput) (req *r
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteUsagePlan for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
 func (c *APIGateway) DeleteUsagePlan(input *DeleteUsagePlanInput) (*DeleteUsagePlanOutput, error) {
@@ -3157,22 +3156,22 @@ func (c *APIGateway) DeleteUsagePlanKeyRequest(input *DeleteUsagePlanKeyInput) (
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteUsagePlanKey for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3249,18 +3248,18 @@ func (c *APIGateway) DeleteVpcLinkRequest(input *DeleteVpcLinkInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation DeleteVpcLink for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
@@ -3337,18 +3336,18 @@ func (c *APIGateway) FlushStageAuthorizersCacheRequest(input *FlushStageAuthoriz
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation FlushStageAuthorizersCache for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3425,18 +3424,18 @@ func (c *APIGateway) FlushStageCacheRequest(input *FlushStageCacheInput) (req *r
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation FlushStageCache for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3512,15 +3511,15 @@ func (c *APIGateway) GenerateClientCertificateRequest(input *GenerateClientCerti
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GenerateClientCertificate for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
 func (c *APIGateway) GenerateClientCertificate(input *GenerateClientCertificateInput) (*ClientCertificate, error) {
@@ -3595,14 +3594,14 @@ func (c *APIGateway) GetAccountRequest(input *GetAccountInput) (req *request.Req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetAccount for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3678,14 +3677,14 @@ func (c *APIGateway) GetApiKeyRequest(input *GetApiKeyInput) (req *request.Reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetApiKey for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3767,15 +3766,15 @@ func (c *APIGateway) GetApiKeysRequest(input *GetApiKeysInput) (req *request.Req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetApiKeys for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3843,12 +3842,10 @@ func (c *APIGateway) GetApiKeysPagesWithContext(ctx aws.Context, input *GetApiKe
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetApiKeysOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetApiKeysOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -3905,14 +3902,14 @@ func (c *APIGateway) GetAuthorizerRequest(input *GetAuthorizerInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetAuthorizer for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -3990,18 +3987,18 @@ func (c *APIGateway) GetAuthorizersRequest(input *GetAuthorizersInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetAuthorizers for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4077,14 +4074,14 @@ func (c *APIGateway) GetBasePathMappingRequest(input *GetBasePathMappingInput) (
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetBasePathMapping for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4166,14 +4163,14 @@ func (c *APIGateway) GetBasePathMappingsRequest(input *GetBasePathMappingsInput)
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetBasePathMappings for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4241,12 +4238,10 @@ func (c *APIGateway) GetBasePathMappingsPagesWithContext(ctx aws.Context, input 
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetBasePathMappingsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetBasePathMappingsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -4301,14 +4296,14 @@ func (c *APIGateway) GetClientCertificateRequest(input *GetClientCertificateInpu
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetClientCertificate for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4390,15 +4385,15 @@ func (c *APIGateway) GetClientCertificatesRequest(input *GetClientCertificatesIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetClientCertificates for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4466,12 +4461,10 @@ func (c *APIGateway) GetClientCertificatesPagesWithContext(ctx aws.Context, inpu
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetClientCertificatesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetClientCertificatesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -4526,18 +4519,18 @@ func (c *APIGateway) GetDeploymentRequest(input *GetDeploymentInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDeployment for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ServiceUnavailableException
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
 //   The requested service is not available. For details see the accompanying
 //   error message. Retry after the specified time period.
 //
@@ -4619,19 +4612,19 @@ func (c *APIGateway) GetDeploymentsRequest(input *GetDeploymentsInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDeployments for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ServiceUnavailableException
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
 //   The requested service is not available. For details see the accompanying
 //   error message. Retry after the specified time period.
 //
@@ -4699,12 +4692,10 @@ func (c *APIGateway) GetDeploymentsPagesWithContext(ctx aws.Context, input *GetD
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetDeploymentsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetDeploymentsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -4757,14 +4748,14 @@ func (c *APIGateway) GetDocumentationPartRequest(input *GetDocumentationPartInpu
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDocumentationPart for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4838,18 +4829,18 @@ func (c *APIGateway) GetDocumentationPartsRequest(input *GetDocumentationPartsIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDocumentationParts for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -4923,14 +4914,14 @@ func (c *APIGateway) GetDocumentationVersionRequest(input *GetDocumentationVersi
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDocumentationVersion for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5004,18 +4995,18 @@ func (c *APIGateway) GetDocumentationVersionsRequest(input *GetDocumentationVers
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDocumentationVersions for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5092,18 +5083,18 @@ func (c *APIGateway) GetDomainNameRequest(input *GetDomainNameInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDomainName for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ServiceUnavailableException
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
 //   The requested service is not available. For details see the accompanying
 //   error message. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5185,15 +5176,15 @@ func (c *APIGateway) GetDomainNamesRequest(input *GetDomainNamesInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetDomainNames for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5261,12 +5252,10 @@ func (c *APIGateway) GetDomainNamesPagesWithContext(ctx aws.Context, input *GetD
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetDomainNamesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetDomainNamesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -5321,22 +5310,22 @@ func (c *APIGateway) GetExportRequest(input *GetExportInput) (req *request.Reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetExport for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5412,14 +5401,14 @@ func (c *APIGateway) GetGatewayResponseRequest(input *GetGatewayResponseInput) (
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetGatewayResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5498,18 +5487,18 @@ func (c *APIGateway) GetGatewayResponsesRequest(input *GetGatewayResponsesInput)
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetGatewayResponses for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5585,14 +5574,14 @@ func (c *APIGateway) GetIntegrationRequest(input *GetIntegrationInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetIntegration for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5668,14 +5657,14 @@ func (c *APIGateway) GetIntegrationResponseRequest(input *GetIntegrationResponse
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetIntegrationResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5751,14 +5740,14 @@ func (c *APIGateway) GetMethodRequest(input *GetMethodInput) (req *request.Reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetMethod for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5834,14 +5823,14 @@ func (c *APIGateway) GetMethodResponseRequest(input *GetMethodResponseInput) (re
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetMethodResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -5917,14 +5906,14 @@ func (c *APIGateway) GetModelRequest(input *GetModelInput) (req *request.Request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetModel for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6001,18 +5990,18 @@ func (c *APIGateway) GetModelTemplateRequest(input *GetModelTemplateInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetModelTemplate for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6094,18 +6083,18 @@ func (c *APIGateway) GetModelsRequest(input *GetModelsInput) (req *request.Reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetModels for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6173,12 +6162,10 @@ func (c *APIGateway) GetModelsPagesWithContext(ctx aws.Context, input *GetModels
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetModelsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetModelsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -6233,14 +6220,14 @@ func (c *APIGateway) GetRequestValidatorRequest(input *GetRequestValidatorInput)
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetRequestValidator for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6316,18 +6303,18 @@ func (c *APIGateway) GetRequestValidatorsRequest(input *GetRequestValidatorsInpu
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetRequestValidators for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6403,14 +6390,14 @@ func (c *APIGateway) GetResourceRequest(input *GetResourceInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetResource for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6492,18 +6479,18 @@ func (c *APIGateway) GetResourcesRequest(input *GetResourcesInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetResources for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6571,12 +6558,10 @@ func (c *APIGateway) GetResourcesPagesWithContext(ctx aws.Context, input *GetRes
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetResourcesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetResourcesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -6631,14 +6616,14 @@ func (c *APIGateway) GetRestApiRequest(input *GetRestApiInput) (req *request.Req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetRestApi for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6720,15 +6705,15 @@ func (c *APIGateway) GetRestApisRequest(input *GetRestApisInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetRestApis for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6796,12 +6781,10 @@ func (c *APIGateway) GetRestApisPagesWithContext(ctx aws.Context, input *GetRest
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetRestApisOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetRestApisOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -6856,22 +6839,22 @@ func (c *APIGateway) GetSdkRequest(input *GetSdkInput) (req *request.Request, ou
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetSdk for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -6945,14 +6928,14 @@ func (c *APIGateway) GetSdkTypeRequest(input *GetSdkTypeInput) (req *request.Req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetSdkType for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7026,11 +7009,11 @@ func (c *APIGateway) GetSdkTypesRequest(input *GetSdkTypesInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetSdkTypes for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7106,14 +7089,14 @@ func (c *APIGateway) GetStageRequest(input *GetStageInput) (req *request.Request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetStage for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7189,14 +7172,14 @@ func (c *APIGateway) GetStagesRequest(input *GetStagesInput) (req *request.Reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetStages for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7272,22 +7255,22 @@ func (c *APIGateway) GetTagsRequest(input *GetTagsInput) (req *request.Request, 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetTags for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
 func (c *APIGateway) GetTags(input *GetTagsInput) (*GetTagsOutput, error) {
@@ -7368,18 +7351,18 @@ func (c *APIGateway) GetUsageRequest(input *GetUsageInput) (req *request.Request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetUsage for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7447,12 +7430,10 @@ func (c *APIGateway) GetUsagePagesWithContext(ctx aws.Context, input *GetUsageIn
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*Usage), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*Usage), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -7507,18 +7488,18 @@ func (c *APIGateway) GetUsagePlanRequest(input *GetUsagePlanInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetUsagePlan for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7594,18 +7575,18 @@ func (c *APIGateway) GetUsagePlanKeyRequest(input *GetUsagePlanKeyInput) (req *r
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetUsagePlanKey for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7688,18 +7669,18 @@ func (c *APIGateway) GetUsagePlanKeysRequest(input *GetUsagePlanKeysInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetUsagePlanKeys for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -7767,12 +7748,10 @@ func (c *APIGateway) GetUsagePlanKeysPagesWithContext(ctx aws.Context, input *Ge
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetUsagePlanKeysOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetUsagePlanKeysOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -7833,23 +7812,23 @@ func (c *APIGateway) GetUsagePlansRequest(input *GetUsagePlansInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetUsagePlans for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
 func (c *APIGateway) GetUsagePlans(input *GetUsagePlansInput) (*GetUsagePlansOutput, error) {
@@ -7916,12 +7895,10 @@ func (c *APIGateway) GetUsagePlansPagesWithContext(ctx aws.Context, input *GetUs
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetUsagePlansOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetUsagePlansOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -7976,14 +7953,14 @@ func (c *APIGateway) GetVpcLinkRequest(input *GetVpcLinkInput) (req *request.Req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetVpcLink for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8065,15 +8042,15 @@ func (c *APIGateway) GetVpcLinksRequest(input *GetVpcLinksInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation GetVpcLinks for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8141,12 +8118,10 @@ func (c *APIGateway) GetVpcLinksPagesWithContext(ctx aws.Context, input *GetVpcL
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*GetVpcLinksOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetVpcLinksOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -8201,25 +8176,25 @@ func (c *APIGateway) ImportApiKeysRequest(input *ImportApiKeysInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation ImportApiKeys for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -8293,21 +8268,21 @@ func (c *APIGateway) ImportDocumentationPartsRequest(input *ImportDocumentationP
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation ImportDocumentationParts for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8384,22 +8359,22 @@ func (c *APIGateway) ImportRestApiRequest(input *ImportRestApiInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation ImportRestApi for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -8476,21 +8451,21 @@ func (c *APIGateway) PutGatewayResponseRequest(input *PutGatewayResponseInput) (
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation PutGatewayResponse for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8566,22 +8541,22 @@ func (c *APIGateway) PutIntegrationRequest(input *PutIntegrationInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation PutIntegration for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8657,25 +8632,25 @@ func (c *APIGateway) PutIntegrationResponseRequest(input *PutIntegrationResponse
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation PutIntegrationResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -8751,25 +8726,25 @@ func (c *APIGateway) PutMethodRequest(input *PutMethodInput) (req *request.Reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation PutMethod for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8845,25 +8820,25 @@ func (c *APIGateway) PutMethodResponseRequest(input *PutMethodResponseInput) (re
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation PutMethodResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -8942,25 +8917,25 @@ func (c *APIGateway) PutRestApiRequest(input *PutRestApiInput) (req *request.Req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation PutRestApi for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -9037,25 +9012,25 @@ func (c *APIGateway) TagResourceRequest(input *TagResourceInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -9135,18 +9110,18 @@ func (c *APIGateway) TestInvokeAuthorizerRequest(input *TestInvokeAuthorizerInpu
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation TestInvokeAuthorizer for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -9223,18 +9198,18 @@ func (c *APIGateway) TestInvokeMethodRequest(input *TestInvokeMethodInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation TestInvokeMethod for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -9311,22 +9286,22 @@ func (c *APIGateway) UntagResourceRequest(input *UntagResourceInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -9402,18 +9377,18 @@ func (c *APIGateway) UpdateAccountRequest(input *UpdateAccountInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateAccount for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -9489,22 +9464,22 @@ func (c *APIGateway) UpdateApiKeyRequest(input *UpdateApiKeyInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateApiKey for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -9582,18 +9557,18 @@ func (c *APIGateway) UpdateAuthorizerRequest(input *UpdateAuthorizerInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateAuthorizer for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -9669,22 +9644,22 @@ func (c *APIGateway) UpdateBasePathMappingRequest(input *UpdateBasePathMappingIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateBasePathMapping for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -9760,19 +9735,19 @@ func (c *APIGateway) UpdateClientCertificateRequest(input *UpdateClientCertifica
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateClientCertificate for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
 func (c *APIGateway) UpdateClientCertificate(input *UpdateClientCertificateInput) (*ClientCertificate, error) {
@@ -9847,22 +9822,22 @@ func (c *APIGateway) UpdateDeploymentRequest(input *UpdateDeploymentInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateDeployment for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ServiceUnavailableException
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
 //   The requested service is not available. For details see the accompanying
 //   error message. Retry after the specified time period.
 //
@@ -9936,25 +9911,25 @@ func (c *APIGateway) UpdateDocumentationPartRequest(input *UpdateDocumentationPa
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateDocumentationPart for usage and error information.
 //
-// Returned Error Types:
-//   * BadRequestException
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * UnauthorizedException
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10028,22 +10003,22 @@ func (c *APIGateway) UpdateDocumentationVersionRequest(input *UpdateDocumentatio
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateDocumentationVersion for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10119,22 +10094,22 @@ func (c *APIGateway) UpdateDomainNameRequest(input *UpdateDomainNameInput) (req 
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateDomainName for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10210,18 +10185,18 @@ func (c *APIGateway) UpdateGatewayResponseRequest(input *UpdateGatewayResponseIn
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateGatewayResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10297,22 +10272,22 @@ func (c *APIGateway) UpdateIntegrationRequest(input *UpdateIntegrationInput) (re
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateIntegration for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -10388,22 +10363,22 @@ func (c *APIGateway) UpdateIntegrationResponseRequest(input *UpdateIntegrationRe
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateIntegrationResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10479,22 +10454,22 @@ func (c *APIGateway) UpdateMethodRequest(input *UpdateMethodInput) (req *request
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateMethod for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10570,25 +10545,25 @@ func (c *APIGateway) UpdateMethodResponseRequest(input *UpdateMethodResponseInpu
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateMethodResponse for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded the rate limit. Retry after the specified time period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10664,22 +10639,22 @@ func (c *APIGateway) UpdateModelRequest(input *UpdateModelInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateModel for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10755,18 +10730,18 @@ func (c *APIGateway) UpdateRequestValidatorRequest(input *UpdateRequestValidator
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateRequestValidator for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10842,22 +10817,22 @@ func (c *APIGateway) UpdateResourceRequest(input *UpdateResourceInput) (req *req
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateResource for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -10933,22 +10908,22 @@ func (c *APIGateway) UpdateRestApiRequest(input *UpdateRestApiInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateRestApi for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -11024,22 +10999,22 @@ func (c *APIGateway) UpdateStageRequest(input *UpdateStageInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateStage for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -11116,19 +11091,19 @@ func (c *APIGateway) UpdateUsageRequest(input *UpdateUsageInput) (req *request.R
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateUsage for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
 func (c *APIGateway) UpdateUsage(input *UpdateUsageInput) (*Usage, error) {
@@ -11203,22 +11178,22 @@ func (c *APIGateway) UpdateUsagePlanRequest(input *UpdateUsagePlanInput) (req *r
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateUsagePlan for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
@@ -11294,22 +11269,22 @@ func (c *APIGateway) UpdateVpcLinkRequest(input *UpdateVpcLinkInput) (req *reque
 // See the AWS API reference guide for Amazon API Gateway's
 // API operation UpdateVpcLink for usage and error information.
 //
-// Returned Error Types:
-//   * UnauthorizedException
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   The request is denied because the caller has insufficient permissions.
 //
-//   * NotFoundException
+//   * ErrCodeNotFoundException "NotFoundException"
 //   The requested resource is not found. Make sure that the request URI is correct.
 //
-//   * BadRequestException
+//   * ErrCodeBadRequestException "BadRequestException"
 //   The submitted request is not valid, for example, the input is incomplete
 //   or incorrect. See the accompanying error message for details.
 //
-//   * ConflictException
+//   * ErrCodeConflictException "ConflictException"
 //   The request configuration has conflicts. For details, see the accompanying
 //   error message.
 //
-//   * TooManyRequestsException
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
 //   The request has reached its throttling limit. Retry after the specified time
 //   period.
 //
@@ -11339,9 +11314,7 @@ func (c *APIGateway) UpdateVpcLinkWithContext(ctx aws.Context, input *UpdateVpcL
 type AccessLogSettings struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the CloudWatch Logs log group or Kinesis
-	// Data Firehose delivery stream to receive access logs. If you specify a Kinesis
-	// Data Firehose delivery stream, the stream name must begin with amazon-apigateway-.
+	// The ARN of the CloudWatch Logs log group to receive access logs.
 	DestinationArn *string `locationName:"destinationArn" type:"string"`
 
 	// A single line format of the access logs of data, as specified by selected
@@ -11766,63 +11739,6 @@ func (s *Authorizer) SetType(v string) *Authorizer {
 	return s
 }
 
-// The submitted request is not valid, for example, the input is incomplete
-// or incorrect. See the accompanying error message for details.
-type BadRequestException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s BadRequestException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s BadRequestException) GoString() string {
-	return s.String()
-}
-
-func newErrorBadRequestException(v protocol.ResponseMetadata) error {
-	return &BadRequestException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *BadRequestException) Code() string {
-	return "BadRequestException"
-}
-
-// Message returns the exception's message.
-func (s *BadRequestException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *BadRequestException) OrigErr() error {
-	return nil
-}
-
-func (s *BadRequestException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *BadRequestException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *BadRequestException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // Represents the base path that callers of the API must provide as part of
 // the URL after the domain name.
 //
@@ -12003,63 +11919,6 @@ func (s *ClientCertificate) SetTags(v map[string]*string) *ClientCertificate {
 	return s
 }
 
-// The request configuration has conflicts. For details, see the accompanying
-// error message.
-type ConflictException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s ConflictException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ConflictException) GoString() string {
-	return s.String()
-}
-
-func newErrorConflictException(v protocol.ResponseMetadata) error {
-	return &ConflictException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *ConflictException) Code() string {
-	return "ConflictException"
-}
-
-// Message returns the exception's message.
-func (s *ConflictException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *ConflictException) OrigErr() error {
-	return nil
-}
-
-func (s *ConflictException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *ConflictException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *ConflictException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // Request to create an ApiKey resource.
 type CreateApiKeyInput struct {
 	_ struct{} `type:"structure"`
@@ -12075,8 +11934,7 @@ type CreateApiKeyInput struct {
 	Enabled *bool `locationName:"enabled" type:"boolean"`
 
 	// Specifies whether (true) or not (false) the key identifier is distinct from
-	// the created API key value. This parameter is deprecated and should not be
-	// used.
+	// the created API key value.
 	GenerateDistinctId *bool `locationName:"generateDistinctId" type:"boolean"`
 
 	// The name of the ApiKey.
@@ -12349,8 +12207,8 @@ type CreateBasePathMappingInput struct {
 	RestApiId *string `locationName:"restApiId" type:"string" required:"true"`
 
 	// The name of the API's stage that you want to use for this mapping. Specify
-	// '(none)' if you want callers to explicitly specify the stage name after any
-	// base path name.
+	// '(none)' if you do not want callers to explicitly specify the stage name
+	// after any base path name.
 	Stage *string `locationName:"stage" type:"string"`
 }
 
@@ -13519,8 +13377,8 @@ type CreateVpcLinkInput struct {
 	// tag value can be up to 256 characters.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// [Required] The ARN of the network load balancer of the VPC targeted by the
-	// VPC link. The network load balancer must be owned by the same AWS account
+	// [Required] The ARNs of network load balancers of the VPC targeted by the
+	// VPC link. The network load balancers must be owned by the same AWS account
 	// of the API owner.
 	//
 	// TargetArns is a required field
@@ -18095,7 +17953,7 @@ func (s *GetModelTemplateInput) SetRestApiId(v string) *GetModelTemplateInput {
 type GetModelTemplateOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Apache Velocity Template Language (VTL) (https://velocity.apache.org/engine/devel/vtl-reference.html)
+	// The Apache Velocity Template Language (VTL) (https://velocity.apache.org/engine/devel/vtl-reference-guide.html)
 	// template content used for the template resource.
 	Value *string `locationName:"value" type:"string"`
 }
@@ -19050,7 +18908,8 @@ type GetTagsInput struct {
 	// set.
 	Position *string `location:"querystring" locationName:"position" type:"string"`
 
-	// [Required] The ARN of a resource that can be tagged.
+	// [Required] The ARN of a resource that can be tagged. The resource ARN must
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resource_arn" type:"string" required:"true"`
@@ -20283,64 +20142,6 @@ func (s *IntegrationResponse) SetStatusCode(v string) *IntegrationResponse {
 	return s
 }
 
-// The request exceeded the rate limit. Retry after the specified time period.
-type LimitExceededException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-
-	RetryAfterSeconds *string `location:"header" locationName:"Retry-After" type:"string"`
-}
-
-// String returns the string representation
-func (s LimitExceededException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s LimitExceededException) GoString() string {
-	return s.String()
-}
-
-func newErrorLimitExceededException(v protocol.ResponseMetadata) error {
-	return &LimitExceededException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *LimitExceededException) Code() string {
-	return "LimitExceededException"
-}
-
-// Message returns the exception's message.
-func (s *LimitExceededException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *LimitExceededException) OrigErr() error {
-	return nil
-}
-
-func (s *LimitExceededException) Error() string {
-	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *LimitExceededException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *LimitExceededException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // Represents a client-facing interface by which the client calls the API to
 // access back-end resources. A Method resource is integrated with an Integration
 // resource. Both consist of a request and one or more responses. The method
@@ -20722,9 +20523,7 @@ type MethodSetting struct {
 
 	// Specifies the logging level for this method, which affects the log entries
 	// pushed to Amazon CloudWatch Logs. The PATCH path for this setting is /{method_setting_key}/logging/loglevel,
-	// and the available levels are OFF, ERROR, and INFO. Choose ERROR to write
-	// only error-level entries to CloudWatch Logs, or choose INFO to include all
-	// ERROR events as well as extra informational events.
+	// and the available levels are OFF, ERROR, and INFO.
 	LoggingLevel *string `locationName:"loggingLevel" type:"string"`
 
 	// Specifies whether Amazon CloudWatch metrics are enabled for this method.
@@ -20930,62 +20729,6 @@ func (s *Model) SetName(v string) *Model {
 func (s *Model) SetSchema(v string) *Model {
 	s.Schema = &v
 	return s
-}
-
-// The requested resource is not found. Make sure that the request URI is correct.
-type NotFoundException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s NotFoundException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s NotFoundException) GoString() string {
-	return s.String()
-}
-
-func newErrorNotFoundException(v protocol.ResponseMetadata) error {
-	return &NotFoundException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *NotFoundException) Code() string {
-	return "NotFoundException"
-}
-
-// Message returns the exception's message.
-func (s *NotFoundException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *NotFoundException) OrigErr() error {
-	return nil
-}
-
-func (s *NotFoundException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *NotFoundException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *NotFoundException) RequestID() string {
-	return s.RespMetadata.RequestID
 }
 
 // A single patch operation to apply to the specified resource. Please refer
@@ -22396,65 +22139,6 @@ func (s *SdkType) SetId(v string) *SdkType {
 	return s
 }
 
-// The requested service is not available. For details see the accompanying
-// error message. Retry after the specified time period.
-type ServiceUnavailableException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-
-	RetryAfterSeconds *string `location:"header" locationName:"Retry-After" type:"string"`
-}
-
-// String returns the string representation
-func (s ServiceUnavailableException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ServiceUnavailableException) GoString() string {
-	return s.String()
-}
-
-func newErrorServiceUnavailableException(v protocol.ResponseMetadata) error {
-	return &ServiceUnavailableException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *ServiceUnavailableException) Code() string {
-	return "ServiceUnavailableException"
-}
-
-// Message returns the exception's message.
-func (s *ServiceUnavailableException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *ServiceUnavailableException) OrigErr() error {
-	return nil
-}
-
-func (s *ServiceUnavailableException) Error() string {
-	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *ServiceUnavailableException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *ServiceUnavailableException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // Represents a unique identifier for a version of a deployed RestApi that is
 // callable by users.
 //
@@ -22670,7 +22354,8 @@ func (s *StageKey) SetStageName(v string) *StageKey {
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// [Required] The ARN of a resource that can be tagged.
+	// [Required] The ARN of a resource that can be tagged. The resource ARN must
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resource_arn" type:"string" required:"true"`
@@ -23178,126 +22863,12 @@ func (s *ThrottleSettings) SetRateLimit(v float64) *ThrottleSettings {
 	return s
 }
 
-// The request has reached its throttling limit. Retry after the specified time
-// period.
-type TooManyRequestsException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-
-	RetryAfterSeconds *string `location:"header" locationName:"Retry-After" type:"string"`
-}
-
-// String returns the string representation
-func (s TooManyRequestsException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s TooManyRequestsException) GoString() string {
-	return s.String()
-}
-
-func newErrorTooManyRequestsException(v protocol.ResponseMetadata) error {
-	return &TooManyRequestsException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *TooManyRequestsException) Code() string {
-	return "TooManyRequestsException"
-}
-
-// Message returns the exception's message.
-func (s *TooManyRequestsException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *TooManyRequestsException) OrigErr() error {
-	return nil
-}
-
-func (s *TooManyRequestsException) Error() string {
-	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *TooManyRequestsException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *TooManyRequestsException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
-// The request is denied because the caller has insufficient permissions.
-type UnauthorizedException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s UnauthorizedException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s UnauthorizedException) GoString() string {
-	return s.String()
-}
-
-func newErrorUnauthorizedException(v protocol.ResponseMetadata) error {
-	return &UnauthorizedException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *UnauthorizedException) Code() string {
-	return "UnauthorizedException"
-}
-
-// Message returns the exception's message.
-func (s *UnauthorizedException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *UnauthorizedException) OrigErr() error {
-	return nil
-}
-
-func (s *UnauthorizedException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *UnauthorizedException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *UnauthorizedException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // Removes a tag from a given resource.
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// [Required] The ARN of a resource that can be tagged.
+	// [Required] The ARN of a resource that can be tagged. The resource ARN must
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resource_arn" type:"string" required:"true"`
@@ -25085,7 +24656,7 @@ func (s *UpdateVpcLinkInput) SetVpcLinkId(v string) *UpdateVpcLinkInput {
 	return s
 }
 
-// An API Gateway VPC link for a RestApi to access resources in an Amazon Virtual
+// A API Gateway VPC link for a RestApi to access resources in an Amazon Virtual
 // Private Cloud (VPC).
 //
 // To enable access to a resource in an Amazon Virtual Private Cloud through
@@ -25119,9 +24690,8 @@ type UpdateVpcLinkOutput struct {
 	// The collection of tags. Each tag element is associated with a given resource.
 	Tags map[string]*string `locationName:"tags" type:"map"`
 
-	// The ARN of the network load balancer of the VPC targeted by the VPC link.
-	// The network load balancer must be owned by the same AWS account of the API
-	// owner.
+	// The ARNs of network load balancers of the VPC targeted by the VPC link. The
+	// network load balancers must be owned by the same AWS account of the API owner.
 	TargetArns []*string `locationName:"targetArns" type:"list"`
 }
 

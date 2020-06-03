@@ -1,18 +1,17 @@
 package aws
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/codepipeline"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"github.com/terraform-providers/terraform-provider-aws/aws/internal/keyvaluetags"
 )
 
 func resourceAwsCodePipeline() *schema.Resource {
@@ -41,15 +40,18 @@ func resourceAwsCodePipeline() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+
 			"artifact_store": {
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Required: true,
+				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"location": {
 							Type:     schema.TypeString,
 							Required: true,
 						},
+
 						"type": {
 							Type:     schema.TypeString,
 							Required: true,
@@ -57,6 +59,7 @@ func resourceAwsCodePipeline() *schema.Resource {
 								codepipeline.ArtifactStoreTypeS3,
 							}, false),
 						},
+
 						"encryption_key": {
 							Type:     schema.TypeList,
 							MaxItems: 1,
@@ -67,6 +70,7 @@ func resourceAwsCodePipeline() *schema.Resource {
 										Type:     schema.TypeString,
 										Required: true,
 									},
+
 									"type": {
 										Type:     schema.TypeString,
 										Required: true,
@@ -76,11 +80,6 @@ func resourceAwsCodePipeline() *schema.Resource {
 									},
 								},
 							},
-						},
-						"region": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Computed: true,
 						},
 					},
 				},
@@ -103,7 +102,6 @@ func resourceAwsCodePipeline() *schema.Resource {
 									"configuration": {
 										Type:     schema.TypeMap,
 										Optional: true,
-										Elem:     &schema.Schema{Type: schema.TypeString},
 									},
 									"category": {
 										Type:     schema.TypeString,
@@ -157,15 +155,6 @@ func resourceAwsCodePipeline() *schema.Resource {
 										Optional: true,
 										Computed: true,
 									},
-									"region": {
-										Type:     schema.TypeString,
-										Optional: true,
-										Computed: true,
-									},
-									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
 								},
 							},
 						},
@@ -179,18 +168,13 @@ func resourceAwsCodePipeline() *schema.Resource {
 
 func resourceAwsCodePipelineCreate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).codepipelineconn
-
-	pipeline, err := expandAwsCodePipeline(d)
-	if err != nil {
-		return err
-	}
 	params := &codepipeline.CreatePipelineInput{
-		Pipeline: pipeline,
-		Tags:     keyvaluetags.New(d.Get("tags").(map[string]interface{})).IgnoreAws().CodepipelineTags(),
+		Pipeline: expandAwsCodePipeline(d),
+		Tags:     tagsFromMapCodePipeline(d.Get("tags").(map[string]interface{})),
 	}
 
 	var resp *codepipeline.CreatePipelineOutput
-	err = resource.Retry(2*time.Minute, func() *resource.RetryError {
+	err := resource.Retry(2*time.Minute, func() *resource.RetryError {
 		var err error
 
 		resp, err = conn.CreatePipeline(params)
@@ -211,65 +195,25 @@ func resourceAwsCodePipelineCreate(d *schema.ResourceData, meta interface{}) err
 		return fmt.Errorf("Error creating CodePipeline: invalid response from AWS")
 	}
 
-	d.SetId(aws.StringValue(resp.Pipeline.Name))
-
+	d.SetId(*resp.Pipeline.Name)
 	return resourceAwsCodePipelineRead(d, meta)
 }
 
-func expandAwsCodePipeline(d *schema.ResourceData) (*codepipeline.PipelineDeclaration, error) {
+func expandAwsCodePipeline(d *schema.ResourceData) *codepipeline.PipelineDeclaration {
+	pipelineArtifactStore := expandAwsCodePipelineArtifactStore(d)
+	pipelineStages := expandAwsCodePipelineStages(d)
+
 	pipeline := codepipeline.PipelineDeclaration{
-		Name:    aws.String(d.Get("name").(string)),
-		RoleArn: aws.String(d.Get("role_arn").(string)),
-		Stages:  expandAwsCodePipelineStages(d),
+		Name:          aws.String(d.Get("name").(string)),
+		RoleArn:       aws.String(d.Get("role_arn").(string)),
+		ArtifactStore: pipelineArtifactStore,
+		Stages:        pipelineStages,
 	}
-
-	pipelineArtifactStores, err := expandAwsCodePipelineArtifactStores(d.Get("artifact_store").(*schema.Set).List())
-	if err != nil {
-		return nil, err
-	}
-	if len(pipelineArtifactStores) == 1 {
-		for _, v := range pipelineArtifactStores {
-			pipeline.ArtifactStore = v
-		}
-	} else {
-		pipeline.ArtifactStores = pipelineArtifactStores
-	}
-
-	return &pipeline, nil
+	return &pipeline
 }
-
-func expandAwsCodePipelineArtifactStores(configs []interface{}) (map[string]*codepipeline.ArtifactStore, error) {
-	if len(configs) == 0 {
-		return nil, nil
-	}
-
-	regions := make([]string, 0, len(configs))
-	pipelineArtifactStores := make(map[string]*codepipeline.ArtifactStore)
-	for _, config := range configs {
-		region, store := expandAwsCodePipelineArtifactStoreData(config.(map[string]interface{}))
-		regions = append(regions, region)
-		pipelineArtifactStores[region] = store
-	}
-
-	if len(regions) == 1 {
-		if regions[0] != "" {
-			return nil, errors.New("region cannot be set for a single-region CodePipeline")
-		}
-	} else {
-		for _, v := range regions {
-			if v == "" {
-				return nil, errors.New("region must be set for a cross-region CodePipeline")
-			}
-		}
-		if len(configs) != len(pipelineArtifactStores) {
-			return nil, errors.New("only one Artifact Store can be defined per region for a cross-region CodePipeline")
-		}
-	}
-
-	return pipelineArtifactStores, nil
-}
-
-func expandAwsCodePipelineArtifactStoreData(data map[string]interface{}) (string, *codepipeline.ArtifactStore) {
+func expandAwsCodePipelineArtifactStore(d *schema.ResourceData) *codepipeline.ArtifactStore {
+	configs := d.Get("artifact_store").([]interface{})
+	data := configs[0].(map[string]interface{})
 	pipelineArtifactStore := codepipeline.ArtifactStore{
 		Location: aws.String(data["location"].(string)),
 		Type:     aws.String(data["type"].(string)),
@@ -283,15 +227,10 @@ func expandAwsCodePipelineArtifactStoreData(data map[string]interface{}) (string
 		}
 		pipelineArtifactStore.EncryptionKey = &ek
 	}
-
-	return data["region"].(string), &pipelineArtifactStore
+	return &pipelineArtifactStore
 }
 
 func flattenAwsCodePipelineArtifactStore(artifactStore *codepipeline.ArtifactStore) []interface{} {
-	if artifactStore == nil {
-		return []interface{}{}
-	}
-
 	values := map[string]interface{}{}
 	values["type"] = *artifactStore.Type
 	values["location"] = *artifactStore.Location
@@ -303,16 +242,6 @@ func flattenAwsCodePipelineArtifactStore(artifactStore *codepipeline.ArtifactSto
 		values["encryption_key"] = []interface{}{as}
 	}
 	return []interface{}{values}
-}
-
-func flattenAwsCodePipelineArtifactStores(artifactStores map[string]*codepipeline.ArtifactStore) []interface{} {
-	values := []interface{}{}
-	for region, artifactStore := range artifactStores {
-		store := flattenAwsCodePipelineArtifactStore(artifactStore)[0].(map[string]interface{})
-		store["region"] = region
-		values = append(values, store)
-	}
-	return values
 }
 
 func expandAwsCodePipelineStages(d *schema.ResourceData) []*codepipeline.StageDeclaration {
@@ -389,14 +318,6 @@ func expandAwsCodePipelineActions(s []interface{}) []*codepipeline.ActionDeclara
 		if ro > 0 {
 			action.RunOrder = aws.Int64(int64(ro))
 		}
-		r := data["region"].(string)
-		if r != "" {
-			action.Region = aws.String(r)
-		}
-		ns := data["namespace"].(string)
-		if len(ns) > 0 {
-			action.Namespace = aws.String(ns)
-		}
 		actions = append(actions, &action)
 	}
 	return actions
@@ -436,14 +357,6 @@ func flattenAwsCodePipelineStageActions(actions []*codepipeline.ActionDeclaratio
 
 		if action.RunOrder != nil {
 			values["run_order"] = int(*action.RunOrder)
-		}
-
-		if action.Region != nil {
-			values["region"] = *action.Region
-		}
-
-		if action.Namespace != nil {
-			values["namespace"] = aws.StringValue(action.Namespace)
 		}
 
 		actionsList = append(actionsList, values)
@@ -512,52 +425,36 @@ func flattenAwsCodePipelineActionsInputArtifacts(artifacts []*codepipeline.Input
 
 func resourceAwsCodePipelineRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).codepipelineconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
-
 	resp, err := conn.GetPipeline(&codepipeline.GetPipelineInput{
 		Name: aws.String(d.Id()),
 	})
 
-	if isAWSErr(err, codepipeline.ErrCodePipelineNotFoundException, "") {
-		log.Printf("[WARN] Codepipeline (%s) not found, removing from state", d.Id())
-		d.SetId("")
-		return nil
-	}
-
 	if err != nil {
-		return fmt.Errorf("error reading Codepipeline: %s", err)
+		pipelineerr, ok := err.(awserr.Error)
+		if ok && pipelineerr.Code() == "PipelineNotFoundException" {
+			log.Printf("[INFO] Codepipeline %q not found", d.Id())
+			d.SetId("")
+			return nil
+		}
+		return fmt.Errorf("Error retreiving Pipeline: %q", err)
 	}
-
 	metadata := resp.Metadata
 	pipeline := resp.Pipeline
 
-	if pipeline.ArtifactStore != nil {
-		if err := d.Set("artifact_store", flattenAwsCodePipelineArtifactStore(pipeline.ArtifactStore)); err != nil {
-			return err
-		}
-	} else if pipeline.ArtifactStores != nil {
-		if err := d.Set("artifact_store", flattenAwsCodePipelineArtifactStores(pipeline.ArtifactStores)); err != nil {
-			return err
-		}
+	if err := d.Set("artifact_store", flattenAwsCodePipelineArtifactStore(pipeline.ArtifactStore)); err != nil {
+		return err
 	}
 
 	if err := d.Set("stage", flattenAwsCodePipelineStages(pipeline.Stages)); err != nil {
 		return err
 	}
 
-	arn := aws.StringValue(metadata.PipelineArn)
-	d.Set("arn", arn)
+	d.Set("arn", metadata.PipelineArn)
 	d.Set("name", pipeline.Name)
 	d.Set("role_arn", pipeline.RoleArn)
 
-	tags, err := keyvaluetags.CodepipelineListTags(conn, arn)
-
-	if err != nil {
-		return fmt.Errorf("error listing tags for Codepipeline (%s): %s", arn, err)
-	}
-
-	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
+	if err := saveTagsCodePipeline(conn, d); err != nil {
+		return err
 	}
 
 	return nil
@@ -566,14 +463,11 @@ func resourceAwsCodePipelineRead(d *schema.ResourceData, meta interface{}) error
 func resourceAwsCodePipelineUpdate(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).codepipelineconn
 
-	pipeline, err := expandAwsCodePipeline(d)
-	if err != nil {
-		return err
-	}
+	pipeline := expandAwsCodePipeline(d)
 	params := &codepipeline.UpdatePipelineInput{
 		Pipeline: pipeline,
 	}
-	_, err = conn.UpdatePipeline(params)
+	_, err := conn.UpdatePipeline(params)
 
 	if err != nil {
 		return fmt.Errorf(
@@ -581,13 +475,8 @@ func resourceAwsCodePipelineUpdate(d *schema.ResourceData, meta interface{}) err
 			d.Id(), err)
 	}
 
-	arn := d.Get("arn").(string)
-	if d.HasChange("tags") {
-		o, n := d.GetChange("tags")
-
-		if err := keyvaluetags.CodepipelineUpdateTags(conn, arn, o, n); err != nil {
-			return fmt.Errorf("error updating Codepipeline (%s) tags: %s", arn, err)
-		}
+	if err := setTagsCodePipeline(conn, d); err != nil {
+		return fmt.Errorf("Error updating CodePipeline tags: %s", d.Id())
 	}
 
 	return resourceAwsCodePipelineRead(d, meta)
@@ -599,14 +488,6 @@ func resourceAwsCodePipelineDelete(d *schema.ResourceData, meta interface{}) err
 	_, err := conn.DeletePipeline(&codepipeline.DeletePipelineInput{
 		Name: aws.String(d.Id()),
 	})
-
-	if isAWSErr(err, codepipeline.ErrCodePipelineNotFoundException, "") {
-		return nil
-	}
-
-	if err != nil {
-		return fmt.Errorf("error deleting Codepipeline (%s): %s", d.Id(), err)
-	}
 
 	return err
 }

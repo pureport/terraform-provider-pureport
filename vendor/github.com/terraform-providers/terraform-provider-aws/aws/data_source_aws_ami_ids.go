@@ -23,12 +23,14 @@ func dataSourceAwsAmiIds() *schema.Resource {
 			"executable_users": {
 				Type:     schema.TypeList,
 				Optional: true,
+				ForceNew: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 			},
 			"name_regex": {
 				Type:         schema.TypeString,
 				Optional:     true,
-				ValidateFunc: validation.StringIsValidRegExp,
+				ForceNew:     true,
+				ValidateFunc: validation.ValidateRegexp,
 			},
 			"owners": {
 				Type:     schema.TypeList,

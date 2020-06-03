@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -159,7 +160,7 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 				Computed: true,
 			},
 			"environment": {
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Required: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
@@ -171,12 +172,12 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 								codebuild.ComputeTypeBuildGeneral1Small,
 								codebuild.ComputeTypeBuildGeneral1Medium,
 								codebuild.ComputeTypeBuildGeneral1Large,
-								codebuild.ComputeTypeBuildGeneral12xlarge,
 							}, false),
 						},
 						"environment_variable": {
 							Type:     schema.TypeList,
 							Optional: true,
+							Computed: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"name": {
@@ -193,7 +194,6 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 										ValidateFunc: validation.StringInSlice([]string{
 											codebuild.EnvironmentVariableTypePlaintext,
 											codebuild.EnvironmentVariableTypeParameterStore,
-											codebuild.EnvironmentVariableTypeSecretsManager,
 										}, false),
 										Default: codebuild.EnvironmentVariableTypePlaintext,
 									},
@@ -209,9 +209,7 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 							Required: true,
 							ValidateFunc: validation.StringInSlice([]string{
 								codebuild.EnvironmentTypeLinuxContainer,
-								codebuild.EnvironmentTypeLinuxGpuContainer,
 								codebuild.EnvironmentTypeWindowsContainer,
-								codebuild.EnvironmentTypeArmContainer,
 							}, false),
 						},
 						"image_pull_credentials_type": {
@@ -255,6 +253,7 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 						},
 					},
 				},
+				Set: resourceAwsCodeBuildProjectEnvironmentHash,
 			},
 			"logs_config": {
 				Type:     schema.TypeList,
@@ -394,9 +393,7 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"auth": {
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
+							Type: schema.TypeSet,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"resource": {
@@ -413,6 +410,8 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 									},
 								},
 							},
+							Optional: true,
+							Set:      resourceAwsCodeBuildProjectSourceAuthHash,
 						},
 						"buildspec": {
 							Type:     schema.TypeString,
@@ -439,19 +438,6 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 							Optional:     true,
 							ValidateFunc: validation.IntAtLeast(0),
 						},
-						"git_submodules_config": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"fetch_submodules": {
-										Type:     schema.TypeBool,
-										Required: true,
-									},
-								},
-							},
-						},
 						"insecure_ssl": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -472,15 +458,11 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 				Required: true,
 			},
 			"source": {
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Required: true,
+				Type: schema.TypeSet,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"auth": {
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
+							Type: schema.TypeSet,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"resource": {
@@ -497,6 +479,8 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 									},
 								},
 							},
+							Optional: true,
+							Set:      resourceAwsCodeBuildProjectSourceAuthHash,
 						},
 						"buildspec": {
 							Type:     schema.TypeString,
@@ -524,19 +508,6 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 							Optional:     true,
 							ValidateFunc: validation.IntAtLeast(0),
 						},
-						"git_submodules_config": {
-							Type:     schema.TypeList,
-							Optional: true,
-							MaxItems: 1,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"fetch_submodules": {
-										Type:     schema.TypeBool,
-										Required: true,
-									},
-								},
-							},
-						},
 						"insecure_ssl": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -547,21 +518,14 @@ func resourceAwsCodeBuildProject() *schema.Resource {
 						},
 					},
 				},
-			},
-			"source_version": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
+				MaxItems: 1,
+				Set:      resourceAwsCodeBuildProjectSourceHash,
 			},
 			"build_timeout": {
 				Type:         schema.TypeInt,
 				Optional:     true,
 				Default:      "60",
-				ValidateFunc: validation.IntBetween(5, 480),
-			},
-			"queued_timeout": {
-				Type:         schema.TypeInt,
-				Optional:     true,
-				Default:      "480",
 				ValidateFunc: validation.IntBetween(5, 480),
 			},
 			"badge_enabled": {
@@ -631,7 +595,7 @@ func resourceAwsCodeBuildProjectCreate(d *schema.ResourceData, meta interface{})
 
 	if aws.StringValue(projectSource.Type) == codebuild.SourceTypeNoSource {
 		if aws.StringValue(projectSource.Buildspec) == "" {
-			return fmt.Errorf("`buildspec` must be set when source's `type` is `NO_SOURCE`")
+			return fmt.Errorf("`build_spec` must be set when source's `type` is `NO_SOURCE`")
 		}
 
 		if aws.StringValue(projectSource.Location) != "" {
@@ -666,16 +630,8 @@ func resourceAwsCodeBuildProjectCreate(d *schema.ResourceData, meta interface{})
 		params.ServiceRole = aws.String(v.(string))
 	}
 
-	if v, ok := d.GetOk("source_version"); ok {
-		params.SourceVersion = aws.String(v.(string))
-	}
-
 	if v, ok := d.GetOk("build_timeout"); ok {
 		params.TimeoutInMinutes = aws.Int64(int64(v.(int)))
-	}
-
-	if v, ok := d.GetOk("queued_timeout"); ok {
-		params.QueuedTimeoutInMinutes = aws.Int64(int64(v.(int)))
 	}
 
 	if v, ok := d.GetOk("vpc_config"); ok {
@@ -712,7 +668,7 @@ func resourceAwsCodeBuildProjectCreate(d *schema.ResourceData, meta interface{})
 		return fmt.Errorf("Error creating CodeBuild project: %s", err)
 	}
 
-	d.SetId(aws.StringValue(resp.Project.Arn))
+	d.SetId(*resp.Project.Arn)
 
 	return resourceAwsCodeBuildProjectRead(d, meta)
 }
@@ -809,7 +765,7 @@ func expandProjectCache(s []interface{}) *codebuild.ProjectCache {
 }
 
 func expandProjectEnvironment(d *schema.ResourceData) *codebuild.ProjectEnvironment {
-	configs := d.Get("environment").([]interface{})
+	configs := d.Get("environment").(*schema.Set).List()
 
 	envConfig := configs[0].(map[string]interface{})
 
@@ -867,7 +823,7 @@ func expandProjectEnvironment(d *schema.ResourceData) *codebuild.ProjectEnvironm
 					projectEnvironmentVar.Name = &v
 				}
 
-				if v, ok := config["value"].(string); ok {
+				if v := config["value"].(string); v != "" {
 					projectEnvironmentVar.Value = &v
 				}
 
@@ -1003,7 +959,7 @@ func expandProjectSecondarySources(d *schema.ResourceData) []*codebuild.ProjectS
 }
 
 func expandProjectSource(d *schema.ResourceData) codebuild.ProjectSource {
-	configs := d.Get("source").([]interface{})
+	configs := d.Get("source").(*schema.Set).List()
 
 	data := configs[0].(map[string]interface{})
 	return expandProjectSourceData(data)
@@ -1033,29 +989,14 @@ func expandProjectSourceData(data map[string]interface{}) codebuild.ProjectSourc
 		projectSource.ReportBuildStatus = aws.Bool(data["report_build_status"].(bool))
 	}
 
-	// Probe data for auth details (max of 1 auth per ProjectSource object)
-	if v, ok := data["auth"]; ok && len(v.([]interface{})) > 0 {
-		if auths := v.([]interface{}); auths[0] != nil {
-			auth := auths[0].(map[string]interface{})
+	if v, ok := data["auth"]; ok {
+		if len(v.(*schema.Set).List()) > 0 {
+			auth := v.(*schema.Set).List()[0].(map[string]interface{})
+
 			projectSource.Auth = &codebuild.SourceAuth{
 				Type:     aws.String(auth["type"].(string)),
 				Resource: aws.String(auth["resource"].(string)),
 			}
-		}
-	}
-
-	// Only valid for CODECOMMIT, GITHUB, GITHUB_ENTERPRISE source types.
-	if sourceType == codebuild.SourceTypeCodecommit || sourceType == codebuild.SourceTypeGithub || sourceType == codebuild.SourceTypeGithubEnterprise {
-		if v, ok := data["git_submodules_config"]; ok && len(v.([]interface{})) > 0 {
-			config := v.([]interface{})[0].(map[string]interface{})
-
-			gitSubmodulesConfig := &codebuild.GitSubmodulesConfig{}
-
-			if v, ok := config["fetch_submodules"]; ok {
-				gitSubmodulesConfig.FetchSubmodules = aws.Bool(v.(bool))
-			}
-
-			projectSource.GitSubmodulesConfig = gitSubmodulesConfig
 		}
 	}
 
@@ -1064,7 +1005,6 @@ func expandProjectSourceData(data map[string]interface{}) codebuild.ProjectSourc
 
 func resourceAwsCodeBuildProjectRead(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AWSClient).codebuildconn
-	ignoreTagsConfig := meta.(*AWSClient).IgnoreTagsConfig
 
 	resp, err := conn.BatchGetProjects(&codebuild.BatchGetProjectsInput{
 		Names: []*string{
@@ -1089,7 +1029,7 @@ func resourceAwsCodeBuildProjectRead(d *schema.ResourceData, meta interface{}) e
 		return fmt.Errorf("error setting artifacts: %s", err)
 	}
 
-	if err := d.Set("environment", flattenAwsCodeBuildProjectEnvironment(project.Environment)); err != nil {
+	if err := d.Set("environment", schema.NewSet(resourceAwsCodeBuildProjectEnvironmentHash, flattenAwsCodeBuildProjectEnvironment(project.Environment))); err != nil {
 		return fmt.Errorf("error setting environment: %s", err)
 	}
 
@@ -1122,9 +1062,7 @@ func resourceAwsCodeBuildProjectRead(d *schema.ResourceData, meta interface{}) e
 	d.Set("encryption_key", project.EncryptionKey)
 	d.Set("name", project.Name)
 	d.Set("service_role", project.ServiceRole)
-	d.Set("source_version", project.SourceVersion)
 	d.Set("build_timeout", project.TimeoutInMinutes)
-	d.Set("queued_timeout", project.QueuedTimeoutInMinutes)
 	if project.Badge != nil {
 		d.Set("badge_enabled", project.Badge.BadgeEnabled)
 		d.Set("badge_url", project.Badge.BadgeRequestUrl)
@@ -1133,7 +1071,7 @@ func resourceAwsCodeBuildProjectRead(d *schema.ResourceData, meta interface{}) e
 		d.Set("badge_url", "")
 	}
 
-	if err := d.Set("tags", keyvaluetags.CodebuildKeyValueTags(project.Tags).IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
+	if err := d.Set("tags", keyvaluetags.CodebuildKeyValueTags(project.Tags).IgnoreAws().Map()); err != nil {
 		return fmt.Errorf("error setting tags: %s", err)
 	}
 
@@ -1203,16 +1141,8 @@ func resourceAwsCodeBuildProjectUpdate(d *schema.ResourceData, meta interface{})
 		params.ServiceRole = aws.String(d.Get("service_role").(string))
 	}
 
-	if d.HasChange("source_version") {
-		params.SourceVersion = aws.String(d.Get("source_version").(string))
-	}
-
 	if d.HasChange("build_timeout") {
 		params.TimeoutInMinutes = aws.Int64(int64(d.Get("build_timeout").(int)))
-	}
-
-	if d.HasChange("queued_timeout") {
-		params.QueuedTimeoutInMinutes = aws.Int64(int64(d.Get("queued_timeout").(int)))
 	}
 
 	if d.HasChange("badge_enabled") {
@@ -1326,38 +1256,38 @@ func flattenAwsCodeBuildProjectArtifacts(artifacts *codebuild.ProjectArtifacts) 
 func flattenAwsCodeBuildProjectArtifactsData(artifacts codebuild.ProjectArtifacts) map[string]interface{} {
 	values := map[string]interface{}{}
 
-	values["type"] = aws.StringValue(artifacts.Type)
+	values["type"] = *artifacts.Type
 
 	if artifacts.ArtifactIdentifier != nil {
-		values["artifact_identifier"] = aws.StringValue(artifacts.ArtifactIdentifier)
+		values["artifact_identifier"] = *artifacts.ArtifactIdentifier
 	}
 
 	if artifacts.EncryptionDisabled != nil {
-		values["encryption_disabled"] = aws.BoolValue(artifacts.EncryptionDisabled)
+		values["encryption_disabled"] = *artifacts.EncryptionDisabled
 	}
 
 	if artifacts.OverrideArtifactName != nil {
-		values["override_artifact_name"] = aws.BoolValue(artifacts.OverrideArtifactName)
+		values["override_artifact_name"] = *artifacts.OverrideArtifactName
 	}
 
 	if artifacts.Location != nil {
-		values["location"] = aws.StringValue(artifacts.Location)
+		values["location"] = *artifacts.Location
 	}
 
 	if artifacts.Name != nil {
-		values["name"] = aws.StringValue(artifacts.Name)
+		values["name"] = *artifacts.Name
 	}
 
 	if artifacts.NamespaceType != nil {
-		values["namespace_type"] = aws.StringValue(artifacts.NamespaceType)
+		values["namespace_type"] = *artifacts.NamespaceType
 	}
 
 	if artifacts.Packaging != nil {
-		values["packaging"] = aws.StringValue(artifacts.Packaging)
+		values["packaging"] = *artifacts.Packaging
 	}
 
 	if artifacts.Path != nil {
-		values["path"] = aws.StringValue(artifacts.Path)
+		values["path"] = *artifacts.Path
 	}
 	return values
 }
@@ -1379,12 +1309,12 @@ func flattenAwsCodebuildProjectCache(cache *codebuild.ProjectCache) []interface{
 func flattenAwsCodeBuildProjectEnvironment(environment *codebuild.ProjectEnvironment) []interface{} {
 	envConfig := map[string]interface{}{}
 
-	envConfig["type"] = aws.StringValue(environment.Type)
-	envConfig["compute_type"] = aws.StringValue(environment.ComputeType)
-	envConfig["image"] = aws.StringValue(environment.Image)
+	envConfig["type"] = *environment.Type
+	envConfig["compute_type"] = *environment.ComputeType
+	envConfig["image"] = *environment.Image
 	envConfig["certificate"] = aws.StringValue(environment.Certificate)
-	envConfig["privileged_mode"] = aws.BoolValue(environment.PrivilegedMode)
-	envConfig["image_pull_credentials_type"] = aws.StringValue(environment.ImagePullCredentialsType)
+	envConfig["privileged_mode"] = *environment.PrivilegedMode
+	envConfig["image_pull_credentials_type"] = *environment.ImagePullCredentialsType
 
 	envConfig["registry_credential"] = flattenAwsCodebuildRegistryCredential(environment.RegistryCredential)
 
@@ -1436,11 +1366,10 @@ func flattenAwsCodeBuildProjectSourceData(source *codebuild.ProjectSource) inter
 		"type":                aws.StringValue(source.Type),
 	}
 
-	m["git_submodules_config"] = flattenAwsCodebuildProjectGitSubmodulesConfig(source.GitSubmodulesConfig)
-
 	if source.Auth != nil {
-		m["auth"] = []interface{}{sourceAuthToMap(source.Auth)}
+		m["auth"] = schema.NewSet(resourceAwsCodeBuildProjectSourceAuthHash, []interface{}{sourceAuthToMap(source.Auth)})
 	}
+
 	if source.SourceIdentifier != nil {
 		m["source_identifier"] = aws.StringValue(source.SourceIdentifier)
 	}
@@ -1448,23 +1377,11 @@ func flattenAwsCodeBuildProjectSourceData(source *codebuild.ProjectSource) inter
 	return m
 }
 
-func flattenAwsCodebuildProjectGitSubmodulesConfig(config *codebuild.GitSubmodulesConfig) []interface{} {
-	if config == nil {
-		return []interface{}{}
-	}
-
-	values := map[string]interface{}{
-		"fetch_submodules": aws.BoolValue(config.FetchSubmodules),
-	}
-
-	return []interface{}{values}
-}
-
 func flattenAwsCodeBuildVpcConfig(vpcConfig *codebuild.VpcConfig) []interface{} {
 	if vpcConfig != nil {
 		values := map[string]interface{}{}
 
-		values["vpc_id"] = aws.StringValue(vpcConfig.VpcId)
+		values["vpc_id"] = *vpcConfig.VpcId
 		values["subnets"] = schema.NewSet(schema.HashString, flattenStringList(vpcConfig.Subnets))
 		values["security_group_ids"] = schema.NewSet(schema.HashString, flattenStringList(vpcConfig.SecurityGroupIds))
 
@@ -1512,16 +1429,100 @@ func resourceAwsCodeBuildProjectArtifactsHash(v interface{}) int {
 	return hashcode.String(buf.String())
 }
 
+func resourceAwsCodeBuildProjectEnvironmentHash(v interface{}) int {
+	var buf bytes.Buffer
+	m := v.(map[string]interface{})
+
+	environmentType := m["type"].(string)
+	computeType := m["compute_type"].(string)
+	image := m["image"].(string)
+	privilegedMode := m["privileged_mode"].(bool)
+	imagePullCredentialsType := m["image_pull_credentials_type"].(string)
+	environmentVariables := m["environment_variable"].([]interface{})
+	buf.WriteString(fmt.Sprintf("%s-", environmentType))
+	buf.WriteString(fmt.Sprintf("%s-", computeType))
+	buf.WriteString(fmt.Sprintf("%s-", image))
+	buf.WriteString(fmt.Sprintf("%t-", privilegedMode))
+	buf.WriteString(fmt.Sprintf("%s-", imagePullCredentialsType))
+	if v, ok := m["certificate"]; ok && v.(string) != "" {
+		buf.WriteString(fmt.Sprintf("%s-", v.(string)))
+	}
+	if v, ok := m["registry_credential"]; ok && len(v.([]interface{})) > 0 && v.([]interface{})[0] != nil {
+		m := v.([]interface{})[0].(map[string]interface{})
+
+		if v, ok := m["credential"]; ok && v.(string) != "" {
+			buf.WriteString(fmt.Sprintf("%s-", v.(string)))
+		}
+
+		if v, ok := m["credential_provider"]; ok && v.(string) != "" {
+			buf.WriteString(fmt.Sprintf("%s-", v.(string)))
+		}
+	}
+	for _, e := range environmentVariables {
+		if e != nil { // Old statefiles might have nil values in them
+			ev := e.(map[string]interface{})
+			buf.WriteString(fmt.Sprintf("%s:", ev["name"].(string)))
+			// type is sometimes not returned by the API
+			if v, ok := ev["type"]; ok {
+				buf.WriteString(fmt.Sprintf("%s:", v.(string)))
+			}
+			buf.WriteString(fmt.Sprintf("%s-", ev["value"].(string)))
+		}
+	}
+
+	return hashcode.String(buf.String())
+}
+
+func resourceAwsCodeBuildProjectSourceHash(v interface{}) int {
+	var buf bytes.Buffer
+	m := v.(map[string]interface{})
+
+	buf.WriteString(fmt.Sprintf("%s-", m["type"].(string)))
+	if v, ok := m["source_identifier"]; ok {
+		buf.WriteString(fmt.Sprintf("%s-", strconv.Itoa(v.(int))))
+	}
+	if v, ok := m["buildspec"]; ok {
+		buf.WriteString(fmt.Sprintf("%s-", v.(string)))
+	}
+	if v, ok := m["location"]; ok {
+		buf.WriteString(fmt.Sprintf("%s-", v.(string)))
+	}
+	if v, ok := m["git_clone_depth"]; ok {
+		buf.WriteString(fmt.Sprintf("%s-", strconv.Itoa(v.(int))))
+	}
+	if v, ok := m["insecure_ssl"]; ok {
+		buf.WriteString(fmt.Sprintf("%s-", strconv.FormatBool(v.(bool))))
+	}
+	if v, ok := m["report_build_status"]; ok {
+		buf.WriteString(fmt.Sprintf("%s-", strconv.FormatBool(v.(bool))))
+	}
+
+	return hashcode.String(buf.String())
+}
+
+func resourceAwsCodeBuildProjectSourceAuthHash(v interface{}) int {
+	var buf bytes.Buffer
+	m := v.(map[string]interface{})
+
+	buf.WriteString(fmt.Sprintf("%s-", m["type"].(string)))
+
+	if m["resource"] != nil {
+		buf.WriteString(fmt.Sprintf("%s-", m["resource"].(string)))
+	}
+
+	return hashcode.String(buf.String())
+}
+
 func environmentVariablesToMap(environmentVariables []*codebuild.EnvironmentVariable) []interface{} {
 
 	envVariables := []interface{}{}
 	if len(environmentVariables) > 0 {
 		for _, env := range environmentVariables {
 			item := map[string]interface{}{}
-			item["name"] = aws.StringValue(env.Name)
-			item["value"] = aws.StringValue(env.Value)
+			item["name"] = *env.Name
+			item["value"] = *env.Value
 			if env.Type != nil {
-				item["type"] = aws.StringValue(env.Type)
+				item["type"] = *env.Type
 			}
 			envVariables = append(envVariables, item)
 		}
@@ -1533,10 +1534,10 @@ func environmentVariablesToMap(environmentVariables []*codebuild.EnvironmentVari
 func sourceAuthToMap(sourceAuth *codebuild.SourceAuth) map[string]interface{} {
 
 	auth := map[string]interface{}{}
-	auth["type"] = aws.StringValue(sourceAuth.Type)
+	auth["type"] = *sourceAuth.Type
 
 	if sourceAuth.Resource != nil {
-		auth["resource"] = aws.StringValue(sourceAuth.Resource)
+		auth["resource"] = *sourceAuth.Resource
 	}
 
 	return auth

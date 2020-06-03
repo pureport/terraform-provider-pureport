@@ -21,6 +21,7 @@ func dataSourceAwsSecretsManagerSecretVersion() *schema.Resource {
 			"secret_id": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 			"secret_string": {
 				Type:      schema.TypeString,

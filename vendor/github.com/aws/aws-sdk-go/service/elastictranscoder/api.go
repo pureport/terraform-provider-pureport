@@ -68,25 +68,25 @@ func (c *ElasticTranscoder) CancelJobRequest(input *CancelJobInput) (req *reques
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation CancelJob for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The resource you are attempting to change is in use. For example, you are
 //   attempting to delete a pipeline that is currently in use.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -168,25 +168,25 @@ func (c *ElasticTranscoder) CreateJobRequest(input *CreateJobInput) (req *reques
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation CreateJob for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   Too many operations for a given AWS account. For example, the number of pipelines
 //   exceeds the maximum allowed.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -262,25 +262,25 @@ func (c *ElasticTranscoder) CreatePipelineRequest(input *CreatePipelineInput) (r
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation CreatePipeline for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   Too many operations for a given AWS account. For example, the number of pipelines
 //   exceeds the maximum allowed.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -370,20 +370,20 @@ func (c *ElasticTranscoder) CreatePresetRequest(input *CreatePresetInput) (req *
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation CreatePreset for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * LimitExceededException
+//   * ErrCodeLimitExceededException "LimitExceededException"
 //   Too many operations for a given AWS account. For example, the number of pipelines
 //   exceeds the maximum allowed.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -464,25 +464,25 @@ func (c *ElasticTranscoder) DeletePipelineRequest(input *DeletePipelineInput) (r
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation DeletePipeline for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The resource you are attempting to change is in use. For example, you are
 //   attempting to delete a pipeline that is currently in use.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -561,21 +561,21 @@ func (c *ElasticTranscoder) DeletePresetRequest(input *DeletePresetInput) (req *
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation DeletePreset for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -661,21 +661,21 @@ func (c *ElasticTranscoder) ListJobsByPipelineRequest(input *ListJobsByPipelineI
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ListJobsByPipeline for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -743,12 +743,10 @@ func (c *ElasticTranscoder) ListJobsByPipelinePagesWithContext(ctx aws.Context, 
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListJobsByPipelineOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListJobsByPipelineOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -811,21 +809,21 @@ func (c *ElasticTranscoder) ListJobsByStatusRequest(input *ListJobsByStatusInput
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ListJobsByStatus for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -893,12 +891,10 @@ func (c *ElasticTranscoder) ListJobsByStatusPagesWithContext(ctx aws.Context, in
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListJobsByStatusOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListJobsByStatusOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -960,16 +956,16 @@ func (c *ElasticTranscoder) ListPipelinesRequest(input *ListPipelinesInput) (req
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ListPipelines for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1037,12 +1033,10 @@ func (c *ElasticTranscoder) ListPipelinesPagesWithContext(ctx aws.Context, input
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListPipelinesOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPipelinesOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -1104,16 +1098,16 @@ func (c *ElasticTranscoder) ListPresetsRequest(input *ListPresetsInput) (req *re
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ListPresets for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1181,12 +1175,10 @@ func (c *ElasticTranscoder) ListPresetsPagesWithContext(ctx aws.Context, input *
 		},
 	}
 
-	for p.Next() {
-		if !fn(p.Page().(*ListPresetsOutput), !p.HasNextPage()) {
-			break
-		}
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPresetsOutput), !p.HasNextPage())
 	}
-
 	return p.Err()
 }
 
@@ -1241,21 +1233,21 @@ func (c *ElasticTranscoder) ReadJobRequest(input *ReadJobInput) (req *request.Re
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ReadJob for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1331,21 +1323,21 @@ func (c *ElasticTranscoder) ReadPipelineRequest(input *ReadPipelineInput) (req *
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ReadPipeline for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1421,21 +1413,21 @@ func (c *ElasticTranscoder) ReadPresetRequest(input *ReadPresetInput) (req *requ
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation ReadPreset for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1522,21 +1514,21 @@ func (c *ElasticTranscoder) TestRoleRequest(input *TestRoleInput) (req *request.
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation TestRole for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1621,25 +1613,25 @@ func (c *ElasticTranscoder) UpdatePipelineRequest(input *UpdatePipelineInput) (r
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation UpdatePipeline for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The resource you are attempting to change is in use. For example, you are
 //   attempting to delete a pipeline that is currently in use.
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1719,25 +1711,25 @@ func (c *ElasticTranscoder) UpdatePipelineNotificationsRequest(input *UpdatePipe
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation UpdatePipelineNotifications for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The resource you are attempting to change is in use. For example, you are
 //   attempting to delete a pipeline that is currently in use.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1820,25 +1812,25 @@ func (c *ElasticTranscoder) UpdatePipelineStatusRequest(input *UpdatePipelineSta
 // See the AWS API reference guide for Amazon Elastic Transcoder's
 // API operation UpdatePipelineStatus for usage and error information.
 //
-// Returned Error Types:
-//   * ValidationException
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
 //   One or more required parameter values were not provided in the request.
 //
-//   * IncompatibleVersionException
+//   * ErrCodeIncompatibleVersionException "IncompatibleVersionException"
 //
-//   * ResourceNotFoundException
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The requested resource does not exist or is not available. For example, the
 //   pipeline to which you're trying to add a job doesn't exist or is still being
 //   created.
 //
-//   * ResourceInUseException
+//   * ErrCodeResourceInUseException "ResourceInUseException"
 //   The resource you are attempting to change is in use. For example, you are
 //   attempting to delete a pipeline that is currently in use.
 //
-//   * AccessDeniedException
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
 //   General authentication failure. The request was not signed correctly.
 //
-//   * InternalServiceException
+//   * ErrCodeInternalServiceException "InternalServiceException"
 //   Elastic Transcoder encountered an unexpected exception while trying to fulfill
 //   the request.
 //
@@ -1861,62 +1853,6 @@ func (c *ElasticTranscoder) UpdatePipelineStatusWithContext(ctx aws.Context, inp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
-}
-
-// General authentication failure. The request was not signed correctly.
-type AccessDeniedException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s AccessDeniedException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s AccessDeniedException) GoString() string {
-	return s.String()
-}
-
-func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
-	return &AccessDeniedException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *AccessDeniedException) Code() string {
-	return "AccessDeniedException"
-}
-
-// Message returns the exception's message.
-func (s *AccessDeniedException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *AccessDeniedException) OrigErr() error {
-	return nil
-}
-
-func (s *AccessDeniedException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *AccessDeniedException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *AccessDeniedException) RequestID() string {
-	return s.RespMetadata.RequestID
 }
 
 // The file to be used as album art. There can be multiple artworks associated
@@ -4094,61 +4030,6 @@ func (s *HlsContentProtection) SetMethod(v string) *HlsContentProtection {
 	return s
 }
 
-type IncompatibleVersionException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s IncompatibleVersionException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s IncompatibleVersionException) GoString() string {
-	return s.String()
-}
-
-func newErrorIncompatibleVersionException(v protocol.ResponseMetadata) error {
-	return &IncompatibleVersionException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *IncompatibleVersionException) Code() string {
-	return "IncompatibleVersionException"
-}
-
-// Message returns the exception's message.
-func (s *IncompatibleVersionException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *IncompatibleVersionException) OrigErr() error {
-	return nil
-}
-
-func (s *IncompatibleVersionException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *IncompatibleVersionException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *IncompatibleVersionException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // The captions to be created, if any.
 type InputCaptions struct {
 	_ struct{} `type:"structure"`
@@ -4219,63 +4100,6 @@ func (s *InputCaptions) SetCaptionSources(v []*CaptionSource) *InputCaptions {
 func (s *InputCaptions) SetMergePolicy(v string) *InputCaptions {
 	s.MergePolicy = &v
 	return s
-}
-
-// Elastic Transcoder encountered an unexpected exception while trying to fulfill
-// the request.
-type InternalServiceException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s InternalServiceException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s InternalServiceException) GoString() string {
-	return s.String()
-}
-
-func newErrorInternalServiceException(v protocol.ResponseMetadata) error {
-	return &InternalServiceException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *InternalServiceException) Code() string {
-	return "InternalServiceException"
-}
-
-// Message returns the exception's message.
-func (s *InternalServiceException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *InternalServiceException) OrigErr() error {
-	return nil
-}
-
-func (s *InternalServiceException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *InternalServiceException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *InternalServiceException) RequestID() string {
-	return s.RespMetadata.RequestID
 }
 
 // A section of the response body that provides information about the job that
@@ -5126,63 +4950,6 @@ func (s *JobWatermark) SetInputKey(v string) *JobWatermark {
 func (s *JobWatermark) SetPresetWatermarkId(v string) *JobWatermark {
 	s.PresetWatermarkId = &v
 	return s
-}
-
-// Too many operations for a given AWS account. For example, the number of pipelines
-// exceeds the maximum allowed.
-type LimitExceededException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s LimitExceededException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s LimitExceededException) GoString() string {
-	return s.String()
-}
-
-func newErrorLimitExceededException(v protocol.ResponseMetadata) error {
-	return &LimitExceededException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *LimitExceededException) Code() string {
-	return "LimitExceededException"
-}
-
-// Message returns the exception's message.
-func (s *LimitExceededException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *LimitExceededException) OrigErr() error {
-	return nil
-}
-
-func (s *LimitExceededException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *LimitExceededException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *LimitExceededException) RequestID() string {
-	return s.RespMetadata.RequestID
 }
 
 // The ListJobsByPipelineRequest structure.
@@ -6760,121 +6527,6 @@ func (s *ReadPresetOutput) SetPreset(v *Preset) *ReadPresetOutput {
 	return s
 }
 
-// The resource you are attempting to change is in use. For example, you are
-// attempting to delete a pipeline that is currently in use.
-type ResourceInUseException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s ResourceInUseException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ResourceInUseException) GoString() string {
-	return s.String()
-}
-
-func newErrorResourceInUseException(v protocol.ResponseMetadata) error {
-	return &ResourceInUseException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *ResourceInUseException) Code() string {
-	return "ResourceInUseException"
-}
-
-// Message returns the exception's message.
-func (s *ResourceInUseException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *ResourceInUseException) OrigErr() error {
-	return nil
-}
-
-func (s *ResourceInUseException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *ResourceInUseException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *ResourceInUseException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
-// The requested resource does not exist or is not available. For example, the
-// pipeline to which you're trying to add a job doesn't exist or is still being
-// created.
-type ResourceNotFoundException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s ResourceNotFoundException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ResourceNotFoundException) GoString() string {
-	return s.String()
-}
-
-func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
-	return &ResourceNotFoundException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *ResourceNotFoundException) Code() string {
-	return "ResourceNotFoundException"
-}
-
-// Message returns the exception's message.
-func (s *ResourceNotFoundException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *ResourceNotFoundException) OrigErr() error {
-	return nil
-}
-
-func (s *ResourceNotFoundException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *ResourceNotFoundException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *ResourceNotFoundException) RequestID() string {
-	return s.RespMetadata.RequestID
-}
-
 // The TestRoleRequest structure.
 //
 // Deprecated: TestRoleInput has been deprecated
@@ -7704,62 +7356,6 @@ func (s UpdatePipelineStatusOutput) GoString() string {
 func (s *UpdatePipelineStatusOutput) SetPipeline(v *Pipeline) *UpdatePipelineStatusOutput {
 	s.Pipeline = v
 	return s
-}
-
-// One or more required parameter values were not provided in the request.
-type ValidationException struct {
-	_            struct{}                  `type:"structure"`
-	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
-
-	Message_ *string `locationName:"message" type:"string"`
-}
-
-// String returns the string representation
-func (s ValidationException) String() string {
-	return awsutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ValidationException) GoString() string {
-	return s.String()
-}
-
-func newErrorValidationException(v protocol.ResponseMetadata) error {
-	return &ValidationException{
-		RespMetadata: v,
-	}
-}
-
-// Code returns the exception type name.
-func (s *ValidationException) Code() string {
-	return "ValidationException"
-}
-
-// Message returns the exception's message.
-func (s *ValidationException) Message() string {
-	if s.Message_ != nil {
-		return *s.Message_
-	}
-	return ""
-}
-
-// OrigErr always returns nil, satisfies awserr.Error interface.
-func (s *ValidationException) OrigErr() error {
-	return nil
-}
-
-func (s *ValidationException) Error() string {
-	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
-}
-
-// Status code returns the HTTP status code for the request's response error.
-func (s *ValidationException) StatusCode() int {
-	return s.RespMetadata.StatusCode
-}
-
-// RequestID returns the service's response RequestID for request.
-func (s *ValidationException) RequestID() string {
-	return s.RespMetadata.RequestID
 }
 
 // The VideoParameters structure.
