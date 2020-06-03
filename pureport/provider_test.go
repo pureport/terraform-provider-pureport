@@ -16,8 +16,8 @@ var (
 	testAccProvider  *schema.Provider
 
 	testEnvironmentName     string = "Production"
-	testOraclePrimaryOCID   string = "ocid1.instance.oc1.phx.abuw4ljrlsfiqw6vzzxb4300000000000000000000000000000000000001"
-	testOracleSecondaryOCID string = "ocid1.instance.oc1.phx.abuw4ljrlsfiqw6vzzxb4300000000000000000000000000000000000002"
+	testOraclePrimaryOCID   string = "ocid1.virtualcircuit.oc1.iad.aaaaaaaa0000000000000000000000000000000000000000000000000001"
+	testOracleSecondaryOCID string = "ocid1.virtualcircuit.oc1.iad.aaaaaaaa0000000000000000000000000000000000000000000000000002"
 )
 
 func init() {
