@@ -92,10 +92,11 @@ func testAccCheckDataSourceLocationAll(resourceName string) resource.TestCheckFu
 	}
 
 	return resource.ComposeTestCheckFunc(
-		resource.TestCheckResourceAttr(resourceName, "locations.#", "3"),
+		resource.TestCheckResourceAttr(resourceName, "locations.#", "4"),
 		testAccCheckDataSourceLocationRaleigh(resourceName, "locations.0"),
 		testAccCheckDataSourceLocationSeattle(resourceName, "locations.1"),
 		testAccCheckDataSourceLocationRaleighLab(resourceName, "locations.2"),
+		testAccCheckDataSourceLocationVirtualPod(resourceName, "locations.3"),
 	)
 }
 
@@ -219,6 +220,15 @@ func testAccCheckDataSourceLocationWashington(resourceName, location string) res
 
 		resource.TestCheckResourceAttr(resourceName, location+".links.3.location_href", "/locations/us-dal"),
 		resource.TestCheckResourceAttr(resourceName, location+".links.3.speed", "1000"),
+	)
+}
+
+func testAccCheckDataSourceLocationVirtualPod(resourceName, location string) resource.TestCheckFunc {
+	return resource.ComposeAggregateTestCheckFunc(
+		resource.TestCheckResourceAttr(resourceName, location+".id", "virt-sea"),
+		resource.TestCheckResourceAttr(resourceName, location+".href", "/locations/virt-sea"),
+		resource.TestCheckResourceAttr(resourceName, location+".name", "Tacoma, WA"),
+		resource.TestCheckResourceAttr(resourceName, location+".links.#", "0"),
 	)
 }
 
