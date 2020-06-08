@@ -29,6 +29,7 @@ func resourceNetwork() *schema.Resource {
 			"account_href": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 			"description": {
 				Type:     schema.TypeString,
