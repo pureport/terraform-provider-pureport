@@ -89,6 +89,16 @@ pipeline {
                 }
             }
         }
+        stage('Run Linters and VET') {
+            steps {
+                script {
+                    docker.image('golang:1.14').inside() {
+                        sh "GOOS=linux GOARCH=amd64 make vet"
+                        sh "GOOS=linux GOARCH=amd64 make lint"
+                    }
+                }
+            }
+        }
         stage('Build') {
             steps {
 
