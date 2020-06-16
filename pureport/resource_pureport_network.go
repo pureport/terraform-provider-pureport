@@ -5,8 +5,11 @@ import (
 	"log"
 	"net/url"
 	"path/filepath"
+	"reflect"
+	"time"
 
 	"github.com/antihax/optional"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/pureport/pureport-sdk-go/pureport/client"
@@ -29,7 +32,6 @@ func resourceNetwork() *schema.Resource {
 			"account_href": {
 				Type:     schema.TypeString,
 				Required: true,
-				ForceNew: true,
 			},
 			"description": {
 				Type:     schema.TypeString,
@@ -112,6 +114,10 @@ func resourceNetworkCreate(d *schema.ResourceData, m interface{}) error {
 	if id == "" {
 		log.Printf("Error when decoding location header")
 		return fmt.Errorf("Error when decoding Network ID")
+	}
+
+	if err := waitForNetwork(d, m); err != nil {
+		return fmt.Errorf("Error waiting for network: err=%s", err)
 	}
 
 	return resourceNetworkRead(d, m)
@@ -203,6 +209,10 @@ func resourceNetworkUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("Error Response while updating Network : code=%v", resp.StatusCode)
 	}
 
+	if err := waitForNetwork(d, m); err != nil {
+		return fmt.Errorf("Error waiting for network: err=%s", err)
+	}
+
 	d.Partial(false)
 	return resourceNetworkRead(d, m)
 }
@@ -212,6 +222,47 @@ func resourceNetworkDelete(d *schema.ResourceData, m interface{}) error {
 	config := m.(*configuration.Config)
 	ctx := config.Session.GetSessionContext()
 	networkId := d.Id()
+
+	// Wait until we are in a state that we can trigger a delete from
+	log.Printf("[Info] Waiting to trigger a network delete.")
+
+	waitingStateConf := &resource.StateChangeConf{
+		Pending: []string{
+			"PENDING",
+			"PROVISIONING",
+			"DELETING",
+		},
+		Target: []string{
+			"ACTIVE",
+			"DELETED",
+		},
+		Refresh: func() (interface{}, string, error) {
+
+			n, resp, err := config.Session.Client.NetworksApi.GetNetwork(ctx, networkId)
+			if err != nil {
+				return 0, "", fmt.Errorf("Error deleting data for network: %s", err)
+			}
+
+			if resp.StatusCode >= 300 {
+				return 0, "", fmt.Errorf("Error Response while attempting to delete network: code=%v", resp.StatusCode)
+			}
+
+			network := reflect.ValueOf(n)
+			state := network.FieldByName("State").String()
+
+			return n, state, nil
+
+		},
+		Timeout:                   d.Timeout(schema.TimeoutDelete),
+		Delay:                     1 * time.Second,
+		MinTimeout:                1 * time.Second,
+		ContinuousTargetOccurence: 2,
+	}
+
+	_, err := waitingStateConf.WaitForState()
+	if err != nil {
+		return fmt.Errorf("Error waiting for network (%s) to be deletable: %s", networkId, err)
+	}
 
 	// Delete
 	resp, err := config.Session.Client.NetworksApi.DeleteNetwork(ctx, networkId)
@@ -224,7 +275,94 @@ func resourceNetworkDelete(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("Error Response while Network: code=%v", resp.StatusCode)
 	}
 
+	log.Printf("[Info] Waiting for network to be deleted")
+
+	deleteStateConf := &resource.StateChangeConf{
+		Pending: []string{
+			"PENDING",
+			"PROVISIONING",
+			"DELETING",
+		},
+		Target: []string{
+			"DELETED",
+		},
+		Refresh: func() (interface{}, string, error) {
+
+			n, resp, err := config.Session.Client.NetworksApi.GetNetwork(ctx, networkId)
+
+			if resp.StatusCode == 404 {
+				return 0, "DELETED", nil
+			}
+
+			if err != nil {
+				return 0, "", fmt.Errorf("Error Response while deleting network: error=%s", err)
+			}
+
+			network := reflect.ValueOf(n)
+			state := network.FieldByName("State").String()
+
+			return n, state, nil
+
+		},
+		Timeout:                   d.Timeout(schema.TimeoutDelete),
+		Delay:                     20 * time.Second,
+		MinTimeout:                5 * time.Second,
+		ContinuousTargetOccurence: 2,
+	}
+
+	_, err = deleteStateConf.WaitForState()
+	if err != nil {
+		return fmt.Errorf("Error waiting for network (%s) to be deleted: %s", networkId, err)
+	}
+
 	d.SetId("")
+
+	return nil
+}
+
+func waitForNetwork(d *schema.ResourceData, m interface{}) error {
+
+	config := m.(*configuration.Config)
+	ctx := config.Session.GetSessionContext()
+	networkId := d.Id()
+
+	log.Printf("[Info] Waiting for network to come up.")
+
+	createStateConf := &resource.StateChangeConf{
+		Pending: []string{
+			"PENDING",
+			"PROVISIONING",
+		},
+		Target: []string{
+			"ACTIVE",
+		},
+		Refresh: func() (interface{}, string, error) {
+
+			n, resp, err := config.Session.Client.NetworksApi.GetNetwork(ctx, networkId)
+			if err != nil {
+				return 0, "", fmt.Errorf("Error reading data for network: %s", err)
+			}
+
+			if resp.StatusCode >= 300 {
+				return 0, "", fmt.Errorf("Error received while waiting for creation of network: code=%v", resp.StatusCode)
+			}
+
+			network := reflect.ValueOf(n)
+			state := network.FieldByName("State").String()
+
+			return n, state, nil
+
+		},
+		Timeout:                   d.Timeout(schema.TimeoutCreate),
+		Delay:                     5 * time.Second,
+		MinTimeout:                5 * time.Second,
+		ContinuousTargetOccurence: 2,
+	}
+
+	_, err := createStateConf.WaitForState()
+	if err != nil {
+		return fmt.Errorf("Error waiting for network (%s) to be created: %s", networkId, err)
+	}
 
 	return nil
 }
