@@ -261,24 +261,19 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 
 	c := expandGoogleCloudConnection(d)
 
-	d.Partial(true)
-
 	config := m.(*configuration.Config)
 	ctx := config.Session.GetSessionContext()
 
 	if d.HasChange("name") {
 		c.Name = d.Get("name").(string)
-		d.SetPartial("name")
 	}
 
 	if d.HasChange("description") {
 		c.Description = d.Get("description").(string)
-		d.SetPartial("description")
 	}
 
 	if d.HasChange("speed") {
 		c.Speed = int32(d.Get("speed").(int))
-		d.SetPartial("speed")
 	}
 
 	if d.HasChange("customer_networks") {
@@ -333,8 +328,6 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 	if err := connection.WaitForConnection(connection.GoogleConnectionName, d, m); err != nil {
 		return fmt.Errorf("Error waiting for %s: err=%s", connection.GoogleConnectionName, err)
 	}
-
-	d.Partial(false)
 
 	return resourceGoogleCloudConnectionRead(d, m)
 }

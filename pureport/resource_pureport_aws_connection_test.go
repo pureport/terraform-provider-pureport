@@ -509,9 +509,10 @@ func TestResourceAWSConnection_nat_mappings(t *testing.T) {
 
 func TestResourceAWSConnection_invalid_ha(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		IsUnitTest: true,
-		PreCheck:   func() { testAccPreCheck(t) },
-		Providers:  testAccProviders,
+		IsUnitTest:   true,
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckAWSConnectionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccResourceAWSConnectionConfig_invalid_ha(),

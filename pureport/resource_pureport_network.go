@@ -153,8 +153,6 @@ func resourceNetworkUpdate(d *schema.ResourceData, m interface{}) error {
 
 	n := expandNetwork(d)
 
-	d.Partial(true)
-
 	if d.HasChange("name") {
 		n.Name = d.Get("name").(string)
 	}
@@ -203,7 +201,6 @@ func resourceNetworkUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("Error Response while updating Network : code=%v", resp.StatusCode)
 	}
 
-	d.Partial(false)
 	return resourceNetworkRead(d, m)
 }
 

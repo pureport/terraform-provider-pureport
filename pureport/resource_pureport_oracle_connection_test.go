@@ -208,6 +208,7 @@ resource "pureport_oracle_connection" "basic" {
 	)
 }
 
+/*
 func testAccResourceOracleConnectionConfig_invalid_ha() string {
 	format := testAccResourceOracleConnectionConfig_common() + `
 
@@ -252,6 +253,7 @@ resource "pureport_oracle_connection" "invalid_ha" {
 		testOracleSecondaryOCID,
 	)
 }
+*/
 
 func TestResourceOracleConnection_basic(t *testing.T) {
 
