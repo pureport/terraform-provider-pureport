@@ -43,6 +43,7 @@ pipeline {
         GOPATH  = "/go"
         GOCACHE = "/tmp/go/.cache"
         GOFLAGS = "-mod=vendor"
+        GOLANGCI_LINT_CACHE = "/tmp/go/.cache/golangci-lint"
     }
     stages {
         stage('Configure') {
