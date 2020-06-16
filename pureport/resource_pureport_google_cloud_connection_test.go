@@ -193,7 +193,7 @@ func TestResourceGoogleCloudConnection_invalid_ha(t *testing.T) {
 		IsUnitTest:   true,
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckAWSConnectionDestroy,
+		CheckDestroy: testAccCheckGoogleCloudConnectionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccResourceGoogleCloudConnectionConfig_invalid_ha(),

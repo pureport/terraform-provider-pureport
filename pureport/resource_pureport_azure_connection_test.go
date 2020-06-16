@@ -191,7 +191,7 @@ func TestResourceAzureConnection_invalid_ha(t *testing.T) {
 		IsUnitTest:   true,
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckAWSConnectionDestroy,
+		CheckDestroy: testAccCheckAzureConnectionDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccResourceAzureConnectionConfig_invalid_ha(),

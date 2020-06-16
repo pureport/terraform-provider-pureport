@@ -206,7 +206,7 @@ func GetBaseResourceConnectionSchema() map[string]*schema.Schema {
 					"address": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.CIDRNetwork(16, 32),
+						ValidateFunc: validation.IsCIDRNetwork(16, 32),
 					},
 				},
 			},

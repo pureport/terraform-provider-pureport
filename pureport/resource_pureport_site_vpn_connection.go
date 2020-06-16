@@ -135,12 +135,12 @@ func resourceSiteVPNConnection() *schema.Resource {
 					"customer_side": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.CIDRNetwork(8, 32),
+						ValidateFunc: validation.IsCIDRNetwork(8, 32),
 					},
 					"pureport_side": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.CIDRNetwork(8, 32),
+						ValidateFunc: validation.IsCIDRNetwork(8, 32),
 					},
 				},
 			},
@@ -566,24 +566,19 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 
 	c := expandSiteVPNConnection(d)
 
-	d.Partial(true)
-
 	config := m.(*configuration.Config)
 	ctx := config.Session.GetSessionContext()
 
 	if d.HasChange("name") {
 		c.Name = d.Get("name").(string)
-		d.SetPartial("name")
 	}
 
 	if d.HasChange("description") {
 		c.Description = d.Get("description").(string)
-		d.SetPartial("description")
 	}
 
 	if d.HasChange("speed") {
 		c.Speed = int32(d.Get("speed").(int))
-		d.SetPartial("speed")
 	}
 
 	if d.HasChange("customer_networks") {
@@ -688,8 +683,6 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 	if err := connection.WaitForConnection(connection.SiteVPNConnectionName, d, m); err != nil {
 		return fmt.Errorf("Error waiting for %s: err=%s", connection.SiteVPNConnectionName, err)
 	}
-
-	d.Partial(false)
 
 	return resourceSiteVPNConnectionRead(d, m)
 }

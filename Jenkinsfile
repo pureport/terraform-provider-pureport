@@ -43,6 +43,7 @@ pipeline {
         GOPATH  = "/go"
         GOCACHE = "/tmp/go/.cache"
         GOFLAGS = "-mod=vendor"
+        GOLANGCI_LINT_CACHE = "/tmp/go/.cache/golangci-lint"
     }
     stages {
         stage('Configure') {
@@ -86,6 +87,16 @@ pipeline {
 
                     env.PUREPORT_ACC_TEST_ENVIRONMENT = environment
                     env.PROVIDER_VERSION = provider_version
+                }
+            }
+        }
+        stage('Run Linters and VET') {
+            steps {
+                script {
+                    docker.image('golang:1.14').inside() {
+                        sh "GOOS=linux GOARCH=amd64 make vet"
+                        sh "GOOS=linux GOARCH=amd64 make lint"
+                    }
                 }
             }
         }
