@@ -14,28 +14,28 @@
   {{end -}}
 {{- end -}}
 {{- if gt (len $breaking) 0 -}}
-BREAKING CHANGES
+BREAKING CHANGES:
 
 {{range $breaking | sortAlpha -}}
 * {{. }}
 {{end -}}
 {{- end -}}
 {{- if gt (len $features) 0}}
-FEATURES
+FEATURES:
 
 {{range $features | sortAlpha -}}
 * {{. }}
 {{end -}}
 {{- end -}}
 {{- if gt (len $improvements) 0}}
-IMPROVEMENTS
+ENHANCEMENTS:
 
 {{range $improvements | sortAlpha -}}
 * {{. }}
 {{end -}}
 {{- end -}}
 {{- if gt (len $bugs) 0}}
-BUGS
+BUG FIXES:
 
 {{range $bugs | sortAlpha -}}
 * {{. }}
