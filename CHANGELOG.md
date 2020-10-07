@@ -18,6 +18,11 @@ BUG FIXES:
 * [PE-2257] Recreate connection on network update ([50](https://github.com/pureport/terraform-provider-pureport/pull/50) by [kevinkirkup](https://github.com/kevinkirkup))
 * [PE-2316] Updating AzureRM is causing failures ([48](https://github.com/pureport/terraform-provider-pureport/pull/48) by [kevinkirkup](https://github.com/kevinkirkup))
 
+## 1.1.9 (August 14, 2020)
+
+ENHANCEMENTS:
+  * Add support for setting `customer_asn` for AWS resources.
+
 ## 1.1.8 (March 24, 2020)
 
 ENHANCEMENTS:
