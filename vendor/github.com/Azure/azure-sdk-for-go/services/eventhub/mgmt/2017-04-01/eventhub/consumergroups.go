@@ -36,7 +36,8 @@ func NewConsumerGroupsClient(subscriptionID string) ConsumerGroupsClient {
 	return NewConsumerGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewConsumerGroupsClientWithBaseURI creates an instance of the ConsumerGroupsClient client.
+// NewConsumerGroupsClientWithBaseURI creates an instance of the ConsumerGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewConsumerGroupsClientWithBaseURI(baseURI string, subscriptionID string) ConsumerGroupsClient {
 	return ConsumerGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -124,8 +125,7 @@ func (client ConsumerGroupsClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConsumerGroupsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -133,7 +133,6 @@ func (client ConsumerGroupsClient) CreateOrUpdateSender(req *http.Request) (*htt
 func (client ConsumerGroupsClient) CreateOrUpdateResponder(resp *http.Response) (result ConsumerGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -221,8 +220,7 @@ func (client ConsumerGroupsClient) DeletePreparer(ctx context.Context, resourceG
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConsumerGroupsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -230,7 +228,6 @@ func (client ConsumerGroupsClient) DeleteSender(req *http.Request) (*http.Respon
 func (client ConsumerGroupsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -317,8 +314,7 @@ func (client ConsumerGroupsClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConsumerGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -326,7 +322,6 @@ func (client ConsumerGroupsClient) GetSender(req *http.Request) (*http.Response,
 func (client ConsumerGroupsClient) GetResponder(resp *http.Response) (result ConsumerGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -396,6 +391,9 @@ func (client ConsumerGroupsClient) ListByEventHub(ctx context.Context, resourceG
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventhub.ConsumerGroupsClient", "ListByEventHub", resp, "Failure responding to request")
 	}
+	if result.cglr.hasNextLink() && result.cglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -431,8 +429,7 @@ func (client ConsumerGroupsClient) ListByEventHubPreparer(ctx context.Context, r
 // ListByEventHubSender sends the ListByEventHub request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConsumerGroupsClient) ListByEventHubSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByEventHubResponder handles the response to the ListByEventHub request. The method always
@@ -440,7 +437,6 @@ func (client ConsumerGroupsClient) ListByEventHubSender(req *http.Request) (*htt
 func (client ConsumerGroupsClient) ListByEventHubResponder(resp *http.Response) (result ConsumerGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

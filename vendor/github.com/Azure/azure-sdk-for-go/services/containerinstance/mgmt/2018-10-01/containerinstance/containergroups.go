@@ -36,7 +36,8 @@ func NewContainerGroupsClient(subscriptionID string) ContainerGroupsClient {
 	return NewContainerGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewContainerGroupsClientWithBaseURI creates an instance of the ContainerGroupsClient client.
+// NewContainerGroupsClientWithBaseURI creates an instance of the ContainerGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewContainerGroupsClientWithBaseURI(baseURI string, subscriptionID string) ContainerGroupsClient {
 	return ContainerGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -118,9 +119,8 @@ func (client ContainerGroupsClient) CreateOrUpdatePreparer(ctx context.Context, 
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) CreateOrUpdateSender(req *http.Request) (future ContainerGroupsCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -133,7 +133,6 @@ func (client ContainerGroupsClient) CreateOrUpdateSender(req *http.Request) (fut
 func (client ContainerGroupsClient) CreateOrUpdateResponder(resp *http.Response) (result ContainerGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -202,8 +201,7 @@ func (client ContainerGroupsClient) DeletePreparer(ctx context.Context, resource
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -211,7 +209,6 @@ func (client ContainerGroupsClient) DeleteSender(req *http.Request) (*http.Respo
 func (client ContainerGroupsClient) DeleteResponder(resp *http.Response) (result ContainerGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -281,8 +278,7 @@ func (client ContainerGroupsClient) GetPreparer(ctx context.Context, resourceGro
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -290,7 +286,6 @@ func (client ContainerGroupsClient) GetSender(req *http.Request) (*http.Response
 func (client ContainerGroupsClient) GetResponder(resp *http.Response) (result ContainerGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -330,6 +325,9 @@ func (client ContainerGroupsClient) List(ctx context.Context) (result ContainerG
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "List", resp, "Failure responding to request")
 	}
+	if result.cglr.hasNextLink() && result.cglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -356,8 +354,7 @@ func (client ContainerGroupsClient) ListPreparer(ctx context.Context) (*http.Req
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -365,7 +362,6 @@ func (client ContainerGroupsClient) ListSender(req *http.Request) (*http.Respons
 func (client ContainerGroupsClient) ListResponder(resp *http.Response) (result ContainerGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -444,6 +440,9 @@ func (client ContainerGroupsClient) ListByResourceGroup(ctx context.Context, res
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerGroupsClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.cglr.hasNextLink() && result.cglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -471,8 +470,7 @@ func (client ContainerGroupsClient) ListByResourceGroupPreparer(ctx context.Cont
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -480,7 +478,6 @@ func (client ContainerGroupsClient) ListByResourceGroupSender(req *http.Request)
 func (client ContainerGroupsClient) ListByResourceGroupResponder(resp *http.Response) (result ContainerGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -580,9 +577,8 @@ func (client ContainerGroupsClient) RestartPreparer(ctx context.Context, resourc
 // RestartSender sends the Restart request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) RestartSender(req *http.Request) (future ContainerGroupsRestartFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -595,7 +591,6 @@ func (client ContainerGroupsClient) RestartSender(req *http.Request) (future Con
 func (client ContainerGroupsClient) RestartResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -656,9 +651,8 @@ func (client ContainerGroupsClient) StartPreparer(ctx context.Context, resourceG
 // StartSender sends the Start request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) StartSender(req *http.Request) (future ContainerGroupsStartFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -671,7 +665,6 @@ func (client ContainerGroupsClient) StartSender(req *http.Request) (future Conta
 func (client ContainerGroupsClient) StartResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -738,8 +731,7 @@ func (client ContainerGroupsClient) StopPreparer(ctx context.Context, resourceGr
 // StopSender sends the Stop request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) StopSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // StopResponder handles the response to the Stop request. The method always
@@ -747,7 +739,6 @@ func (client ContainerGroupsClient) StopSender(req *http.Request) (*http.Respons
 func (client ContainerGroupsClient) StopResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -820,8 +811,7 @@ func (client ContainerGroupsClient) UpdatePreparer(ctx context.Context, resource
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ContainerGroupsClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -829,7 +819,6 @@ func (client ContainerGroupsClient) UpdateSender(req *http.Request) (*http.Respo
 func (client ContainerGroupsClient) UpdateResponder(resp *http.Response) (result ContainerGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

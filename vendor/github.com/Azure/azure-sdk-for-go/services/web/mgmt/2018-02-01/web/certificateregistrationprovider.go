@@ -36,7 +36,8 @@ func NewCertificateRegistrationProviderClient(subscriptionID string) Certificate
 }
 
 // NewCertificateRegistrationProviderClientWithBaseURI creates an instance of the CertificateRegistrationProviderClient
-// client.
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
 func NewCertificateRegistrationProviderClientWithBaseURI(baseURI string, subscriptionID string) CertificateRegistrationProviderClient {
 	return CertificateRegistrationProviderClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -71,6 +72,9 @@ func (client CertificateRegistrationProviderClient) ListOperations(ctx context.C
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.CertificateRegistrationProviderClient", "ListOperations", resp, "Failure responding to request")
 	}
+	if result.coc.hasNextLink() && result.coc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -93,8 +97,7 @@ func (client CertificateRegistrationProviderClient) ListOperationsPreparer(ctx c
 // ListOperationsSender sends the ListOperations request. The method will close the
 // http.Response Body if it receives an error.
 func (client CertificateRegistrationProviderClient) ListOperationsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListOperationsResponder handles the response to the ListOperations request. The method always
@@ -102,7 +105,6 @@ func (client CertificateRegistrationProviderClient) ListOperationsSender(req *ht
 func (client CertificateRegistrationProviderClient) ListOperationsResponder(resp *http.Response) (result CsmOperationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

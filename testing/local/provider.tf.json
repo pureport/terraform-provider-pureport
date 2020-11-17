@@ -1,0 +1,9 @@
+{
+    "provider": {
+        "pureport": {
+            "api_key": "KPw3sgLRclgV6",
+            "api_secret": "LZrf8uN8aPDZTbEwl",
+            "api_url": "http://localhost:8080"
+        }
+    }
+}

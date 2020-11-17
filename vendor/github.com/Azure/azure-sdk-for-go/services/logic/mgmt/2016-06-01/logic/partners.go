@@ -36,7 +36,8 @@ func NewPartnersClient(subscriptionID string) PartnersClient {
 	return NewPartnersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewPartnersClientWithBaseURI creates an instance of the PartnersClient client.
+// NewPartnersClientWithBaseURI creates an instance of the PartnersClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewPartnersClientWithBaseURI(baseURI string, subscriptionID string) PartnersClient {
 	return PartnersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client PartnersClient) CreateOrUpdatePreparer(ctx context.Context, resourc
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartnersClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -122,7 +122,6 @@ func (client PartnersClient) CreateOrUpdateSender(req *http.Request) (*http.Resp
 func (client PartnersClient) CreateOrUpdateResponder(resp *http.Response) (result IntegrationAccountPartner, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -192,8 +191,7 @@ func (client PartnersClient) DeletePreparer(ctx context.Context, resourceGroupNa
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartnersClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -201,7 +199,6 @@ func (client PartnersClient) DeleteSender(req *http.Request) (*http.Response, er
 func (client PartnersClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -270,8 +267,7 @@ func (client PartnersClient) GetPreparer(ctx context.Context, resourceGroupName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartnersClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -279,7 +275,6 @@ func (client PartnersClient) GetSender(req *http.Request) (*http.Response, error
 func (client PartnersClient) GetResponder(resp *http.Response) (result IntegrationAccountPartner, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -322,6 +317,9 @@ func (client PartnersClient) ListByIntegrationAccounts(ctx context.Context, reso
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.PartnersClient", "ListByIntegrationAccounts", resp, "Failure responding to request")
 	}
+	if result.iaplr.hasNextLink() && result.iaplr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -356,8 +354,7 @@ func (client PartnersClient) ListByIntegrationAccountsPreparer(ctx context.Conte
 // ListByIntegrationAccountsSender sends the ListByIntegrationAccounts request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartnersClient) ListByIntegrationAccountsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByIntegrationAccountsResponder handles the response to the ListByIntegrationAccounts request. The method always
@@ -365,7 +362,6 @@ func (client PartnersClient) ListByIntegrationAccountsSender(req *http.Request) 
 func (client PartnersClient) ListByIntegrationAccountsResponder(resp *http.Response) (result IntegrationAccountPartnerListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -474,8 +470,7 @@ func (client PartnersClient) ListContentCallbackURLPreparer(ctx context.Context,
 // ListContentCallbackURLSender sends the ListContentCallbackURL request. The method will close the
 // http.Response Body if it receives an error.
 func (client PartnersClient) ListContentCallbackURLSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListContentCallbackURLResponder handles the response to the ListContentCallbackURL request. The method always
@@ -483,7 +478,6 @@ func (client PartnersClient) ListContentCallbackURLSender(req *http.Request) (*h
 func (client PartnersClient) ListContentCallbackURLResponder(resp *http.Response) (result WorkflowTriggerCallbackURL, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

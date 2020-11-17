@@ -35,7 +35,8 @@ func NewDomainTopicsClient(subscriptionID string) DomainTopicsClient {
 	return NewDomainTopicsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDomainTopicsClientWithBaseURI creates an instance of the DomainTopicsClient client.
+// NewDomainTopicsClientWithBaseURI creates an instance of the DomainTopicsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDomainTopicsClientWithBaseURI(baseURI string, subscriptionID string) DomainTopicsClient {
 	return DomainTopicsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -102,8 +103,7 @@ func (client DomainTopicsClient) GetPreparer(ctx context.Context, resourceGroupN
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainTopicsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -111,7 +111,6 @@ func (client DomainTopicsClient) GetSender(req *http.Request) (*http.Response, e
 func (client DomainTopicsClient) GetResponder(resp *http.Response) (result DomainTopic, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -179,8 +178,7 @@ func (client DomainTopicsClient) ListByDomainPreparer(ctx context.Context, resou
 // ListByDomainSender sends the ListByDomain request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainTopicsClient) ListByDomainSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDomainResponder handles the response to the ListByDomain request. The method always
@@ -188,7 +186,6 @@ func (client DomainTopicsClient) ListByDomainSender(req *http.Request) (*http.Re
 func (client DomainTopicsClient) ListByDomainResponder(resp *http.Response) (result DomainTopicsListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

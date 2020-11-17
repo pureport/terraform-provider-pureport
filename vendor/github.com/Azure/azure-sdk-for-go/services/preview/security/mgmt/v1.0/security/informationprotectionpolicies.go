@@ -36,7 +36,8 @@ func NewInformationProtectionPoliciesClient(subscriptionID string, ascLocation s
 }
 
 // NewInformationProtectionPoliciesClientWithBaseURI creates an instance of the InformationProtectionPoliciesClient
-// client.
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
 func NewInformationProtectionPoliciesClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) InformationProtectionPoliciesClient {
 	return InformationProtectionPoliciesClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -46,7 +47,8 @@ func NewInformationProtectionPoliciesClientWithBaseURI(baseURI string, subscript
 // scope - scope of the query, can be subscription (/subscriptions/0b06d9ea-afe6-4779-bd59-30e5c2d9d13f) or
 // management group (/providers/Microsoft.Management/managementGroups/mgName).
 // informationProtectionPolicyName - name of the information protection policy.
-func (client InformationProtectionPoliciesClient) CreateOrUpdate(ctx context.Context, scope string, informationProtectionPolicyName string) (result InformationProtectionPolicy, err error) {
+// informationProtectionPolicy - information protection policy.
+func (client InformationProtectionPoliciesClient) CreateOrUpdate(ctx context.Context, scope string, informationProtectionPolicyName string, informationProtectionPolicy InformationProtectionPolicy) (result InformationProtectionPolicy, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/InformationProtectionPoliciesClient.CreateOrUpdate")
 		defer func() {
@@ -57,7 +59,7 @@ func (client InformationProtectionPoliciesClient) CreateOrUpdate(ctx context.Con
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	req, err := client.CreateOrUpdatePreparer(ctx, scope, informationProtectionPolicyName)
+	req, err := client.CreateOrUpdatePreparer(ctx, scope, informationProtectionPolicyName, informationProtectionPolicy)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.InformationProtectionPoliciesClient", "CreateOrUpdate", nil, "Failure preparing request")
 		return
@@ -79,10 +81,10 @@ func (client InformationProtectionPoliciesClient) CreateOrUpdate(ctx context.Con
 }
 
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
-func (client InformationProtectionPoliciesClient) CreateOrUpdatePreparer(ctx context.Context, scope string, informationProtectionPolicyName string) (*http.Request, error) {
+func (client InformationProtectionPoliciesClient) CreateOrUpdatePreparer(ctx context.Context, scope string, informationProtectionPolicyName string, informationProtectionPolicy InformationProtectionPolicy) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"informationProtectionPolicyName": autorest.Encode("path", informationProtectionPolicyName),
-		"scope":                           autorest.Encode("path", scope),
+		"scope":                           scope,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -91,9 +93,11 @@ func (client InformationProtectionPoliciesClient) CreateOrUpdatePreparer(ctx con
 	}
 
 	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
 		autorest.WithBaseURL(client.BaseURI),
 		autorest.WithPathParameters("/{scope}/providers/Microsoft.Security/informationProtectionPolicies/{informationProtectionPolicyName}", pathParameters),
+		autorest.WithJSON(informationProtectionPolicy),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -101,8 +105,7 @@ func (client InformationProtectionPoliciesClient) CreateOrUpdatePreparer(ctx con
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client InformationProtectionPoliciesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -110,7 +113,6 @@ func (client InformationProtectionPoliciesClient) CreateOrUpdateSender(req *http
 func (client InformationProtectionPoliciesClient) CreateOrUpdateResponder(resp *http.Response) (result InformationProtectionPolicy, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -159,7 +161,7 @@ func (client InformationProtectionPoliciesClient) Get(ctx context.Context, scope
 func (client InformationProtectionPoliciesClient) GetPreparer(ctx context.Context, scope string, informationProtectionPolicyName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"informationProtectionPolicyName": autorest.Encode("path", informationProtectionPolicyName),
-		"scope":                           autorest.Encode("path", scope),
+		"scope":                           scope,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -178,8 +180,7 @@ func (client InformationProtectionPoliciesClient) GetPreparer(ctx context.Contex
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client InformationProtectionPoliciesClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -187,7 +188,6 @@ func (client InformationProtectionPoliciesClient) GetSender(req *http.Request) (
 func (client InformationProtectionPoliciesClient) GetResponder(resp *http.Response) (result InformationProtectionPolicy, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -228,6 +228,9 @@ func (client InformationProtectionPoliciesClient) List(ctx context.Context, scop
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.InformationProtectionPoliciesClient", "List", resp, "Failure responding to request")
 	}
+	if result.ippl.hasNextLink() && result.ippl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -235,7 +238,7 @@ func (client InformationProtectionPoliciesClient) List(ctx context.Context, scop
 // ListPreparer prepares the List request.
 func (client InformationProtectionPoliciesClient) ListPreparer(ctx context.Context, scope string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"scope": autorest.Encode("path", scope),
+		"scope": scope,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -254,8 +257,7 @@ func (client InformationProtectionPoliciesClient) ListPreparer(ctx context.Conte
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client InformationProtectionPoliciesClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -263,7 +265,6 @@ func (client InformationProtectionPoliciesClient) ListSender(req *http.Request) 
 func (client InformationProtectionPoliciesClient) ListResponder(resp *http.Response) (result InformationProtectionPolicyList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

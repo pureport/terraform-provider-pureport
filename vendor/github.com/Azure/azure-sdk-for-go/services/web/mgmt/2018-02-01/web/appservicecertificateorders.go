@@ -36,7 +36,9 @@ func NewAppServiceCertificateOrdersClient(subscriptionID string) AppServiceCerti
 	return NewAppServiceCertificateOrdersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAppServiceCertificateOrdersClientWithBaseURI creates an instance of the AppServiceCertificateOrdersClient client.
+// NewAppServiceCertificateOrdersClientWithBaseURI creates an instance of the AppServiceCertificateOrdersClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewAppServiceCertificateOrdersClientWithBaseURI(baseURI string, subscriptionID string) AppServiceCertificateOrdersClient {
 	return AppServiceCertificateOrdersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,9 +115,8 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdatePreparer(ctx conte
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) CreateOrUpdateSender(req *http.Request) (future AppServiceCertificateOrdersCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -128,7 +129,6 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateSender(req *http.R
 func (client AppServiceCertificateOrdersClient) CreateOrUpdateResponder(resp *http.Response) (result AppServiceCertificateOrder, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -203,9 +203,8 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificatePrepare
 // CreateOrUpdateCertificateSender sends the CreateOrUpdateCertificate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificateSender(req *http.Request) (future AppServiceCertificateOrdersCreateOrUpdateCertificateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -218,7 +217,6 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificateSender(
 func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificateResponder(resp *http.Response) (result AppServiceCertificateResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -294,8 +292,7 @@ func (client AppServiceCertificateOrdersClient) DeletePreparer(ctx context.Conte
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -303,7 +300,6 @@ func (client AppServiceCertificateOrdersClient) DeleteSender(req *http.Request) 
 func (client AppServiceCertificateOrdersClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -380,8 +376,7 @@ func (client AppServiceCertificateOrdersClient) DeleteCertificatePreparer(ctx co
 // DeleteCertificateSender sends the DeleteCertificate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) DeleteCertificateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteCertificateResponder handles the response to the DeleteCertificate request. The method always
@@ -389,7 +384,6 @@ func (client AppServiceCertificateOrdersClient) DeleteCertificateSender(req *htt
 func (client AppServiceCertificateOrdersClient) DeleteCertificateResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -464,8 +458,7 @@ func (client AppServiceCertificateOrdersClient) GetPreparer(ctx context.Context,
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -473,7 +466,6 @@ func (client AppServiceCertificateOrdersClient) GetSender(req *http.Request) (*h
 func (client AppServiceCertificateOrdersClient) GetResponder(resp *http.Response) (result AppServiceCertificateOrder, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -551,8 +543,7 @@ func (client AppServiceCertificateOrdersClient) GetCertificatePreparer(ctx conte
 // GetCertificateSender sends the GetCertificate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) GetCertificateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetCertificateResponder handles the response to the GetCertificate request. The method always
@@ -560,7 +551,6 @@ func (client AppServiceCertificateOrdersClient) GetCertificateSender(req *http.R
 func (client AppServiceCertificateOrdersClient) GetCertificateResponder(resp *http.Response) (result AppServiceCertificateResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -598,6 +588,9 @@ func (client AppServiceCertificateOrdersClient) List(ctx context.Context) (resul
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceCertificateOrdersClient", "List", resp, "Failure responding to request")
 	}
+	if result.ascoc.hasNextLink() && result.ascoc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -624,8 +617,7 @@ func (client AppServiceCertificateOrdersClient) ListPreparer(ctx context.Context
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -633,7 +625,6 @@ func (client AppServiceCertificateOrdersClient) ListSender(req *http.Request) (*
 func (client AppServiceCertificateOrdersClient) ListResponder(resp *http.Response) (result AppServiceCertificateOrderCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -718,6 +709,9 @@ func (client AppServiceCertificateOrdersClient) ListByResourceGroup(ctx context.
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceCertificateOrdersClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.ascoc.hasNextLink() && result.ascoc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -745,8 +739,7 @@ func (client AppServiceCertificateOrdersClient) ListByResourceGroupPreparer(ctx 
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -754,7 +747,6 @@ func (client AppServiceCertificateOrdersClient) ListByResourceGroupSender(req *h
 func (client AppServiceCertificateOrdersClient) ListByResourceGroupResponder(resp *http.Response) (result AppServiceCertificateOrderCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -840,6 +832,9 @@ func (client AppServiceCertificateOrdersClient) ListCertificates(ctx context.Con
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceCertificateOrdersClient", "ListCertificates", resp, "Failure responding to request")
 	}
+	if result.ascc.hasNextLink() && result.ascc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -868,8 +863,7 @@ func (client AppServiceCertificateOrdersClient) ListCertificatesPreparer(ctx con
 // ListCertificatesSender sends the ListCertificates request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ListCertificatesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListCertificatesResponder handles the response to the ListCertificates request. The method always
@@ -877,7 +871,6 @@ func (client AppServiceCertificateOrdersClient) ListCertificatesSender(req *http
 func (client AppServiceCertificateOrdersClient) ListCertificatesResponder(resp *http.Response) (result AppServiceCertificateCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -993,8 +986,7 @@ func (client AppServiceCertificateOrdersClient) ReissuePreparer(ctx context.Cont
 // ReissueSender sends the Reissue request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ReissueSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ReissueResponder handles the response to the Reissue request. The method always
@@ -1002,7 +994,6 @@ func (client AppServiceCertificateOrdersClient) ReissueSender(req *http.Request)
 func (client AppServiceCertificateOrdersClient) ReissueResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1080,8 +1071,7 @@ func (client AppServiceCertificateOrdersClient) RenewPreparer(ctx context.Contex
 // RenewSender sends the Renew request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) RenewSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RenewResponder handles the response to the Renew request. The method always
@@ -1089,7 +1079,6 @@ func (client AppServiceCertificateOrdersClient) RenewSender(req *http.Request) (
 func (client AppServiceCertificateOrdersClient) RenewResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1164,8 +1153,7 @@ func (client AppServiceCertificateOrdersClient) ResendEmailPreparer(ctx context.
 // ResendEmailSender sends the ResendEmail request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ResendEmailSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ResendEmailResponder handles the response to the ResendEmail request. The method always
@@ -1173,7 +1161,6 @@ func (client AppServiceCertificateOrdersClient) ResendEmailSender(req *http.Requ
 func (client AppServiceCertificateOrdersClient) ResendEmailResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1251,8 +1238,7 @@ func (client AppServiceCertificateOrdersClient) ResendRequestEmailsPreparer(ctx 
 // ResendRequestEmailsSender sends the ResendRequestEmails request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ResendRequestEmailsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ResendRequestEmailsResponder handles the response to the ResendRequestEmails request. The method always
@@ -1260,7 +1246,6 @@ func (client AppServiceCertificateOrdersClient) ResendRequestEmailsSender(req *h
 func (client AppServiceCertificateOrdersClient) ResendRequestEmailsResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1335,8 +1320,7 @@ func (client AppServiceCertificateOrdersClient) RetrieveCertificateActionsPrepar
 // RetrieveCertificateActionsSender sends the RetrieveCertificateActions request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) RetrieveCertificateActionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RetrieveCertificateActionsResponder handles the response to the RetrieveCertificateActions request. The method always
@@ -1344,7 +1328,6 @@ func (client AppServiceCertificateOrdersClient) RetrieveCertificateActionsSender
 func (client AppServiceCertificateOrdersClient) RetrieveCertificateActionsResponder(resp *http.Response) (result ListCertificateOrderAction, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -1420,8 +1403,7 @@ func (client AppServiceCertificateOrdersClient) RetrieveCertificateEmailHistoryP
 // RetrieveCertificateEmailHistorySender sends the RetrieveCertificateEmailHistory request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) RetrieveCertificateEmailHistorySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RetrieveCertificateEmailHistoryResponder handles the response to the RetrieveCertificateEmailHistory request. The method always
@@ -1429,7 +1411,6 @@ func (client AppServiceCertificateOrdersClient) RetrieveCertificateEmailHistoryS
 func (client AppServiceCertificateOrdersClient) RetrieveCertificateEmailHistoryResponder(resp *http.Response) (result ListCertificateEmail, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -1508,8 +1489,7 @@ func (client AppServiceCertificateOrdersClient) RetrieveSiteSealPreparer(ctx con
 // RetrieveSiteSealSender sends the RetrieveSiteSeal request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) RetrieveSiteSealSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RetrieveSiteSealResponder handles the response to the RetrieveSiteSeal request. The method always
@@ -1517,7 +1497,6 @@ func (client AppServiceCertificateOrdersClient) RetrieveSiteSealSender(req *http
 func (client AppServiceCertificateOrdersClient) RetrieveSiteSealResponder(resp *http.Response) (result SiteSeal, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1596,8 +1575,7 @@ func (client AppServiceCertificateOrdersClient) UpdatePreparer(ctx context.Conte
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -1605,7 +1583,6 @@ func (client AppServiceCertificateOrdersClient) UpdateSender(req *http.Request) 
 func (client AppServiceCertificateOrdersClient) UpdateResponder(resp *http.Response) (result AppServiceCertificateOrder, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1686,8 +1663,7 @@ func (client AppServiceCertificateOrdersClient) UpdateCertificatePreparer(ctx co
 // UpdateCertificateSender sends the UpdateCertificate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) UpdateCertificateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateCertificateResponder handles the response to the UpdateCertificate request. The method always
@@ -1695,7 +1671,6 @@ func (client AppServiceCertificateOrdersClient) UpdateCertificateSender(req *htt
 func (client AppServiceCertificateOrdersClient) UpdateCertificateResponder(resp *http.Response) (result AppServiceCertificateResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1773,8 +1748,7 @@ func (client AppServiceCertificateOrdersClient) ValidatePurchaseInformationPrepa
 // ValidatePurchaseInformationSender sends the ValidatePurchaseInformation request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) ValidatePurchaseInformationSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ValidatePurchaseInformationResponder handles the response to the ValidatePurchaseInformation request. The method always
@@ -1782,7 +1756,6 @@ func (client AppServiceCertificateOrdersClient) ValidatePurchaseInformationSende
 func (client AppServiceCertificateOrdersClient) ValidatePurchaseInformationResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1857,8 +1830,7 @@ func (client AppServiceCertificateOrdersClient) VerifyDomainOwnershipPreparer(ct
 // VerifyDomainOwnershipSender sends the VerifyDomainOwnership request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceCertificateOrdersClient) VerifyDomainOwnershipSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // VerifyDomainOwnershipResponder handles the response to the VerifyDomainOwnership request. The method always
@@ -1866,7 +1838,6 @@ func (client AppServiceCertificateOrdersClient) VerifyDomainOwnershipSender(req 
 func (client AppServiceCertificateOrdersClient) VerifyDomainOwnershipResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp

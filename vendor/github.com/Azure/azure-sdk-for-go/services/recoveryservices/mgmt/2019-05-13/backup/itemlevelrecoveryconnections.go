@@ -36,7 +36,8 @@ func NewItemLevelRecoveryConnectionsClient(subscriptionID string) ItemLevelRecov
 }
 
 // NewItemLevelRecoveryConnectionsClientWithBaseURI creates an instance of the ItemLevelRecoveryConnectionsClient
-// client.
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
 func NewItemLevelRecoveryConnectionsClientWithBaseURI(baseURI string, subscriptionID string) ItemLevelRecoveryConnectionsClient {
 	return ItemLevelRecoveryConnectionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -116,8 +117,7 @@ func (client ItemLevelRecoveryConnectionsClient) ProvisionPreparer(ctx context.C
 // ProvisionSender sends the Provision request. The method will close the
 // http.Response Body if it receives an error.
 func (client ItemLevelRecoveryConnectionsClient) ProvisionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ProvisionResponder handles the response to the Provision request. The method always
@@ -125,7 +125,6 @@ func (client ItemLevelRecoveryConnectionsClient) ProvisionSender(req *http.Reque
 func (client ItemLevelRecoveryConnectionsClient) ProvisionResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp
@@ -203,8 +202,7 @@ func (client ItemLevelRecoveryConnectionsClient) RevokePreparer(ctx context.Cont
 // RevokeSender sends the Revoke request. The method will close the
 // http.Response Body if it receives an error.
 func (client ItemLevelRecoveryConnectionsClient) RevokeSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RevokeResponder handles the response to the Revoke request. The method always
@@ -212,7 +210,6 @@ func (client ItemLevelRecoveryConnectionsClient) RevokeSender(req *http.Request)
 func (client ItemLevelRecoveryConnectionsClient) RevokeResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp

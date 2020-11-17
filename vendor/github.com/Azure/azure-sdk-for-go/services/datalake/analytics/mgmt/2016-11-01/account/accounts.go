@@ -36,7 +36,8 @@ func NewAccountsClient(subscriptionID string) AccountsClient {
 	return NewAccountsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAccountsClientWithBaseURI creates an instance of the AccountsClient client.
+// NewAccountsClientWithBaseURI creates an instance of the AccountsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) AccountsClient {
 	return AccountsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -109,8 +110,7 @@ func (client AccountsClient) CheckNameAvailabilityPreparer(ctx context.Context, 
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
@@ -118,7 +118,6 @@ func (client AccountsClient) CheckNameAvailabilitySender(req *http.Request) (*ht
 func (client AccountsClient) CheckNameAvailabilityResponder(resp *http.Response) (result NameAvailabilityInformation, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -206,9 +205,8 @@ func (client AccountsClient) CreatePreparer(ctx context.Context, resourceGroupNa
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) CreateSender(req *http.Request) (future AccountsCreateFutureType, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -221,7 +219,6 @@ func (client AccountsClient) CreateSender(req *http.Request) (future AccountsCre
 func (client AccountsClient) CreateResponder(resp *http.Response) (result DataLakeAnalyticsAccount, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -283,9 +280,8 @@ func (client AccountsClient) DeletePreparer(ctx context.Context, resourceGroupNa
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) DeleteSender(req *http.Request) (future AccountsDeleteFutureType, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -298,7 +294,6 @@ func (client AccountsClient) DeleteSender(req *http.Request) (future AccountsDel
 func (client AccountsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -365,8 +360,7 @@ func (client AccountsClient) GetPreparer(ctx context.Context, resourceGroupName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -374,7 +368,6 @@ func (client AccountsClient) GetSender(req *http.Request) (*http.Response, error
 func (client AccountsClient) GetResponder(resp *http.Response) (result DataLakeAnalyticsAccount, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -434,6 +427,9 @@ func (client AccountsClient) List(ctx context.Context, filter string, top *int32
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.AccountsClient", "List", resp, "Failure responding to request")
 	}
+	if result.dlaalr.hasNextLink() && result.dlaalr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -478,8 +474,7 @@ func (client AccountsClient) ListPreparer(ctx context.Context, filter string, to
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -487,7 +482,6 @@ func (client AccountsClient) ListSender(req *http.Request) (*http.Response, erro
 func (client AccountsClient) ListResponder(resp *http.Response) (result DataLakeAnalyticsAccountListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -585,6 +579,9 @@ func (client AccountsClient) ListByResourceGroup(ctx context.Context, resourceGr
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.AccountsClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.dlaalr.hasNextLink() && result.dlaalr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -630,8 +627,7 @@ func (client AccountsClient) ListByResourceGroupPreparer(ctx context.Context, re
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -639,7 +635,6 @@ func (client AccountsClient) ListByResourceGroupSender(req *http.Request) (*http
 func (client AccountsClient) ListByResourceGroupResponder(resp *http.Response) (result DataLakeAnalyticsAccountListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -745,9 +740,8 @@ func (client AccountsClient) UpdatePreparer(ctx context.Context, resourceGroupNa
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client AccountsClient) UpdateSender(req *http.Request) (future AccountsUpdateFutureType, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -760,7 +754,6 @@ func (client AccountsClient) UpdateSender(req *http.Request) (future AccountsUpd
 func (client AccountsClient) UpdateResponder(resp *http.Response) (result DataLakeAnalyticsAccount, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

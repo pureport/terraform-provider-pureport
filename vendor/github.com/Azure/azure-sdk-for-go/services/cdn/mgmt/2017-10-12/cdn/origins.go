@@ -36,7 +36,8 @@ func NewOriginsClient(subscriptionID string) OriginsClient {
 	return NewOriginsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewOriginsClientWithBaseURI creates an instance of the OriginsClient client.
+// NewOriginsClientWithBaseURI creates an instance of the OriginsClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewOriginsClientWithBaseURI(baseURI string, subscriptionID string) OriginsClient {
 	return OriginsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client OriginsClient) GetPreparer(ctx context.Context, resourceGroupName s
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client OriginsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -122,7 +122,6 @@ func (client OriginsClient) GetSender(req *http.Request) (*http.Response, error)
 func (client OriginsClient) GetResponder(resp *http.Response) (result Origin, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -172,6 +171,9 @@ func (client OriginsClient) ListByEndpoint(ctx context.Context, resourceGroupNam
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.OriginsClient", "ListByEndpoint", resp, "Failure responding to request")
 	}
+	if result.olr.hasNextLink() && result.olr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -201,8 +203,7 @@ func (client OriginsClient) ListByEndpointPreparer(ctx context.Context, resource
 // ListByEndpointSender sends the ListByEndpoint request. The method will close the
 // http.Response Body if it receives an error.
 func (client OriginsClient) ListByEndpointSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByEndpointResponder handles the response to the ListByEndpoint request. The method always
@@ -210,7 +211,6 @@ func (client OriginsClient) ListByEndpointSender(req *http.Request) (*http.Respo
 func (client OriginsClient) ListByEndpointResponder(resp *http.Response) (result OriginListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -324,9 +324,8 @@ func (client OriginsClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client OriginsClient) UpdateSender(req *http.Request) (future OriginsUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -339,7 +338,6 @@ func (client OriginsClient) UpdateSender(req *http.Request) (future OriginsUpdat
 func (client OriginsClient) UpdateResponder(resp *http.Response) (result Origin, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

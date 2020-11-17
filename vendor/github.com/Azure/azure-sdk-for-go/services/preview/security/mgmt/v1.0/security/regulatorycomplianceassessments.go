@@ -38,7 +38,8 @@ func NewRegulatoryComplianceAssessmentsClient(subscriptionID string, ascLocation
 }
 
 // NewRegulatoryComplianceAssessmentsClientWithBaseURI creates an instance of the RegulatoryComplianceAssessmentsClient
-// client.
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
 func NewRegulatoryComplianceAssessmentsClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) RegulatoryComplianceAssessmentsClient {
 	return RegulatoryComplianceAssessmentsClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -111,8 +112,7 @@ func (client RegulatoryComplianceAssessmentsClient) GetPreparer(ctx context.Cont
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client RegulatoryComplianceAssessmentsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -120,7 +120,6 @@ func (client RegulatoryComplianceAssessmentsClient) GetSender(req *http.Request)
 func (client RegulatoryComplianceAssessmentsClient) GetResponder(resp *http.Response) (result RegulatoryComplianceAssessment, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -168,6 +167,9 @@ func (client RegulatoryComplianceAssessmentsClient) List(ctx context.Context, re
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.RegulatoryComplianceAssessmentsClient", "List", resp, "Failure responding to request")
 	}
+	if result.rcal.hasNextLink() && result.rcal.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -199,8 +201,7 @@ func (client RegulatoryComplianceAssessmentsClient) ListPreparer(ctx context.Con
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client RegulatoryComplianceAssessmentsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -208,7 +209,6 @@ func (client RegulatoryComplianceAssessmentsClient) ListSender(req *http.Request
 func (client RegulatoryComplianceAssessmentsClient) ListResponder(resp *http.Response) (result RegulatoryComplianceAssessmentList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

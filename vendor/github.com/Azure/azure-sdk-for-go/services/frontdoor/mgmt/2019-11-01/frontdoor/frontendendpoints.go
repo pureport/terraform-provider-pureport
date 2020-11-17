@@ -115,9 +115,8 @@ func (client FrontendEndpointsClient) DisableHTTPSPreparer(ctx context.Context, 
 // DisableHTTPSSender sends the DisableHTTPS request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontendEndpointsClient) DisableHTTPSSender(req *http.Request) (future FrontendEndpointsDisableHTTPSFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -130,7 +129,6 @@ func (client FrontendEndpointsClient) DisableHTTPSSender(req *http.Request) (fut
 func (client FrontendEndpointsClient) DisableHTTPSResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp
@@ -214,9 +212,8 @@ func (client FrontendEndpointsClient) EnableHTTPSPreparer(ctx context.Context, r
 // EnableHTTPSSender sends the EnableHTTPS request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontendEndpointsClient) EnableHTTPSSender(req *http.Request) (future FrontendEndpointsEnableHTTPSFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -229,7 +226,6 @@ func (client FrontendEndpointsClient) EnableHTTPSSender(req *http.Request) (futu
 func (client FrontendEndpointsClient) EnableHTTPSResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp
@@ -314,8 +310,7 @@ func (client FrontendEndpointsClient) GetPreparer(ctx context.Context, resourceG
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontendEndpointsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -323,7 +318,6 @@ func (client FrontendEndpointsClient) GetSender(req *http.Request) (*http.Respon
 func (client FrontendEndpointsClient) GetResponder(resp *http.Response) (result FrontendEndpoint, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -376,6 +370,9 @@ func (client FrontendEndpointsClient) ListByFrontDoor(ctx context.Context, resou
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "frontdoor.FrontendEndpointsClient", "ListByFrontDoor", resp, "Failure responding to request")
 	}
+	if result.felr.hasNextLink() && result.felr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -404,8 +401,7 @@ func (client FrontendEndpointsClient) ListByFrontDoorPreparer(ctx context.Contex
 // ListByFrontDoorSender sends the ListByFrontDoor request. The method will close the
 // http.Response Body if it receives an error.
 func (client FrontendEndpointsClient) ListByFrontDoorSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByFrontDoorResponder handles the response to the ListByFrontDoor request. The method always
@@ -413,7 +409,6 @@ func (client FrontendEndpointsClient) ListByFrontDoorSender(req *http.Request) (
 func (client FrontendEndpointsClient) ListByFrontDoorResponder(resp *http.Response) (result FrontendEndpointsListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -45,7 +45,8 @@ func New(subscriptionID string) BaseClient {
 	return NewWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
+// NewWithBaseURI creates an instance of the BaseClient client using a custom endpoint.  Use this when interacting with
+// an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return BaseClient{
 		Client:         autorest.NewClientWithUserAgent(UserAgent()),
@@ -112,8 +113,7 @@ func (client BaseClient) ListCachedImagesPreparer(ctx context.Context, location 
 // ListCachedImagesSender sends the ListCachedImages request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ListCachedImagesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListCachedImagesResponder handles the response to the ListCachedImages request. The method always
@@ -121,7 +121,6 @@ func (client BaseClient) ListCachedImagesSender(req *http.Request) (*http.Respon
 func (client BaseClient) ListCachedImagesResponder(resp *http.Response) (result CachedImagesListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -187,8 +186,7 @@ func (client BaseClient) ListCapabilitiesPreparer(ctx context.Context, location 
 // ListCapabilitiesSender sends the ListCapabilities request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) ListCapabilitiesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListCapabilitiesResponder handles the response to the ListCapabilities request. The method always
@@ -196,7 +194,6 @@ func (client BaseClient) ListCapabilitiesSender(req *http.Request) (*http.Respon
 func (client BaseClient) ListCapabilitiesResponder(resp *http.Response) (result CapabilitiesListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -38,7 +38,8 @@ func NewJobTargetGroupsClient(subscriptionID string) JobTargetGroupsClient {
 	return NewJobTargetGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewJobTargetGroupsClientWithBaseURI creates an instance of the JobTargetGroupsClient client.
+// NewJobTargetGroupsClientWithBaseURI creates an instance of the JobTargetGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewJobTargetGroupsClientWithBaseURI(baseURI string, subscriptionID string) JobTargetGroupsClient {
 	return JobTargetGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -118,8 +119,7 @@ func (client JobTargetGroupsClient) CreateOrUpdatePreparer(ctx context.Context, 
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobTargetGroupsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -127,7 +127,6 @@ func (client JobTargetGroupsClient) CreateOrUpdateSender(req *http.Request) (*ht
 func (client JobTargetGroupsClient) CreateOrUpdateResponder(resp *http.Response) (result JobTargetGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -200,8 +199,7 @@ func (client JobTargetGroupsClient) DeletePreparer(ctx context.Context, resource
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobTargetGroupsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -209,7 +207,6 @@ func (client JobTargetGroupsClient) DeleteSender(req *http.Request) (*http.Respo
 func (client JobTargetGroupsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -281,8 +278,7 @@ func (client JobTargetGroupsClient) GetPreparer(ctx context.Context, resourceGro
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobTargetGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -290,7 +286,6 @@ func (client JobTargetGroupsClient) GetSender(req *http.Request) (*http.Response
 func (client JobTargetGroupsClient) GetResponder(resp *http.Response) (result JobTargetGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -333,6 +328,9 @@ func (client JobTargetGroupsClient) ListByAgent(ctx context.Context, resourceGro
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobTargetGroupsClient", "ListByAgent", resp, "Failure responding to request")
 	}
+	if result.jtglr.hasNextLink() && result.jtglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -362,8 +360,7 @@ func (client JobTargetGroupsClient) ListByAgentPreparer(ctx context.Context, res
 // ListByAgentSender sends the ListByAgent request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobTargetGroupsClient) ListByAgentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByAgentResponder handles the response to the ListByAgent request. The method always
@@ -371,7 +368,6 @@ func (client JobTargetGroupsClient) ListByAgentSender(req *http.Request) (*http.
 func (client JobTargetGroupsClient) ListByAgentResponder(resp *http.Response) (result JobTargetGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

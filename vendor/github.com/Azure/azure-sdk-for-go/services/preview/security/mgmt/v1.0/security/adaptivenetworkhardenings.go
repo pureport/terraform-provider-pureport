@@ -36,7 +36,9 @@ func NewAdaptiveNetworkHardeningsClient(subscriptionID string, ascLocation strin
 	return NewAdaptiveNetworkHardeningsClientWithBaseURI(DefaultBaseURI, subscriptionID, ascLocation)
 }
 
-// NewAdaptiveNetworkHardeningsClientWithBaseURI creates an instance of the AdaptiveNetworkHardeningsClient client.
+// NewAdaptiveNetworkHardeningsClientWithBaseURI creates an instance of the AdaptiveNetworkHardeningsClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewAdaptiveNetworkHardeningsClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) AdaptiveNetworkHardeningsClient {
 	return AdaptiveNetworkHardeningsClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -118,9 +120,8 @@ func (client AdaptiveNetworkHardeningsClient) EnforcePreparer(ctx context.Contex
 // EnforceSender sends the Enforce request. The method will close the
 // http.Response Body if it receives an error.
 func (client AdaptiveNetworkHardeningsClient) EnforceSender(req *http.Request) (future AdaptiveNetworkHardeningsEnforceFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -133,7 +134,6 @@ func (client AdaptiveNetworkHardeningsClient) EnforceSender(req *http.Request) (
 func (client AdaptiveNetworkHardeningsClient) EnforceResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp
@@ -217,8 +217,7 @@ func (client AdaptiveNetworkHardeningsClient) GetPreparer(ctx context.Context, r
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AdaptiveNetworkHardeningsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -226,7 +225,6 @@ func (client AdaptiveNetworkHardeningsClient) GetSender(req *http.Request) (*htt
 func (client AdaptiveNetworkHardeningsClient) GetResponder(resp *http.Response) (result AdaptiveNetworkHardening, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -280,6 +278,9 @@ func (client AdaptiveNetworkHardeningsClient) ListByExtendedResource(ctx context
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.AdaptiveNetworkHardeningsClient", "ListByExtendedResource", resp, "Failure responding to request")
 	}
+	if result.anhl.hasNextLink() && result.anhl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -310,8 +311,7 @@ func (client AdaptiveNetworkHardeningsClient) ListByExtendedResourcePreparer(ctx
 // ListByExtendedResourceSender sends the ListByExtendedResource request. The method will close the
 // http.Response Body if it receives an error.
 func (client AdaptiveNetworkHardeningsClient) ListByExtendedResourceSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByExtendedResourceResponder handles the response to the ListByExtendedResource request. The method always
@@ -319,7 +319,6 @@ func (client AdaptiveNetworkHardeningsClient) ListByExtendedResourceSender(req *
 func (client AdaptiveNetworkHardeningsClient) ListByExtendedResourceResponder(resp *http.Response) (result AdaptiveNetworkHardeningsList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

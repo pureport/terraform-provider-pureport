@@ -35,7 +35,8 @@ func NewSecurityGroupsClient(subscriptionID string) SecurityGroupsClient {
 	return NewSecurityGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewSecurityGroupsClientWithBaseURI creates an instance of the SecurityGroupsClient client.
+// NewSecurityGroupsClientWithBaseURI creates an instance of the SecurityGroupsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewSecurityGroupsClientWithBaseURI(baseURI string, subscriptionID string) SecurityGroupsClient {
 	return SecurityGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -98,9 +99,8 @@ func (client SecurityGroupsClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) CreateOrUpdateSender(req *http.Request) (future SecurityGroupsCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -113,7 +113,6 @@ func (client SecurityGroupsClient) CreateOrUpdateSender(req *http.Request) (futu
 func (client SecurityGroupsClient) CreateOrUpdateResponder(resp *http.Response) (result SecurityGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -175,9 +174,8 @@ func (client SecurityGroupsClient) DeletePreparer(ctx context.Context, resourceG
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) DeleteSender(req *http.Request) (future SecurityGroupsDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -190,7 +188,6 @@ func (client SecurityGroupsClient) DeleteSender(req *http.Request) (future Secur
 func (client SecurityGroupsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -261,8 +258,7 @@ func (client SecurityGroupsClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -270,7 +266,6 @@ func (client SecurityGroupsClient) GetSender(req *http.Request) (*http.Response,
 func (client SecurityGroupsClient) GetResponder(resp *http.Response) (result SecurityGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -310,6 +305,9 @@ func (client SecurityGroupsClient) List(ctx context.Context, resourceGroupName s
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.SecurityGroupsClient", "List", resp, "Failure responding to request")
 	}
+	if result.sglr.hasNextLink() && result.sglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -337,8 +335,7 @@ func (client SecurityGroupsClient) ListPreparer(ctx context.Context, resourceGro
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -346,7 +343,6 @@ func (client SecurityGroupsClient) ListSender(req *http.Request) (*http.Response
 func (client SecurityGroupsClient) ListResponder(resp *http.Response) (result SecurityGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -421,6 +417,9 @@ func (client SecurityGroupsClient) ListAll(ctx context.Context) (result Security
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.SecurityGroupsClient", "ListAll", resp, "Failure responding to request")
 	}
+	if result.sglr.hasNextLink() && result.sglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -447,8 +446,7 @@ func (client SecurityGroupsClient) ListAllPreparer(ctx context.Context) (*http.R
 // ListAllSender sends the ListAll request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) ListAllSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAllResponder handles the response to the ListAll request. The method always
@@ -456,7 +454,6 @@ func (client SecurityGroupsClient) ListAllSender(req *http.Request) (*http.Respo
 func (client SecurityGroupsClient) ListAllResponder(resp *http.Response) (result SecurityGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -564,8 +561,7 @@ func (client SecurityGroupsClient) UpdateTagsPreparer(ctx context.Context, resou
 // UpdateTagsSender sends the UpdateTags request. The method will close the
 // http.Response Body if it receives an error.
 func (client SecurityGroupsClient) UpdateTagsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateTagsResponder handles the response to the UpdateTags request. The method always
@@ -573,7 +569,6 @@ func (client SecurityGroupsClient) UpdateTagsSender(req *http.Request) (*http.Re
 func (client SecurityGroupsClient) UpdateTagsResponder(resp *http.Response) (result SecurityGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

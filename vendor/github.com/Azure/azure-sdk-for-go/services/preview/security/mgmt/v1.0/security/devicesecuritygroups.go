@@ -35,7 +35,9 @@ func NewDeviceSecurityGroupsClient(subscriptionID string, ascLocation string) De
 	return NewDeviceSecurityGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID, ascLocation)
 }
 
-// NewDeviceSecurityGroupsClientWithBaseURI creates an instance of the DeviceSecurityGroupsClient client.
+// NewDeviceSecurityGroupsClientWithBaseURI creates an instance of the DeviceSecurityGroupsClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewDeviceSecurityGroupsClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) DeviceSecurityGroupsClient {
 	return DeviceSecurityGroupsClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -81,7 +83,7 @@ func (client DeviceSecurityGroupsClient) CreateOrUpdate(ctx context.Context, res
 func (client DeviceSecurityGroupsClient) CreateOrUpdatePreparer(ctx context.Context, resourceID string, deviceSecurityGroupName string, deviceSecurityGroup DeviceSecurityGroup) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"deviceSecurityGroupName": autorest.Encode("path", deviceSecurityGroupName),
-		"resourceId":              autorest.Encode("path", resourceID),
+		"resourceId":              resourceID,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -102,8 +104,7 @@ func (client DeviceSecurityGroupsClient) CreateOrUpdatePreparer(ctx context.Cont
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client DeviceSecurityGroupsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -111,7 +112,6 @@ func (client DeviceSecurityGroupsClient) CreateOrUpdateSender(req *http.Request)
 func (client DeviceSecurityGroupsClient) CreateOrUpdateResponder(resp *http.Response) (result DeviceSecurityGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -159,7 +159,7 @@ func (client DeviceSecurityGroupsClient) Delete(ctx context.Context, resourceID 
 func (client DeviceSecurityGroupsClient) DeletePreparer(ctx context.Context, resourceID string, deviceSecurityGroupName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"deviceSecurityGroupName": autorest.Encode("path", deviceSecurityGroupName),
-		"resourceId":              autorest.Encode("path", resourceID),
+		"resourceId":              resourceID,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -178,8 +178,7 @@ func (client DeviceSecurityGroupsClient) DeletePreparer(ctx context.Context, res
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client DeviceSecurityGroupsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -187,7 +186,6 @@ func (client DeviceSecurityGroupsClient) DeleteSender(req *http.Request) (*http.
 func (client DeviceSecurityGroupsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -234,7 +232,7 @@ func (client DeviceSecurityGroupsClient) Get(ctx context.Context, resourceID str
 func (client DeviceSecurityGroupsClient) GetPreparer(ctx context.Context, resourceID string, deviceSecurityGroupName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"deviceSecurityGroupName": autorest.Encode("path", deviceSecurityGroupName),
-		"resourceId":              autorest.Encode("path", resourceID),
+		"resourceId":              resourceID,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -253,8 +251,7 @@ func (client DeviceSecurityGroupsClient) GetPreparer(ctx context.Context, resour
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DeviceSecurityGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -262,7 +259,6 @@ func (client DeviceSecurityGroupsClient) GetSender(req *http.Request) (*http.Res
 func (client DeviceSecurityGroupsClient) GetResponder(resp *http.Response) (result DeviceSecurityGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -302,6 +298,9 @@ func (client DeviceSecurityGroupsClient) List(ctx context.Context, resourceID st
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.DeviceSecurityGroupsClient", "List", resp, "Failure responding to request")
 	}
+	if result.dsgl.hasNextLink() && result.dsgl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -309,7 +308,7 @@ func (client DeviceSecurityGroupsClient) List(ctx context.Context, resourceID st
 // ListPreparer prepares the List request.
 func (client DeviceSecurityGroupsClient) ListPreparer(ctx context.Context, resourceID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"resourceId": autorest.Encode("path", resourceID),
+		"resourceId": resourceID,
 	}
 
 	const APIVersion = "2017-08-01-preview"
@@ -328,8 +327,7 @@ func (client DeviceSecurityGroupsClient) ListPreparer(ctx context.Context, resou
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client DeviceSecurityGroupsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -337,7 +335,6 @@ func (client DeviceSecurityGroupsClient) ListSender(req *http.Request) (*http.Re
 func (client DeviceSecurityGroupsClient) ListResponder(resp *http.Response) (result DeviceSecurityGroupList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -36,7 +36,8 @@ func NewBotConnectionClient(subscriptionID string) BotConnectionClient {
 	return NewBotConnectionClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewBotConnectionClientWithBaseURI creates an instance of the BotConnectionClient client.
+// NewBotConnectionClientWithBaseURI creates an instance of the BotConnectionClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewBotConnectionClientWithBaseURI(baseURI string, subscriptionID string) BotConnectionClient {
 	return BotConnectionClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -122,8 +123,7 @@ func (client BotConnectionClient) CreatePreparer(ctx context.Context, resourceGr
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) CreateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -131,7 +131,6 @@ func (client BotConnectionClient) CreateSender(req *http.Request) (*http.Respons
 func (client BotConnectionClient) CreateResponder(resp *http.Response) (result ConnectionSetting, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -217,8 +216,7 @@ func (client BotConnectionClient) DeletePreparer(ctx context.Context, resourceGr
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -226,7 +224,6 @@ func (client BotConnectionClient) DeleteSender(req *http.Request) (*http.Respons
 func (client BotConnectionClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -311,8 +308,7 @@ func (client BotConnectionClient) GetPreparer(ctx context.Context, resourceGroup
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -320,7 +316,6 @@ func (client BotConnectionClient) GetSender(req *http.Request) (*http.Response, 
 func (client BotConnectionClient) GetResponder(resp *http.Response) (result ConnectionSetting, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -373,6 +368,9 @@ func (client BotConnectionClient) ListByBotService(ctx context.Context, resource
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "botservice.BotConnectionClient", "ListByBotService", resp, "Failure responding to request")
 	}
+	if result.csrl.hasNextLink() && result.csrl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -401,8 +399,7 @@ func (client BotConnectionClient) ListByBotServicePreparer(ctx context.Context, 
 // ListByBotServiceSender sends the ListByBotService request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) ListByBotServiceSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByBotServiceResponder handles the response to the ListByBotService request. The method always
@@ -410,7 +407,6 @@ func (client BotConnectionClient) ListByBotServiceSender(req *http.Request) (*ht
 func (client BotConnectionClient) ListByBotServiceResponder(resp *http.Response) (result ConnectionSettingResponseList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -510,8 +506,7 @@ func (client BotConnectionClient) ListServiceProvidersPreparer(ctx context.Conte
 // ListServiceProvidersSender sends the ListServiceProviders request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) ListServiceProvidersSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListServiceProvidersResponder handles the response to the ListServiceProviders request. The method always
@@ -519,7 +514,6 @@ func (client BotConnectionClient) ListServiceProvidersSender(req *http.Request) 
 func (client BotConnectionClient) ListServiceProvidersResponder(resp *http.Response) (result ServiceProviderResponseList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -605,8 +599,7 @@ func (client BotConnectionClient) ListWithSecretsPreparer(ctx context.Context, r
 // ListWithSecretsSender sends the ListWithSecrets request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) ListWithSecretsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWithSecretsResponder handles the response to the ListWithSecrets request. The method always
@@ -614,7 +607,6 @@ func (client BotConnectionClient) ListWithSecretsSender(req *http.Request) (*htt
 func (client BotConnectionClient) ListWithSecretsResponder(resp *http.Response) (result ConnectionSetting, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -703,8 +695,7 @@ func (client BotConnectionClient) UpdatePreparer(ctx context.Context, resourceGr
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client BotConnectionClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -712,7 +703,6 @@ func (client BotConnectionClient) UpdateSender(req *http.Request) (*http.Respons
 func (client BotConnectionClient) UpdateResponder(resp *http.Response) (result ConnectionSetting, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

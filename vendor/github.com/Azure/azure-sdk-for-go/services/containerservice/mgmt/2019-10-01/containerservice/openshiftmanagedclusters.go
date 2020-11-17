@@ -36,7 +36,9 @@ func NewOpenShiftManagedClustersClient(subscriptionID string) OpenShiftManagedCl
 	return NewOpenShiftManagedClustersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewOpenShiftManagedClustersClientWithBaseURI creates an instance of the OpenShiftManagedClustersClient client.
+// NewOpenShiftManagedClustersClientWithBaseURI creates an instance of the OpenShiftManagedClustersClient client using
+// a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewOpenShiftManagedClustersClientWithBaseURI(baseURI string, subscriptionID string) OpenShiftManagedClustersClient {
 	return OpenShiftManagedClustersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -111,9 +113,8 @@ func (client OpenShiftManagedClustersClient) CreateOrUpdatePreparer(ctx context.
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client OpenShiftManagedClustersClient) CreateOrUpdateSender(req *http.Request) (future OpenShiftManagedClustersCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -126,7 +127,6 @@ func (client OpenShiftManagedClustersClient) CreateOrUpdateSender(req *http.Requ
 func (client OpenShiftManagedClustersClient) CreateOrUpdateResponder(resp *http.Response) (result OpenShiftManagedCluster, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -194,9 +194,8 @@ func (client OpenShiftManagedClustersClient) DeletePreparer(ctx context.Context,
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client OpenShiftManagedClustersClient) DeleteSender(req *http.Request) (future OpenShiftManagedClustersDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -209,7 +208,6 @@ func (client OpenShiftManagedClustersClient) DeleteSender(req *http.Request) (fu
 func (client OpenShiftManagedClustersClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -282,8 +280,7 @@ func (client OpenShiftManagedClustersClient) GetPreparer(ctx context.Context, re
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client OpenShiftManagedClustersClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -291,7 +288,6 @@ func (client OpenShiftManagedClustersClient) GetSender(req *http.Request) (*http
 func (client OpenShiftManagedClustersClient) GetResponder(resp *http.Response) (result OpenShiftManagedCluster, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -330,6 +326,9 @@ func (client OpenShiftManagedClustersClient) List(ctx context.Context) (result O
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerservice.OpenShiftManagedClustersClient", "List", resp, "Failure responding to request")
 	}
+	if result.osmclr.hasNextLink() && result.osmclr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -356,8 +355,7 @@ func (client OpenShiftManagedClustersClient) ListPreparer(ctx context.Context) (
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client OpenShiftManagedClustersClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -365,7 +363,6 @@ func (client OpenShiftManagedClustersClient) ListSender(req *http.Request) (*htt
 func (client OpenShiftManagedClustersClient) ListResponder(resp *http.Response) (result OpenShiftManagedClusterListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -449,6 +446,9 @@ func (client OpenShiftManagedClustersClient) ListByResourceGroup(ctx context.Con
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerservice.OpenShiftManagedClustersClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.osmclr.hasNextLink() && result.osmclr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -476,8 +476,7 @@ func (client OpenShiftManagedClustersClient) ListByResourceGroupPreparer(ctx con
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client OpenShiftManagedClustersClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -485,7 +484,6 @@ func (client OpenShiftManagedClustersClient) ListByResourceGroupSender(req *http
 func (client OpenShiftManagedClustersClient) ListByResourceGroupResponder(resp *http.Response) (result OpenShiftManagedClusterListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -593,9 +591,8 @@ func (client OpenShiftManagedClustersClient) UpdateTagsPreparer(ctx context.Cont
 // UpdateTagsSender sends the UpdateTags request. The method will close the
 // http.Response Body if it receives an error.
 func (client OpenShiftManagedClustersClient) UpdateTagsSender(req *http.Request) (future OpenShiftManagedClustersUpdateTagsFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -608,7 +605,6 @@ func (client OpenShiftManagedClustersClient) UpdateTagsSender(req *http.Request)
 func (client OpenShiftManagedClustersClient) UpdateTagsResponder(resp *http.Response) (result OpenShiftManagedCluster, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

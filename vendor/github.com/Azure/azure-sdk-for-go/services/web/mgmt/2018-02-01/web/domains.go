@@ -36,7 +36,8 @@ func NewDomainsClient(subscriptionID string) DomainsClient {
 	return NewDomainsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDomainsClientWithBaseURI creates an instance of the DomainsClient client.
+// NewDomainsClientWithBaseURI creates an instance of the DomainsClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDomainsClientWithBaseURI(baseURI string, subscriptionID string) DomainsClient {
 	return DomainsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -100,8 +101,7 @@ func (client DomainsClient) CheckAvailabilityPreparer(ctx context.Context, ident
 // CheckAvailabilitySender sends the CheckAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) CheckAvailabilitySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckAvailabilityResponder handles the response to the CheckAvailability request. The method always
@@ -109,7 +109,6 @@ func (client DomainsClient) CheckAvailabilitySender(req *http.Request) (*http.Re
 func (client DomainsClient) CheckAvailabilityResponder(resp *http.Response) (result DomainAvailablilityCheckResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -240,9 +239,8 @@ func (client DomainsClient) CreateOrUpdatePreparer(ctx context.Context, resource
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) CreateOrUpdateSender(req *http.Request) (future DomainsCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -255,7 +253,6 @@ func (client DomainsClient) CreateOrUpdateSender(req *http.Request) (future Doma
 func (client DomainsClient) CreateOrUpdateResponder(resp *http.Response) (result Domain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -337,8 +334,7 @@ func (client DomainsClient) CreateOrUpdateOwnershipIdentifierPreparer(ctx contex
 // CreateOrUpdateOwnershipIdentifierSender sends the CreateOrUpdateOwnershipIdentifier request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) CreateOrUpdateOwnershipIdentifierSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateOwnershipIdentifierResponder handles the response to the CreateOrUpdateOwnershipIdentifier request. The method always
@@ -346,7 +342,6 @@ func (client DomainsClient) CreateOrUpdateOwnershipIdentifierSender(req *http.Re
 func (client DomainsClient) CreateOrUpdateOwnershipIdentifierResponder(resp *http.Response) (result DomainOwnershipIdentifier, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -427,8 +422,7 @@ func (client DomainsClient) DeletePreparer(ctx context.Context, resourceGroupNam
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -436,7 +430,6 @@ func (client DomainsClient) DeleteSender(req *http.Request) (*http.Response, err
 func (client DomainsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -513,8 +506,7 @@ func (client DomainsClient) DeleteOwnershipIdentifierPreparer(ctx context.Contex
 // DeleteOwnershipIdentifierSender sends the DeleteOwnershipIdentifier request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) DeleteOwnershipIdentifierSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteOwnershipIdentifierResponder handles the response to the DeleteOwnershipIdentifier request. The method always
@@ -522,7 +514,6 @@ func (client DomainsClient) DeleteOwnershipIdentifierSender(req *http.Request) (
 func (client DomainsClient) DeleteOwnershipIdentifierResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -597,8 +588,7 @@ func (client DomainsClient) GetPreparer(ctx context.Context, resourceGroupName s
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -606,7 +596,6 @@ func (client DomainsClient) GetSender(req *http.Request) (*http.Response, error)
 func (client DomainsClient) GetResponder(resp *http.Response) (result Domain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -669,8 +658,7 @@ func (client DomainsClient) GetControlCenterSsoRequestPreparer(ctx context.Conte
 // GetControlCenterSsoRequestSender sends the GetControlCenterSsoRequest request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) GetControlCenterSsoRequestSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetControlCenterSsoRequestResponder handles the response to the GetControlCenterSsoRequest request. The method always
@@ -678,7 +666,6 @@ func (client DomainsClient) GetControlCenterSsoRequestSender(req *http.Request) 
 func (client DomainsClient) GetControlCenterSsoRequestResponder(resp *http.Response) (result DomainControlCenterSsoRequest, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -756,8 +743,7 @@ func (client DomainsClient) GetOwnershipIdentifierPreparer(ctx context.Context, 
 // GetOwnershipIdentifierSender sends the GetOwnershipIdentifier request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) GetOwnershipIdentifierSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetOwnershipIdentifierResponder handles the response to the GetOwnershipIdentifier request. The method always
@@ -765,7 +751,6 @@ func (client DomainsClient) GetOwnershipIdentifierSender(req *http.Request) (*ht
 func (client DomainsClient) GetOwnershipIdentifierResponder(resp *http.Response) (result DomainOwnershipIdentifier, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -803,6 +788,9 @@ func (client DomainsClient) List(ctx context.Context) (result DomainCollectionPa
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DomainsClient", "List", resp, "Failure responding to request")
 	}
+	if result.dc.hasNextLink() && result.dc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -829,8 +817,7 @@ func (client DomainsClient) ListPreparer(ctx context.Context) (*http.Request, er
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -838,7 +825,6 @@ func (client DomainsClient) ListSender(req *http.Request) (*http.Response, error
 func (client DomainsClient) ListResponder(resp *http.Response) (result DomainCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -923,6 +909,9 @@ func (client DomainsClient) ListByResourceGroup(ctx context.Context, resourceGro
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DomainsClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.dc.hasNextLink() && result.dc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -950,8 +939,7 @@ func (client DomainsClient) ListByResourceGroupPreparer(ctx context.Context, res
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -959,7 +947,6 @@ func (client DomainsClient) ListByResourceGroupSender(req *http.Request) (*http.
 func (client DomainsClient) ListByResourceGroupResponder(resp *http.Response) (result DomainCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1045,6 +1032,9 @@ func (client DomainsClient) ListOwnershipIdentifiers(ctx context.Context, resour
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DomainsClient", "ListOwnershipIdentifiers", resp, "Failure responding to request")
 	}
+	if result.doic.hasNextLink() && result.doic.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1073,8 +1063,7 @@ func (client DomainsClient) ListOwnershipIdentifiersPreparer(ctx context.Context
 // ListOwnershipIdentifiersSender sends the ListOwnershipIdentifiers request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) ListOwnershipIdentifiersSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListOwnershipIdentifiersResponder handles the response to the ListOwnershipIdentifiers request. The method always
@@ -1082,7 +1071,6 @@ func (client DomainsClient) ListOwnershipIdentifiersSender(req *http.Request) (*
 func (client DomainsClient) ListOwnershipIdentifiersResponder(resp *http.Response) (result DomainOwnershipIdentifierCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1159,6 +1147,9 @@ func (client DomainsClient) ListRecommendations(ctx context.Context, parameters 
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DomainsClient", "ListRecommendations", resp, "Failure responding to request")
 	}
+	if result.nic.hasNextLink() && result.nic.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1187,8 +1178,7 @@ func (client DomainsClient) ListRecommendationsPreparer(ctx context.Context, par
 // ListRecommendationsSender sends the ListRecommendations request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) ListRecommendationsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListRecommendationsResponder handles the response to the ListRecommendations request. The method always
@@ -1196,7 +1186,6 @@ func (client DomainsClient) ListRecommendationsSender(req *http.Request) (*http.
 func (client DomainsClient) ListRecommendationsResponder(resp *http.Response) (result NameIdentifierCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1309,8 +1298,7 @@ func (client DomainsClient) RenewPreparer(ctx context.Context, resourceGroupName
 // RenewSender sends the Renew request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) RenewSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RenewResponder handles the response to the Renew request. The method always
@@ -1318,7 +1306,6 @@ func (client DomainsClient) RenewSender(req *http.Request) (*http.Response, erro
 func (client DomainsClient) RenewResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent, http.StatusBadRequest, http.StatusInternalServerError),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1398,8 +1385,7 @@ func (client DomainsClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -1407,7 +1393,6 @@ func (client DomainsClient) UpdateSender(req *http.Request) (*http.Response, err
 func (client DomainsClient) UpdateResponder(resp *http.Response) (result Domain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1489,8 +1474,7 @@ func (client DomainsClient) UpdateOwnershipIdentifierPreparer(ctx context.Contex
 // UpdateOwnershipIdentifierSender sends the UpdateOwnershipIdentifier request. The method will close the
 // http.Response Body if it receives an error.
 func (client DomainsClient) UpdateOwnershipIdentifierSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateOwnershipIdentifierResponder handles the response to the UpdateOwnershipIdentifier request. The method always
@@ -1498,7 +1482,6 @@ func (client DomainsClient) UpdateOwnershipIdentifierSender(req *http.Request) (
 func (client DomainsClient) UpdateOwnershipIdentifierResponder(resp *http.Response) (result DomainOwnershipIdentifier, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

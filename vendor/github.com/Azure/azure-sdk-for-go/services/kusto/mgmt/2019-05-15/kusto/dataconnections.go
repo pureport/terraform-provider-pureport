@@ -38,7 +38,8 @@ func NewDataConnectionsClient(subscriptionID string) DataConnectionsClient {
 	return NewDataConnectionsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDataConnectionsClientWithBaseURI creates an instance of the DataConnectionsClient client.
+// NewDataConnectionsClientWithBaseURI creates an instance of the DataConnectionsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDataConnectionsClientWithBaseURI(baseURI string, subscriptionID string) DataConnectionsClient {
 	return DataConnectionsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -115,8 +116,7 @@ func (client DataConnectionsClient) CheckNameAvailabilityPreparer(ctx context.Co
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
@@ -124,7 +124,6 @@ func (client DataConnectionsClient) CheckNameAvailabilitySender(req *http.Reques
 func (client DataConnectionsClient) CheckNameAvailabilityResponder(resp *http.Response) (result CheckNameResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -193,9 +192,8 @@ func (client DataConnectionsClient) CreateOrUpdatePreparer(ctx context.Context, 
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) CreateOrUpdateSender(req *http.Request) (future DataConnectionsCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -208,7 +206,6 @@ func (client DataConnectionsClient) CreateOrUpdateSender(req *http.Request) (fut
 func (client DataConnectionsClient) CreateOrUpdateResponder(resp *http.Response) (result DataConnectionModel, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -281,8 +278,7 @@ func (client DataConnectionsClient) DataConnectionValidationMethodPreparer(ctx c
 // DataConnectionValidationMethodSender sends the DataConnectionValidationMethod request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) DataConnectionValidationMethodSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DataConnectionValidationMethodResponder handles the response to the DataConnectionValidationMethod request. The method always
@@ -290,7 +286,6 @@ func (client DataConnectionsClient) DataConnectionValidationMethodSender(req *ht
 func (client DataConnectionsClient) DataConnectionValidationMethodResponder(resp *http.Response) (result DataConnectionValidationListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -356,9 +351,8 @@ func (client DataConnectionsClient) DeletePreparer(ctx context.Context, resource
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) DeleteSender(req *http.Request) (future DataConnectionsDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -371,7 +365,6 @@ func (client DataConnectionsClient) DeleteSender(req *http.Request) (future Data
 func (client DataConnectionsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -442,8 +435,7 @@ func (client DataConnectionsClient) GetPreparer(ctx context.Context, resourceGro
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -451,7 +443,6 @@ func (client DataConnectionsClient) GetSender(req *http.Request) (*http.Response
 func (client DataConnectionsClient) GetResponder(resp *http.Response) (result DataConnectionModel, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -521,8 +512,7 @@ func (client DataConnectionsClient) ListByDatabasePreparer(ctx context.Context, 
 // ListByDatabaseSender sends the ListByDatabase request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) ListByDatabaseSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDatabaseResponder handles the response to the ListByDatabase request. The method always
@@ -530,7 +520,6 @@ func (client DataConnectionsClient) ListByDatabaseSender(req *http.Request) (*ht
 func (client DataConnectionsClient) ListByDatabaseResponder(resp *http.Response) (result DataConnectionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -599,9 +588,8 @@ func (client DataConnectionsClient) UpdatePreparer(ctx context.Context, resource
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client DataConnectionsClient) UpdateSender(req *http.Request) (future DataConnectionsUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -614,7 +602,6 @@ func (client DataConnectionsClient) UpdateSender(req *http.Request) (future Data
 func (client DataConnectionsClient) UpdateResponder(resp *http.Response) (result DataConnectionModel, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

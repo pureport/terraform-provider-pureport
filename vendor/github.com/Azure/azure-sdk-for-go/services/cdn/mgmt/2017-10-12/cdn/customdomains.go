@@ -36,7 +36,8 @@ func NewCustomDomainsClient(subscriptionID string) CustomDomainsClient {
 	return NewCustomDomainsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewCustomDomainsClientWithBaseURI creates an instance of the CustomDomainsClient client.
+// NewCustomDomainsClientWithBaseURI creates an instance of the CustomDomainsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewCustomDomainsClientWithBaseURI(baseURI string, subscriptionID string) CustomDomainsClient {
 	return CustomDomainsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,9 +114,8 @@ func (client CustomDomainsClient) CreatePreparer(ctx context.Context, resourceGr
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) CreateSender(req *http.Request) (future CustomDomainsCreateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -128,7 +128,6 @@ func (client CustomDomainsClient) CreateSender(req *http.Request) (future Custom
 func (client CustomDomainsClient) CreateResponder(resp *http.Response) (result CustomDomain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -202,9 +201,8 @@ func (client CustomDomainsClient) DeletePreparer(ctx context.Context, resourceGr
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) DeleteSender(req *http.Request) (future CustomDomainsDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -217,7 +215,6 @@ func (client CustomDomainsClient) DeleteSender(req *http.Request) (future Custom
 func (client CustomDomainsClient) DeleteResponder(resp *http.Response) (result CustomDomain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -297,8 +294,7 @@ func (client CustomDomainsClient) DisableCustomHTTPSPreparer(ctx context.Context
 // DisableCustomHTTPSSender sends the DisableCustomHTTPS request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) DisableCustomHTTPSSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableCustomHTTPSResponder handles the response to the DisableCustomHTTPS request. The method always
@@ -306,7 +302,6 @@ func (client CustomDomainsClient) DisableCustomHTTPSSender(req *http.Request) (*
 func (client CustomDomainsClient) DisableCustomHTTPSResponder(resp *http.Response) (result CustomDomain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -394,8 +389,7 @@ func (client CustomDomainsClient) EnableCustomHTTPSPreparer(ctx context.Context,
 // EnableCustomHTTPSSender sends the EnableCustomHTTPS request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) EnableCustomHTTPSSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // EnableCustomHTTPSResponder handles the response to the EnableCustomHTTPS request. The method always
@@ -403,7 +397,6 @@ func (client CustomDomainsClient) EnableCustomHTTPSSender(req *http.Request) (*h
 func (client CustomDomainsClient) EnableCustomHTTPSResponder(resp *http.Response) (result CustomDomain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -483,8 +476,7 @@ func (client CustomDomainsClient) GetPreparer(ctx context.Context, resourceGroup
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -492,7 +484,6 @@ func (client CustomDomainsClient) GetSender(req *http.Request) (*http.Response, 
 func (client CustomDomainsClient) GetResponder(resp *http.Response) (result CustomDomain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -542,6 +533,9 @@ func (client CustomDomainsClient) ListByEndpoint(ctx context.Context, resourceGr
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.CustomDomainsClient", "ListByEndpoint", resp, "Failure responding to request")
 	}
+	if result.cdlr.hasNextLink() && result.cdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -571,8 +565,7 @@ func (client CustomDomainsClient) ListByEndpointPreparer(ctx context.Context, re
 // ListByEndpointSender sends the ListByEndpoint request. The method will close the
 // http.Response Body if it receives an error.
 func (client CustomDomainsClient) ListByEndpointSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByEndpointResponder handles the response to the ListByEndpoint request. The method always
@@ -580,7 +573,6 @@ func (client CustomDomainsClient) ListByEndpointSender(req *http.Request) (*http
 func (client CustomDomainsClient) ListByEndpointResponder(resp *http.Response) (result CustomDomainListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

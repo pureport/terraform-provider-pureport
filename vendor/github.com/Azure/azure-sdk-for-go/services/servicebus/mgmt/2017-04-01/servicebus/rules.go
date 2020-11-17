@@ -36,7 +36,8 @@ func NewRulesClient(subscriptionID string) RulesClient {
 	return NewRulesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewRulesClientWithBaseURI creates an instance of the RulesClient client.
+// NewRulesClientWithBaseURI creates an instance of the RulesClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewRulesClientWithBaseURI(baseURI string, subscriptionID string) RulesClient {
 	return RulesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -137,8 +138,7 @@ func (client RulesClient) CreateOrUpdatePreparer(ctx context.Context, resourceGr
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client RulesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -146,7 +146,6 @@ func (client RulesClient) CreateOrUpdateSender(req *http.Request) (*http.Respons
 func (client RulesClient) CreateOrUpdateResponder(resp *http.Response) (result Rule, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -238,8 +237,7 @@ func (client RulesClient) DeletePreparer(ctx context.Context, resourceGroupName 
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client RulesClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -247,7 +245,6 @@ func (client RulesClient) DeleteSender(req *http.Request) (*http.Response, error
 func (client RulesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -338,8 +335,7 @@ func (client RulesClient) GetPreparer(ctx context.Context, resourceGroupName str
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client RulesClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -347,7 +343,6 @@ func (client RulesClient) GetSender(req *http.Request) (*http.Response, error) {
 func (client RulesClient) GetResponder(resp *http.Response) (result Rule, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -419,6 +414,9 @@ func (client RulesClient) ListBySubscriptions(ctx context.Context, resourceGroup
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicebus.RulesClient", "ListBySubscriptions", resp, "Failure responding to request")
 	}
+	if result.rlr.hasNextLink() && result.rlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -455,8 +453,7 @@ func (client RulesClient) ListBySubscriptionsPreparer(ctx context.Context, resou
 // ListBySubscriptionsSender sends the ListBySubscriptions request. The method will close the
 // http.Response Body if it receives an error.
 func (client RulesClient) ListBySubscriptionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionsResponder handles the response to the ListBySubscriptions request. The method always
@@ -464,7 +461,6 @@ func (client RulesClient) ListBySubscriptionsSender(req *http.Request) (*http.Re
 func (client RulesClient) ListBySubscriptionsResponder(resp *http.Response) (result RuleListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

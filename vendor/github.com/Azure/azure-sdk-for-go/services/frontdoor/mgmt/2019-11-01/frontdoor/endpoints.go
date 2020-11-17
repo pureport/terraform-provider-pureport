@@ -115,9 +115,8 @@ func (client EndpointsClient) PurgeContentPreparer(ctx context.Context, resource
 // PurgeContentSender sends the PurgeContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client EndpointsClient) PurgeContentSender(req *http.Request) (future EndpointsPurgeContentFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -130,7 +129,6 @@ func (client EndpointsClient) PurgeContentSender(req *http.Request) (future Endp
 func (client EndpointsClient) PurgeContentResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp

@@ -35,7 +35,9 @@ func NewAvailableServiceAliasesClient(subscriptionID string) AvailableServiceAli
 	return NewAvailableServiceAliasesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAvailableServiceAliasesClientWithBaseURI creates an instance of the AvailableServiceAliasesClient client.
+// NewAvailableServiceAliasesClientWithBaseURI creates an instance of the AvailableServiceAliasesClient client using a
+// custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds,
+// Azure stack).
 func NewAvailableServiceAliasesClientWithBaseURI(baseURI string, subscriptionID string) AvailableServiceAliasesClient {
 	return AvailableServiceAliasesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -72,6 +74,9 @@ func (client AvailableServiceAliasesClient) List(ctx context.Context, location s
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.AvailableServiceAliasesClient", "List", resp, "Failure responding to request")
 	}
+	if result.asar.hasNextLink() && result.asar.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -99,8 +104,7 @@ func (client AvailableServiceAliasesClient) ListPreparer(ctx context.Context, lo
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client AvailableServiceAliasesClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -108,7 +112,6 @@ func (client AvailableServiceAliasesClient) ListSender(req *http.Request) (*http
 func (client AvailableServiceAliasesClient) ListResponder(resp *http.Response) (result AvailableServiceAliasesResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -186,6 +189,9 @@ func (client AvailableServiceAliasesClient) ListByResourceGroup(ctx context.Cont
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.AvailableServiceAliasesClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.asar.hasNextLink() && result.asar.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -214,8 +220,7 @@ func (client AvailableServiceAliasesClient) ListByResourceGroupPreparer(ctx cont
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client AvailableServiceAliasesClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -223,7 +228,6 @@ func (client AvailableServiceAliasesClient) ListByResourceGroupSender(req *http.
 func (client AvailableServiceAliasesClient) ListByResourceGroupResponder(resp *http.Response) (result AvailableServiceAliasesResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
