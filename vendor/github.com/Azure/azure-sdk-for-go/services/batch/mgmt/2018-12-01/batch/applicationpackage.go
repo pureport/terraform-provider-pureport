@@ -36,7 +36,9 @@ func NewApplicationPackageClient(subscriptionID string) ApplicationPackageClient
 	return NewApplicationPackageClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewApplicationPackageClientWithBaseURI creates an instance of the ApplicationPackageClient client.
+// NewApplicationPackageClientWithBaseURI creates an instance of the ApplicationPackageClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewApplicationPackageClientWithBaseURI(baseURI string, subscriptionID string) ApplicationPackageClient {
 	return ApplicationPackageClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -126,8 +128,7 @@ func (client ApplicationPackageClient) ActivatePreparer(ctx context.Context, res
 // ActivateSender sends the Activate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationPackageClient) ActivateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ActivateResponder handles the response to the Activate request. The method always
@@ -135,7 +136,6 @@ func (client ApplicationPackageClient) ActivateSender(req *http.Request) (*http.
 func (client ApplicationPackageClient) ActivateResponder(resp *http.Response) (result ApplicationPackage, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -229,8 +229,7 @@ func (client ApplicationPackageClient) CreatePreparer(ctx context.Context, resou
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationPackageClient) CreateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -238,7 +237,6 @@ func (client ApplicationPackageClient) CreateSender(req *http.Request) (*http.Re
 func (client ApplicationPackageClient) CreateResponder(resp *http.Response) (result ApplicationPackage, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -326,8 +324,7 @@ func (client ApplicationPackageClient) DeletePreparer(ctx context.Context, resou
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationPackageClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -335,7 +332,6 @@ func (client ApplicationPackageClient) DeleteSender(req *http.Request) (*http.Re
 func (client ApplicationPackageClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -422,8 +418,7 @@ func (client ApplicationPackageClient) GetPreparer(ctx context.Context, resource
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationPackageClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -431,7 +426,6 @@ func (client ApplicationPackageClient) GetSender(req *http.Request) (*http.Respo
 func (client ApplicationPackageClient) GetResponder(resp *http.Response) (result ApplicationPackage, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -486,6 +480,9 @@ func (client ApplicationPackageClient) List(ctx context.Context, resourceGroupNa
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batch.ApplicationPackageClient", "List", resp, "Failure responding to request")
 	}
+	if result.lapr.hasNextLink() && result.lapr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -518,8 +515,7 @@ func (client ApplicationPackageClient) ListPreparer(ctx context.Context, resourc
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ApplicationPackageClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -527,7 +523,6 @@ func (client ApplicationPackageClient) ListSender(req *http.Request) (*http.Resp
 func (client ApplicationPackageClient) ListResponder(resp *http.Response) (result ListApplicationPackagesResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

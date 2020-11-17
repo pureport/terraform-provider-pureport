@@ -36,7 +36,8 @@ func NewIotHubResourceClient(subscriptionID string) IotHubResourceClient {
 	return NewIotHubResourceClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewIotHubResourceClientWithBaseURI creates an instance of the IotHubResourceClient client.
+// NewIotHubResourceClientWithBaseURI creates an instance of the IotHubResourceClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewIotHubResourceClientWithBaseURI(baseURI string, subscriptionID string) IotHubResourceClient {
 	return IotHubResourceClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -107,8 +108,7 @@ func (client IotHubResourceClient) CheckNameAvailabilityPreparer(ctx context.Con
 // CheckNameAvailabilitySender sends the CheckNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) CheckNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
@@ -116,7 +116,6 @@ func (client IotHubResourceClient) CheckNameAvailabilitySender(req *http.Request
 func (client IotHubResourceClient) CheckNameAvailabilityResponder(resp *http.Response) (result IotHubNameAvailabilityInfo, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -188,8 +187,7 @@ func (client IotHubResourceClient) CreateEventHubConsumerGroupPreparer(ctx conte
 // CreateEventHubConsumerGroupSender sends the CreateEventHubConsumerGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) CreateEventHubConsumerGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateEventHubConsumerGroupResponder handles the response to the CreateEventHubConsumerGroup request. The method always
@@ -197,7 +195,6 @@ func (client IotHubResourceClient) CreateEventHubConsumerGroupSender(req *http.R
 func (client IotHubResourceClient) CreateEventHubConsumerGroupResponder(resp *http.Response) (result EventHubConsumerGroupInfo, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -241,12 +238,12 @@ func (client IotHubResourceClient) CreateOrUpdate(ctx context.Context, resourceG
 					{Target: "iotHubDescription.Properties.CloudToDevice", Name: validation.Null, Rule: false,
 						Chain: []validation.Constraint{{Target: "iotHubDescription.Properties.CloudToDevice.MaxDeliveryCount", Name: validation.Null, Rule: false,
 							Chain: []validation.Constraint{{Target: "iotHubDescription.Properties.CloudToDevice.MaxDeliveryCount", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-								{Target: "iotHubDescription.Properties.CloudToDevice.MaxDeliveryCount", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+								{Target: "iotHubDescription.Properties.CloudToDevice.MaxDeliveryCount", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 							}},
 							{Target: "iotHubDescription.Properties.CloudToDevice.Feedback", Name: validation.Null, Rule: false,
 								Chain: []validation.Constraint{{Target: "iotHubDescription.Properties.CloudToDevice.Feedback.MaxDeliveryCount", Name: validation.Null, Rule: false,
 									Chain: []validation.Constraint{{Target: "iotHubDescription.Properties.CloudToDevice.Feedback.MaxDeliveryCount", Name: validation.InclusiveMaximum, Rule: int64(100), Chain: nil},
-										{Target: "iotHubDescription.Properties.CloudToDevice.Feedback.MaxDeliveryCount", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil},
+										{Target: "iotHubDescription.Properties.CloudToDevice.Feedback.MaxDeliveryCount", Name: validation.InclusiveMinimum, Rule: int64(1), Chain: nil},
 									}},
 								}},
 						}},
@@ -300,9 +297,8 @@ func (client IotHubResourceClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) CreateOrUpdateSender(req *http.Request) (future IotHubResourceCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -315,7 +311,6 @@ func (client IotHubResourceClient) CreateOrUpdateSender(req *http.Request) (futu
 func (client IotHubResourceClient) CreateOrUpdateResponder(resp *http.Response) (result IotHubDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -377,9 +372,8 @@ func (client IotHubResourceClient) DeletePreparer(ctx context.Context, resourceG
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) DeleteSender(req *http.Request) (future IotHubResourceDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -392,7 +386,6 @@ func (client IotHubResourceClient) DeleteSender(req *http.Request) (future IotHu
 func (client IotHubResourceClient) DeleteResponder(resp *http.Response) (result SetObject, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent, http.StatusNotFound),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -464,8 +457,7 @@ func (client IotHubResourceClient) DeleteEventHubConsumerGroupPreparer(ctx conte
 // DeleteEventHubConsumerGroupSender sends the DeleteEventHubConsumerGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) DeleteEventHubConsumerGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteEventHubConsumerGroupResponder handles the response to the DeleteEventHubConsumerGroup request. The method always
@@ -473,7 +465,6 @@ func (client IotHubResourceClient) DeleteEventHubConsumerGroupSender(req *http.R
 func (client IotHubResourceClient) DeleteEventHubConsumerGroupResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -552,8 +543,7 @@ func (client IotHubResourceClient) ExportDevicesPreparer(ctx context.Context, re
 // ExportDevicesSender sends the ExportDevices request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ExportDevicesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ExportDevicesResponder handles the response to the ExportDevices request. The method always
@@ -561,7 +551,6 @@ func (client IotHubResourceClient) ExportDevicesSender(req *http.Request) (*http
 func (client IotHubResourceClient) ExportDevicesResponder(resp *http.Response) (result JobResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -629,8 +618,7 @@ func (client IotHubResourceClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -638,7 +626,6 @@ func (client IotHubResourceClient) GetSender(req *http.Request) (*http.Response,
 func (client IotHubResourceClient) GetResponder(resp *http.Response) (result IotHubDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -676,6 +663,9 @@ func (client IotHubResourceClient) GetEndpointHealth(ctx context.Context, resour
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetEndpointHealth", resp, "Failure responding to request")
 	}
+	if result.ehdlr.hasNextLink() && result.ehdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -704,8 +694,7 @@ func (client IotHubResourceClient) GetEndpointHealthPreparer(ctx context.Context
 // GetEndpointHealthSender sends the GetEndpointHealth request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetEndpointHealthSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetEndpointHealthResponder handles the response to the GetEndpointHealth request. The method always
@@ -713,7 +702,6 @@ func (client IotHubResourceClient) GetEndpointHealthSender(req *http.Request) (*
 func (client IotHubResourceClient) GetEndpointHealthResponder(resp *http.Response) (result EndpointHealthDataListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -822,8 +810,7 @@ func (client IotHubResourceClient) GetEventHubConsumerGroupPreparer(ctx context.
 // GetEventHubConsumerGroupSender sends the GetEventHubConsumerGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetEventHubConsumerGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetEventHubConsumerGroupResponder handles the response to the GetEventHubConsumerGroup request. The method always
@@ -831,7 +818,6 @@ func (client IotHubResourceClient) GetEventHubConsumerGroupSender(req *http.Requ
 func (client IotHubResourceClient) GetEventHubConsumerGroupResponder(resp *http.Response) (result EventHubConsumerGroupInfo, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -902,8 +888,7 @@ func (client IotHubResourceClient) GetJobPreparer(ctx context.Context, resourceG
 // GetJobSender sends the GetJob request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetJobSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetJobResponder handles the response to the GetJob request. The method always
@@ -911,7 +896,6 @@ func (client IotHubResourceClient) GetJobSender(req *http.Request) (*http.Respon
 func (client IotHubResourceClient) GetJobResponder(resp *http.Response) (result JobResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -982,8 +966,7 @@ func (client IotHubResourceClient) GetKeysForKeyNamePreparer(ctx context.Context
 // GetKeysForKeyNameSender sends the GetKeysForKeyName request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetKeysForKeyNameSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetKeysForKeyNameResponder handles the response to the GetKeysForKeyName request. The method always
@@ -991,7 +974,6 @@ func (client IotHubResourceClient) GetKeysForKeyNameSender(req *http.Request) (*
 func (client IotHubResourceClient) GetKeysForKeyNameResponder(resp *http.Response) (result SharedAccessSignatureAuthorizationRule, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1032,6 +1014,9 @@ func (client IotHubResourceClient) GetQuotaMetrics(ctx context.Context, resource
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetQuotaMetrics", resp, "Failure responding to request")
 	}
+	if result.ihqmilr.hasNextLink() && result.ihqmilr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1060,8 +1045,7 @@ func (client IotHubResourceClient) GetQuotaMetricsPreparer(ctx context.Context, 
 // GetQuotaMetricsSender sends the GetQuotaMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetQuotaMetricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetQuotaMetricsResponder handles the response to the GetQuotaMetrics request. The method always
@@ -1069,7 +1053,6 @@ func (client IotHubResourceClient) GetQuotaMetricsSender(req *http.Request) (*ht
 func (client IotHubResourceClient) GetQuotaMetricsResponder(resp *http.Response) (result IotHubQuotaMetricInfoListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1174,8 +1157,7 @@ func (client IotHubResourceClient) GetStatsPreparer(ctx context.Context, resourc
 // GetStatsSender sends the GetStats request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetStatsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetStatsResponder handles the response to the GetStats request. The method always
@@ -1183,7 +1165,6 @@ func (client IotHubResourceClient) GetStatsSender(req *http.Request) (*http.Resp
 func (client IotHubResourceClient) GetStatsResponder(resp *http.Response) (result RegistryStatistics, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1224,6 +1205,9 @@ func (client IotHubResourceClient) GetValidSkus(ctx context.Context, resourceGro
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetValidSkus", resp, "Failure responding to request")
 	}
+	if result.ihsdlr.hasNextLink() && result.ihsdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1252,8 +1236,7 @@ func (client IotHubResourceClient) GetValidSkusPreparer(ctx context.Context, res
 // GetValidSkusSender sends the GetValidSkus request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) GetValidSkusSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetValidSkusResponder handles the response to the GetValidSkus request. The method always
@@ -1261,7 +1244,6 @@ func (client IotHubResourceClient) GetValidSkusSender(req *http.Request) (*http.
 func (client IotHubResourceClient) GetValidSkusResponder(resp *http.Response) (result IotHubSkuDescriptionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1378,8 +1360,7 @@ func (client IotHubResourceClient) ImportDevicesPreparer(ctx context.Context, re
 // ImportDevicesSender sends the ImportDevices request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ImportDevicesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ImportDevicesResponder handles the response to the ImportDevices request. The method always
@@ -1387,7 +1368,6 @@ func (client IotHubResourceClient) ImportDevicesSender(req *http.Request) (*http
 func (client IotHubResourceClient) ImportDevicesResponder(resp *http.Response) (result JobResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1427,6 +1407,9 @@ func (client IotHubResourceClient) ListByResourceGroup(ctx context.Context, reso
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.ihdlr.hasNextLink() && result.ihdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1454,8 +1437,7 @@ func (client IotHubResourceClient) ListByResourceGroupPreparer(ctx context.Conte
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -1463,7 +1445,6 @@ func (client IotHubResourceClient) ListByResourceGroupSender(req *http.Request) 
 func (client IotHubResourceClient) ListByResourceGroupResponder(resp *http.Response) (result IotHubDescriptionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1538,6 +1519,9 @@ func (client IotHubResourceClient) ListBySubscription(ctx context.Context) (resu
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "ListBySubscription", resp, "Failure responding to request")
 	}
+	if result.ihdlr.hasNextLink() && result.ihdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1564,8 +1548,7 @@ func (client IotHubResourceClient) ListBySubscriptionPreparer(ctx context.Contex
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -1573,7 +1556,6 @@ func (client IotHubResourceClient) ListBySubscriptionSender(req *http.Request) (
 func (client IotHubResourceClient) ListBySubscriptionResponder(resp *http.Response) (result IotHubDescriptionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1653,6 +1635,9 @@ func (client IotHubResourceClient) ListEventHubConsumerGroups(ctx context.Contex
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "ListEventHubConsumerGroups", resp, "Failure responding to request")
 	}
+	if result.ehcglr.hasNextLink() && result.ehcglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1682,8 +1667,7 @@ func (client IotHubResourceClient) ListEventHubConsumerGroupsPreparer(ctx contex
 // ListEventHubConsumerGroupsSender sends the ListEventHubConsumerGroups request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ListEventHubConsumerGroupsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListEventHubConsumerGroupsResponder handles the response to the ListEventHubConsumerGroups request. The method always
@@ -1691,7 +1675,6 @@ func (client IotHubResourceClient) ListEventHubConsumerGroupsSender(req *http.Re
 func (client IotHubResourceClient) ListEventHubConsumerGroupsResponder(resp *http.Response) (result EventHubConsumerGroupsListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1770,6 +1753,9 @@ func (client IotHubResourceClient) ListJobs(ctx context.Context, resourceGroupNa
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "ListJobs", resp, "Failure responding to request")
 	}
+	if result.jrlr.hasNextLink() && result.jrlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1798,8 +1784,7 @@ func (client IotHubResourceClient) ListJobsPreparer(ctx context.Context, resourc
 // ListJobsSender sends the ListJobs request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ListJobsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListJobsResponder handles the response to the ListJobs request. The method always
@@ -1807,7 +1792,6 @@ func (client IotHubResourceClient) ListJobsSender(req *http.Request) (*http.Resp
 func (client IotHubResourceClient) ListJobsResponder(resp *http.Response) (result JobResponseListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1886,6 +1870,9 @@ func (client IotHubResourceClient) ListKeys(ctx context.Context, resourceGroupNa
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "ListKeys", resp, "Failure responding to request")
 	}
+	if result.sasarlr.hasNextLink() && result.sasarlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1914,8 +1901,7 @@ func (client IotHubResourceClient) ListKeysPreparer(ctx context.Context, resourc
 // ListKeysSender sends the ListKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) ListKeysSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysResponder handles the response to the ListKeys request. The method always
@@ -1923,7 +1909,6 @@ func (client IotHubResourceClient) ListKeysSender(req *http.Request) (*http.Resp
 func (client IotHubResourceClient) ListKeysResponder(resp *http.Response) (result SharedAccessSignatureAuthorizationRuleListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2031,8 +2016,7 @@ func (client IotHubResourceClient) TestAllRoutesPreparer(ctx context.Context, in
 // TestAllRoutesSender sends the TestAllRoutes request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) TestAllRoutesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // TestAllRoutesResponder handles the response to the TestAllRoutes request. The method always
@@ -2040,7 +2024,6 @@ func (client IotHubResourceClient) TestAllRoutesSender(req *http.Request) (*http
 func (client IotHubResourceClient) TestAllRoutesResponder(resp *http.Response) (result TestAllRoutesResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2125,8 +2108,7 @@ func (client IotHubResourceClient) TestRoutePreparer(ctx context.Context, input 
 // TestRouteSender sends the TestRoute request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) TestRouteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // TestRouteResponder handles the response to the TestRoute request. The method always
@@ -2134,7 +2116,6 @@ func (client IotHubResourceClient) TestRouteSender(req *http.Request) (*http.Res
 func (client IotHubResourceClient) TestRouteResponder(resp *http.Response) (result TestRouteResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2199,9 +2180,8 @@ func (client IotHubResourceClient) UpdatePreparer(ctx context.Context, resourceG
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotHubResourceClient) UpdateSender(req *http.Request) (future IotHubResourceUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -2214,7 +2194,6 @@ func (client IotHubResourceClient) UpdateSender(req *http.Request) (future IotHu
 func (client IotHubResourceClient) UpdateResponder(resp *http.Response) (result IotHubDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

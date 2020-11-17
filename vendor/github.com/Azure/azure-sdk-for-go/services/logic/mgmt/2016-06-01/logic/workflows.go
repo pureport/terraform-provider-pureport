@@ -35,7 +35,8 @@ func NewWorkflowsClient(subscriptionID string) WorkflowsClient {
 	return NewWorkflowsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewWorkflowsClientWithBaseURI creates an instance of the WorkflowsClient client.
+// NewWorkflowsClientWithBaseURI creates an instance of the WorkflowsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWorkflowsClientWithBaseURI(baseURI string, subscriptionID string) WorkflowsClient {
 	return WorkflowsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -103,8 +104,7 @@ func (client WorkflowsClient) CreateOrUpdatePreparer(ctx context.Context, resour
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -112,7 +112,6 @@ func (client WorkflowsClient) CreateOrUpdateSender(req *http.Request) (*http.Res
 func (client WorkflowsClient) CreateOrUpdateResponder(resp *http.Response) (result Workflow, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -180,8 +179,7 @@ func (client WorkflowsClient) DeletePreparer(ctx context.Context, resourceGroupN
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -189,7 +187,6 @@ func (client WorkflowsClient) DeleteSender(req *http.Request) (*http.Response, e
 func (client WorkflowsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -256,8 +253,7 @@ func (client WorkflowsClient) DisablePreparer(ctx context.Context, resourceGroup
 // DisableSender sends the Disable request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) DisableSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableResponder handles the response to the Disable request. The method always
@@ -265,7 +261,6 @@ func (client WorkflowsClient) DisableSender(req *http.Request) (*http.Response, 
 func (client WorkflowsClient) DisableResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -332,8 +327,7 @@ func (client WorkflowsClient) EnablePreparer(ctx context.Context, resourceGroupN
 // EnableSender sends the Enable request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) EnableSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // EnableResponder handles the response to the Enable request. The method always
@@ -341,7 +335,6 @@ func (client WorkflowsClient) EnableSender(req *http.Request) (*http.Response, e
 func (client WorkflowsClient) EnableResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -411,8 +404,7 @@ func (client WorkflowsClient) GenerateUpgradedDefinitionPreparer(ctx context.Con
 // GenerateUpgradedDefinitionSender sends the GenerateUpgradedDefinition request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) GenerateUpgradedDefinitionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GenerateUpgradedDefinitionResponder handles the response to the GenerateUpgradedDefinition request. The method always
@@ -420,7 +412,6 @@ func (client WorkflowsClient) GenerateUpgradedDefinitionSender(req *http.Request
 func (client WorkflowsClient) GenerateUpgradedDefinitionResponder(resp *http.Response) (result SetObject, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -488,8 +479,7 @@ func (client WorkflowsClient) GetPreparer(ctx context.Context, resourceGroupName
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -497,7 +487,6 @@ func (client WorkflowsClient) GetSender(req *http.Request) (*http.Response, erro
 func (client WorkflowsClient) GetResponder(resp *http.Response) (result Workflow, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -540,6 +529,9 @@ func (client WorkflowsClient) ListByResourceGroup(ctx context.Context, resourceG
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.wlr.hasNextLink() && result.wlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -573,8 +565,7 @@ func (client WorkflowsClient) ListByResourceGroupPreparer(ctx context.Context, r
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -582,7 +573,6 @@ func (client WorkflowsClient) ListByResourceGroupSender(req *http.Request) (*htt
 func (client WorkflowsClient) ListByResourceGroupResponder(resp *http.Response) (result WorkflowListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -661,6 +651,9 @@ func (client WorkflowsClient) ListBySubscription(ctx context.Context, top *int32
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "ListBySubscription", resp, "Failure responding to request")
 	}
+	if result.wlr.hasNextLink() && result.wlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -693,8 +686,7 @@ func (client WorkflowsClient) ListBySubscriptionPreparer(ctx context.Context, to
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -702,7 +694,6 @@ func (client WorkflowsClient) ListBySubscriptionSender(req *http.Request) (*http
 func (client WorkflowsClient) ListBySubscriptionResponder(resp *http.Response) (result WorkflowListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -810,8 +801,7 @@ func (client WorkflowsClient) ListCallbackURLPreparer(ctx context.Context, resou
 // ListCallbackURLSender sends the ListCallbackURL request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) ListCallbackURLSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListCallbackURLResponder handles the response to the ListCallbackURL request. The method always
@@ -819,7 +809,6 @@ func (client WorkflowsClient) ListCallbackURLSender(req *http.Request) (*http.Re
 func (client WorkflowsClient) ListCallbackURLResponder(resp *http.Response) (result WorkflowTriggerCallbackURL, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -887,8 +876,7 @@ func (client WorkflowsClient) ListSwaggerPreparer(ctx context.Context, resourceG
 // ListSwaggerSender sends the ListSwagger request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) ListSwaggerSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSwaggerResponder handles the response to the ListSwagger request. The method always
@@ -896,7 +884,6 @@ func (client WorkflowsClient) ListSwaggerSender(req *http.Request) (*http.Respon
 func (client WorkflowsClient) ListSwaggerResponder(resp *http.Response) (result SetObject, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -967,8 +954,7 @@ func (client WorkflowsClient) MovePreparer(ctx context.Context, resourceGroupNam
 // MoveSender sends the Move request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) MoveSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // MoveResponder handles the response to the Move request. The method always
@@ -976,7 +962,6 @@ func (client WorkflowsClient) MoveSender(req *http.Request) (*http.Response, err
 func (client WorkflowsClient) MoveResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1046,8 +1031,7 @@ func (client WorkflowsClient) RegenerateAccessKeyPreparer(ctx context.Context, r
 // RegenerateAccessKeySender sends the RegenerateAccessKey request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) RegenerateAccessKeySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RegenerateAccessKeyResponder handles the response to the RegenerateAccessKey request. The method always
@@ -1055,7 +1039,6 @@ func (client WorkflowsClient) RegenerateAccessKeySender(req *http.Request) (*htt
 func (client WorkflowsClient) RegenerateAccessKeyResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1125,8 +1108,7 @@ func (client WorkflowsClient) UpdatePreparer(ctx context.Context, resourceGroupN
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -1134,7 +1116,6 @@ func (client WorkflowsClient) UpdateSender(req *http.Request) (*http.Response, e
 func (client WorkflowsClient) UpdateResponder(resp *http.Response) (result Workflow, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1207,8 +1188,7 @@ func (client WorkflowsClient) ValidatePreparer(ctx context.Context, resourceGrou
 // ValidateSender sends the Validate request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) ValidateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ValidateResponder handles the response to the Validate request. The method always
@@ -1216,7 +1196,6 @@ func (client WorkflowsClient) ValidateSender(req *http.Request) (*http.Response,
 func (client WorkflowsClient) ValidateResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1286,8 +1265,7 @@ func (client WorkflowsClient) ValidateWorkflowPreparer(ctx context.Context, reso
 // ValidateWorkflowSender sends the ValidateWorkflow request. The method will close the
 // http.Response Body if it receives an error.
 func (client WorkflowsClient) ValidateWorkflowSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ValidateWorkflowResponder handles the response to the ValidateWorkflow request. The method always
@@ -1295,7 +1273,6 @@ func (client WorkflowsClient) ValidateWorkflowSender(req *http.Request) (*http.R
 func (client WorkflowsClient) ValidateWorkflowResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp

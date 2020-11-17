@@ -35,7 +35,9 @@ func NewReplicationvCentersClient(subscriptionID string, resourceGroupName strin
 	return NewReplicationvCentersClientWithBaseURI(DefaultBaseURI, subscriptionID, resourceGroupName, resourceName)
 }
 
-// NewReplicationvCentersClientWithBaseURI creates an instance of the ReplicationvCentersClient client.
+// NewReplicationvCentersClientWithBaseURI creates an instance of the ReplicationvCentersClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewReplicationvCentersClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) ReplicationvCentersClient {
 	return ReplicationvCentersClient{NewWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)}
 }
@@ -99,9 +101,8 @@ func (client ReplicationvCentersClient) CreatePreparer(ctx context.Context, fabr
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicationvCentersClient) CreateSender(req *http.Request) (future ReplicationvCentersCreateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -114,7 +115,6 @@ func (client ReplicationvCentersClient) CreateSender(req *http.Request) (future 
 func (client ReplicationvCentersClient) CreateResponder(resp *http.Response) (result VCenter, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -178,9 +178,8 @@ func (client ReplicationvCentersClient) DeletePreparer(ctx context.Context, fabr
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicationvCentersClient) DeleteSender(req *http.Request) (future ReplicationvCentersDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -193,7 +192,6 @@ func (client ReplicationvCentersClient) DeleteSender(req *http.Request) (future 
 func (client ReplicationvCentersClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -262,8 +260,7 @@ func (client ReplicationvCentersClient) GetPreparer(ctx context.Context, fabricN
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicationvCentersClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -271,7 +268,6 @@ func (client ReplicationvCentersClient) GetSender(req *http.Request) (*http.Resp
 func (client ReplicationvCentersClient) GetResponder(resp *http.Response) (result VCenter, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -309,6 +305,9 @@ func (client ReplicationvCentersClient) List(ctx context.Context) (result VCente
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationvCentersClient", "List", resp, "Failure responding to request")
 	}
+	if result.vcc.hasNextLink() && result.vcc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -337,8 +336,7 @@ func (client ReplicationvCentersClient) ListPreparer(ctx context.Context) (*http
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicationvCentersClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -346,7 +344,6 @@ func (client ReplicationvCentersClient) ListSender(req *http.Request) (*http.Res
 func (client ReplicationvCentersClient) ListResponder(resp *http.Response) (result VCenterCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -423,6 +420,9 @@ func (client ReplicationvCentersClient) ListByReplicationFabrics(ctx context.Con
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationvCentersClient", "ListByReplicationFabrics", resp, "Failure responding to request")
 	}
+	if result.vcc.hasNextLink() && result.vcc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -452,8 +452,7 @@ func (client ReplicationvCentersClient) ListByReplicationFabricsPreparer(ctx con
 // ListByReplicationFabricsSender sends the ListByReplicationFabrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicationvCentersClient) ListByReplicationFabricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByReplicationFabricsResponder handles the response to the ListByReplicationFabrics request. The method always
@@ -461,7 +460,6 @@ func (client ReplicationvCentersClient) ListByReplicationFabricsSender(req *http
 func (client ReplicationvCentersClient) ListByReplicationFabricsResponder(resp *http.Response) (result VCenterCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -565,9 +563,8 @@ func (client ReplicationvCentersClient) UpdatePreparer(ctx context.Context, fabr
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client ReplicationvCentersClient) UpdateSender(req *http.Request) (future ReplicationvCentersUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -580,7 +577,6 @@ func (client ReplicationvCentersClient) UpdateSender(req *http.Request) (future 
 func (client ReplicationvCentersClient) UpdateResponder(resp *http.Response) (result VCenter, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

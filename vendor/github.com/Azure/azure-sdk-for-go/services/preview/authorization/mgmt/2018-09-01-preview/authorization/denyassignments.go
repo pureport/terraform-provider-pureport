@@ -35,7 +35,8 @@ func NewDenyAssignmentsClient(subscriptionID string) DenyAssignmentsClient {
 	return NewDenyAssignmentsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDenyAssignmentsClientWithBaseURI creates an instance of the DenyAssignmentsClient client.
+// NewDenyAssignmentsClientWithBaseURI creates an instance of the DenyAssignmentsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDenyAssignmentsClientWithBaseURI(baseURI string, subscriptionID string) DenyAssignmentsClient {
 	return DenyAssignmentsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -99,8 +100,7 @@ func (client DenyAssignmentsClient) GetPreparer(ctx context.Context, scope strin
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DenyAssignmentsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -108,7 +108,6 @@ func (client DenyAssignmentsClient) GetSender(req *http.Request) (*http.Response
 func (client DenyAssignmentsClient) GetResponder(resp *http.Response) (result DenyAssignment, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -176,8 +175,7 @@ func (client DenyAssignmentsClient) GetByIDPreparer(ctx context.Context, denyAss
 // GetByIDSender sends the GetByID request. The method will close the
 // http.Response Body if it receives an error.
 func (client DenyAssignmentsClient) GetByIDSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetByIDResponder handles the response to the GetByID request. The method always
@@ -185,7 +183,6 @@ func (client DenyAssignmentsClient) GetByIDSender(req *http.Request) (*http.Resp
 func (client DenyAssignmentsClient) GetByIDResponder(resp *http.Response) (result DenyAssignment, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -233,6 +230,9 @@ func (client DenyAssignmentsClient) List(ctx context.Context, filter string) (re
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authorization.DenyAssignmentsClient", "List", resp, "Failure responding to request")
 	}
+	if result.dalr.hasNextLink() && result.dalr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -262,8 +262,7 @@ func (client DenyAssignmentsClient) ListPreparer(ctx context.Context, filter str
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client DenyAssignmentsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -271,7 +270,6 @@ func (client DenyAssignmentsClient) ListSender(req *http.Request) (*http.Respons
 func (client DenyAssignmentsClient) ListResponder(resp *http.Response) (result DenyAssignmentListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -361,6 +359,9 @@ func (client DenyAssignmentsClient) ListForResource(ctx context.Context, resourc
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authorization.DenyAssignmentsClient", "ListForResource", resp, "Failure responding to request")
 	}
+	if result.dalr.hasNextLink() && result.dalr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -395,8 +396,7 @@ func (client DenyAssignmentsClient) ListForResourcePreparer(ctx context.Context,
 // ListForResourceSender sends the ListForResource request. The method will close the
 // http.Response Body if it receives an error.
 func (client DenyAssignmentsClient) ListForResourceSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListForResourceResponder handles the response to the ListForResource request. The method always
@@ -404,7 +404,6 @@ func (client DenyAssignmentsClient) ListForResourceSender(req *http.Request) (*h
 func (client DenyAssignmentsClient) ListForResourceResponder(resp *http.Response) (result DenyAssignmentListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -490,6 +489,9 @@ func (client DenyAssignmentsClient) ListForResourceGroup(ctx context.Context, re
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authorization.DenyAssignmentsClient", "ListForResourceGroup", resp, "Failure responding to request")
 	}
+	if result.dalr.hasNextLink() && result.dalr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -520,8 +522,7 @@ func (client DenyAssignmentsClient) ListForResourceGroupPreparer(ctx context.Con
 // ListForResourceGroupSender sends the ListForResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client DenyAssignmentsClient) ListForResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListForResourceGroupResponder handles the response to the ListForResourceGroup request. The method always
@@ -529,7 +530,6 @@ func (client DenyAssignmentsClient) ListForResourceGroupSender(req *http.Request
 func (client DenyAssignmentsClient) ListForResourceGroupResponder(resp *http.Response) (result DenyAssignmentListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -615,6 +615,9 @@ func (client DenyAssignmentsClient) ListForScope(ctx context.Context, scope stri
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authorization.DenyAssignmentsClient", "ListForScope", resp, "Failure responding to request")
 	}
+	if result.dalr.hasNextLink() && result.dalr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -644,8 +647,7 @@ func (client DenyAssignmentsClient) ListForScopePreparer(ctx context.Context, sc
 // ListForScopeSender sends the ListForScope request. The method will close the
 // http.Response Body if it receives an error.
 func (client DenyAssignmentsClient) ListForScopeSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListForScopeResponder handles the response to the ListForScope request. The method always
@@ -653,7 +655,6 @@ func (client DenyAssignmentsClient) ListForScopeSender(req *http.Request) (*http
 func (client DenyAssignmentsClient) ListForScopeResponder(resp *http.Response) (result DenyAssignmentListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -100,6 +100,32 @@ resource "pureport_azure_connection" "main" {
 	return fmt.Sprintf(format, connection_name)
 }
 
+func testAccResourceAzureConnectionConfig_invalid_ha() string {
+	format := `
+resource "pureport_azure_connection" "main" {
+  name = "%s"
+  description = "Some random description"
+  speed = "100"
+  high_availability = false
+
+  location_href = "location/blah"
+  network_href = "network/blah"
+
+  service_key = "some-key"
+
+  tags = {
+    Environment = "tf-test"
+    Owner       = "ksk-azure"
+    sweep       = "TRUE"
+  }
+}
+`
+
+	connection_name := acctest.RandomWithPrefix("AzureExpressRouteTest")
+
+	return fmt.Sprintf(format, connection_name)
+}
+
 func TestResourceAzureConnection_basic(t *testing.T) {
 
 	resourceName := "pureport_azure_connection.main"
@@ -155,6 +181,21 @@ func TestResourceAzureConnection_basic(t *testing.T) {
 						resource.TestCheckResourceAttr(resourceName, "tags.Owner", "ksk-azure"),
 					),
 				),
+			},
+		},
+	})
+}
+
+func TestResourceAzureConnection_invalid_ha(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		IsUnitTest:   true,
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckAzureConnectionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccResourceAzureConnectionConfig_invalid_ha(),
+				ExpectError: regexp.MustCompile("Cloud Connection with high availability required for speeds greater than 50Mbps"),
 			},
 		},
 	})

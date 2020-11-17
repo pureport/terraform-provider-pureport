@@ -1,0 +1,21 @@
+{
+    "resource": {
+        "pureport_network": {
+            "ksk-google": {
+                "name": "AUTO-1-20-04-15-19-20-48-ksk",
+                "account_href": "/accounts/ac-ZrSRwTYsajrvPHL8tngI7w",
+                "description": "Auto-ksk"
+            }
+        },
+        "pureport_google_cloud_connection": {
+            "ksk-google-cloud-1": {
+                "name": "ksk-google-cloud-1",
+                "speed": 50,
+                "high_availability": false,
+                "location_href": "/locations/virt-region1",
+                "network_href": "${pureport_network.ksk-google.href}",
+                "primary_pairing_key": "f0ba459c-f65a-428a-84db-3ef2fc81ee8a/us-west1/1"
+            }
+        }
+    }
+}

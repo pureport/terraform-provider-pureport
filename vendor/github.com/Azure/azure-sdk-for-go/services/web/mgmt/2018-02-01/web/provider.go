@@ -35,7 +35,8 @@ func NewProviderClient(subscriptionID string) ProviderClient {
 	return NewProviderClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewProviderClientWithBaseURI creates an instance of the ProviderClient client.
+// NewProviderClientWithBaseURI creates an instance of the ProviderClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewProviderClientWithBaseURI(baseURI string, subscriptionID string) ProviderClient {
 	return ProviderClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -70,6 +71,9 @@ func (client ProviderClient) GetAvailableStacks(ctx context.Context, osTypeSelec
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.ProviderClient", "GetAvailableStacks", resp, "Failure responding to request")
 	}
+	if result.asc.hasNextLink() && result.asc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -95,8 +99,7 @@ func (client ProviderClient) GetAvailableStacksPreparer(ctx context.Context, osT
 // GetAvailableStacksSender sends the GetAvailableStacks request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProviderClient) GetAvailableStacksSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // GetAvailableStacksResponder handles the response to the GetAvailableStacks request. The method always
@@ -104,7 +107,6 @@ func (client ProviderClient) GetAvailableStacksSender(req *http.Request) (*http.
 func (client ProviderClient) GetAvailableStacksResponder(resp *http.Response) (result ApplicationStackCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -179,6 +181,9 @@ func (client ProviderClient) GetAvailableStacksOnPrem(ctx context.Context, osTyp
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.ProviderClient", "GetAvailableStacksOnPrem", resp, "Failure responding to request")
 	}
+	if result.asc.hasNextLink() && result.asc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -208,8 +213,7 @@ func (client ProviderClient) GetAvailableStacksOnPremPreparer(ctx context.Contex
 // GetAvailableStacksOnPremSender sends the GetAvailableStacksOnPrem request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProviderClient) GetAvailableStacksOnPremSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetAvailableStacksOnPremResponder handles the response to the GetAvailableStacksOnPrem request. The method always
@@ -217,7 +221,6 @@ func (client ProviderClient) GetAvailableStacksOnPremSender(req *http.Request) (
 func (client ProviderClient) GetAvailableStacksOnPremResponder(resp *http.Response) (result ApplicationStackCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -293,6 +296,9 @@ func (client ProviderClient) ListOperations(ctx context.Context) (result CsmOper
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.ProviderClient", "ListOperations", resp, "Failure responding to request")
 	}
+	if result.coc.hasNextLink() && result.coc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -315,8 +321,7 @@ func (client ProviderClient) ListOperationsPreparer(ctx context.Context) (*http.
 // ListOperationsSender sends the ListOperations request. The method will close the
 // http.Response Body if it receives an error.
 func (client ProviderClient) ListOperationsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListOperationsResponder handles the response to the ListOperations request. The method always
@@ -324,7 +329,6 @@ func (client ProviderClient) ListOperationsSender(req *http.Request) (*http.Resp
 func (client ProviderClient) ListOperationsResponder(resp *http.Response) (result CsmOperationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"regexp"
 	"sort"
 	"time"
 
@@ -20,6 +21,7 @@ const (
 	AwsConnectionName     = "AWS Cloud Connection"
 	AzureConnectionName   = "Azure Cloud Connection"
 	GoogleConnectionName  = "Google Cloud Connection"
+	OracleConnectionName  = "Oracle Cloud Connection"
 	SiteVPNConnectionName = "SiteVPN Connection"
 
 	CreateTimeout = 15 * time.Minute
@@ -146,6 +148,22 @@ var (
 			Computed: true,
 		},
 	}
+
+	BGPPeerSchema = map[string]*schema.Schema{
+		"pureport_subnet": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"customer_subnet": {
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"availability_domain": {
+			Type:         schema.TypeString,
+			Required:     true,
+			ValidateFunc: validation.StringMatch(regexp.MustCompile(`^(PRIMARY|SECONDARY)$`), "Must be a valid availability domain."),
+		},
+	}
 )
 
 func GetBaseResourceConnectionSchema() map[string]*schema.Schema {
@@ -170,6 +188,7 @@ func GetBaseResourceConnectionSchema() map[string]*schema.Schema {
 		"network_href": {
 			Type:     schema.TypeString,
 			Required: true,
+			ForceNew: true,
 		},
 		"description": {
 			Type:     schema.TypeString,
@@ -187,7 +206,7 @@ func GetBaseResourceConnectionSchema() map[string]*schema.Schema {
 					"address": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.CIDRNetwork(16, 32),
+						ValidateFunc: validation.IsCIDRNetwork(16, 32),
 					},
 				},
 			},
@@ -393,7 +412,7 @@ func FlattenVpnGateway(gateway *client.VpnGateway) (out map[string]interface{}) 
 		"customer_vti_ip":     gateway.CustomerVtiIP,
 		"pureport_gateway_ip": gateway.PureportGatewayIP,
 		"pureport_vti_ip":     gateway.PureportVtiIP,
-		"vpn_auth_type":       gateway.Auth.Type_,
+		"vpn_auth_type":       gateway.Auth.Type,
 		"vpn_auth_key":        gateway.Auth.Key,
 		"customer_asn":        0,
 		"customer_ip":         "",
@@ -491,7 +510,7 @@ func WaitForConnection(name string, d *schema.ResourceData, m interface{}) error
 
 		},
 		Timeout:                   d.Timeout(schema.TimeoutCreate),
-		Delay:                     5 * time.Second,
+		Delay:                     20 * time.Second,
 		MinTimeout:                5 * time.Second,
 		ContinuousTargetOccurence: 2,
 	}
@@ -547,7 +566,7 @@ func DeleteConnection(name string, d *schema.ResourceData, m interface{}) error 
 
 		},
 		Timeout:                   d.Timeout(schema.TimeoutDelete),
-		Delay:                     5 * time.Second,
+		Delay:                     1 * time.Second,
 		MinTimeout:                1 * time.Second,
 		ContinuousTargetOccurence: 2,
 	}
@@ -599,8 +618,8 @@ func DeleteConnection(name string, d *schema.ResourceData, m interface{}) error 
 
 		},
 		Timeout:                   d.Timeout(schema.TimeoutDelete),
-		Delay:                     5 * time.Second,
-		MinTimeout:                1 * time.Second,
+		Delay:                     20 * time.Second,
+		MinTimeout:                5 * time.Second,
 		ContinuousTargetOccurence: 2,
 	}
 
@@ -689,10 +708,25 @@ func ExpandPeeringType(d *schema.ResourceData) *client.PeeringConfiguration {
 	peeringConfig := &client.PeeringConfiguration{}
 
 	if data, ok := d.GetOk("peering_type"); ok {
-		peeringConfig.Type_ = data.(string)
+		peeringConfig.Type = data.(string)
 	} else {
-		peeringConfig.Type_ = "Private"
+		peeringConfig.Type = "Private"
 	}
 
 	return peeringConfig
+}
+
+func CloudResourceDiff(d *schema.ResourceDiff) error {
+	speed := d.Get("speed").(int)
+
+	highAvailability := false
+	if v, ok := d.GetOk("high_availability"); ok {
+		highAvailability = v.(bool)
+	}
+
+	if !highAvailability && speed > 50 {
+		return fmt.Errorf("Cloud Connection with high availability required for speeds greater than 50Mbps")
+	}
+
+	return nil
 }

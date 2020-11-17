@@ -36,7 +36,9 @@ func NewAppServiceEnvironmentsClient(subscriptionID string) AppServiceEnvironmen
 	return NewAppServiceEnvironmentsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAppServiceEnvironmentsClientWithBaseURI creates an instance of the AppServiceEnvironmentsClient client.
+// NewAppServiceEnvironmentsClientWithBaseURI creates an instance of the AppServiceEnvironmentsClient client using a
+// custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds,
+// Azure stack).
 func NewAppServiceEnvironmentsClientWithBaseURI(baseURI string, subscriptionID string) AppServiceEnvironmentsClient {
 	return AppServiceEnvironmentsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -108,9 +110,8 @@ func (client AppServiceEnvironmentsClient) ChangeVnetPreparer(ctx context.Contex
 // ChangeVnetSender sends the ChangeVnet request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ChangeVnetSender(req *http.Request) (future AppServiceEnvironmentsChangeVnetFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -129,7 +130,6 @@ func (client AppServiceEnvironmentsClient) ChangeVnetResponder(resp *http.Respon
 func (client AppServiceEnvironmentsClient) changeVnetResponder(resp *http.Response) (result AppCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -147,8 +147,7 @@ func (client AppServiceEnvironmentsClient) changeVnetNextResults(ctx context.Con
 		return
 	}
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "changeVnetNextResults", resp, "Failure sending next results request")
 	}
@@ -245,9 +244,8 @@ func (client AppServiceEnvironmentsClient) CreateOrUpdatePreparer(ctx context.Co
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) CreateOrUpdateSender(req *http.Request) (future AppServiceEnvironmentsCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -260,7 +258,6 @@ func (client AppServiceEnvironmentsClient) CreateOrUpdateSender(req *http.Reques
 func (client AppServiceEnvironmentsClient) CreateOrUpdateResponder(resp *http.Response) (result AppServiceEnvironmentResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -333,9 +330,8 @@ func (client AppServiceEnvironmentsClient) CreateOrUpdateMultiRolePoolPreparer(c
 // CreateOrUpdateMultiRolePoolSender sends the CreateOrUpdateMultiRolePool request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) CreateOrUpdateMultiRolePoolSender(req *http.Request) (future AppServiceEnvironmentsCreateOrUpdateMultiRolePoolFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -348,7 +344,6 @@ func (client AppServiceEnvironmentsClient) CreateOrUpdateMultiRolePoolSender(req
 func (client AppServiceEnvironmentsClient) CreateOrUpdateMultiRolePoolResponder(resp *http.Response) (result WorkerPoolResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -423,9 +418,8 @@ func (client AppServiceEnvironmentsClient) CreateOrUpdateWorkerPoolPreparer(ctx 
 // CreateOrUpdateWorkerPoolSender sends the CreateOrUpdateWorkerPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) CreateOrUpdateWorkerPoolSender(req *http.Request) (future AppServiceEnvironmentsCreateOrUpdateWorkerPoolFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -438,7 +432,6 @@ func (client AppServiceEnvironmentsClient) CreateOrUpdateWorkerPoolSender(req *h
 func (client AppServiceEnvironmentsClient) CreateOrUpdateWorkerPoolResponder(resp *http.Response) (result WorkerPoolResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -513,9 +506,8 @@ func (client AppServiceEnvironmentsClient) DeletePreparer(ctx context.Context, r
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) DeleteSender(req *http.Request) (future AppServiceEnvironmentsDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -528,7 +520,6 @@ func (client AppServiceEnvironmentsClient) DeleteSender(req *http.Request) (futu
 func (client AppServiceEnvironmentsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByClosing())
 	result.Response = resp
@@ -603,8 +594,7 @@ func (client AppServiceEnvironmentsClient) GetPreparer(ctx context.Context, reso
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -612,7 +602,6 @@ func (client AppServiceEnvironmentsClient) GetSender(req *http.Request) (*http.R
 func (client AppServiceEnvironmentsClient) GetResponder(resp *http.Response) (result AppServiceEnvironmentResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -690,8 +679,7 @@ func (client AppServiceEnvironmentsClient) GetDiagnosticsItemPreparer(ctx contex
 // GetDiagnosticsItemSender sends the GetDiagnosticsItem request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) GetDiagnosticsItemSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetDiagnosticsItemResponder handles the response to the GetDiagnosticsItem request. The method always
@@ -699,7 +687,6 @@ func (client AppServiceEnvironmentsClient) GetDiagnosticsItemSender(req *http.Re
 func (client AppServiceEnvironmentsClient) GetDiagnosticsItemResponder(resp *http.Response) (result HostingEnvironmentDiagnostics, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -749,6 +736,9 @@ func (client AppServiceEnvironmentsClient) GetInboundNetworkDependenciesEndpoint
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "GetInboundNetworkDependenciesEndpoints", resp, "Failure responding to request")
 	}
+	if result.ieec.hasNextLink() && result.ieec.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -777,8 +767,7 @@ func (client AppServiceEnvironmentsClient) GetInboundNetworkDependenciesEndpoint
 // GetInboundNetworkDependenciesEndpointsSender sends the GetInboundNetworkDependenciesEndpoints request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) GetInboundNetworkDependenciesEndpointsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetInboundNetworkDependenciesEndpointsResponder handles the response to the GetInboundNetworkDependenciesEndpoints request. The method always
@@ -786,7 +775,6 @@ func (client AppServiceEnvironmentsClient) GetInboundNetworkDependenciesEndpoint
 func (client AppServiceEnvironmentsClient) GetInboundNetworkDependenciesEndpointsResponder(resp *http.Response) (result InboundEnvironmentEndpointCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -899,8 +887,7 @@ func (client AppServiceEnvironmentsClient) GetMultiRolePoolPreparer(ctx context.
 // GetMultiRolePoolSender sends the GetMultiRolePool request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) GetMultiRolePoolSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetMultiRolePoolResponder handles the response to the GetMultiRolePool request. The method always
@@ -908,7 +895,6 @@ func (client AppServiceEnvironmentsClient) GetMultiRolePoolSender(req *http.Requ
 func (client AppServiceEnvironmentsClient) GetMultiRolePoolResponder(resp *http.Response) (result WorkerPoolResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -958,6 +944,9 @@ func (client AppServiceEnvironmentsClient) GetOutboundNetworkDependenciesEndpoin
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "GetOutboundNetworkDependenciesEndpoints", resp, "Failure responding to request")
 	}
+	if result.oeec.hasNextLink() && result.oeec.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -986,8 +975,7 @@ func (client AppServiceEnvironmentsClient) GetOutboundNetworkDependenciesEndpoin
 // GetOutboundNetworkDependenciesEndpointsSender sends the GetOutboundNetworkDependenciesEndpoints request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) GetOutboundNetworkDependenciesEndpointsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetOutboundNetworkDependenciesEndpointsResponder handles the response to the GetOutboundNetworkDependenciesEndpoints request. The method always
@@ -995,7 +983,6 @@ func (client AppServiceEnvironmentsClient) GetOutboundNetworkDependenciesEndpoin
 func (client AppServiceEnvironmentsClient) GetOutboundNetworkDependenciesEndpointsResponder(resp *http.Response) (result OutboundEnvironmentEndpointCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1110,8 +1097,7 @@ func (client AppServiceEnvironmentsClient) GetWorkerPoolPreparer(ctx context.Con
 // GetWorkerPoolSender sends the GetWorkerPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) GetWorkerPoolSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetWorkerPoolResponder handles the response to the GetWorkerPool request. The method always
@@ -1119,7 +1105,6 @@ func (client AppServiceEnvironmentsClient) GetWorkerPoolSender(req *http.Request
 func (client AppServiceEnvironmentsClient) GetWorkerPoolResponder(resp *http.Response) (result WorkerPoolResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1157,6 +1142,9 @@ func (client AppServiceEnvironmentsClient) List(ctx context.Context) (result App
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "List", resp, "Failure responding to request")
 	}
+	if result.asec.hasNextLink() && result.asec.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1183,8 +1171,7 @@ func (client AppServiceEnvironmentsClient) ListPreparer(ctx context.Context) (*h
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -1192,7 +1179,6 @@ func (client AppServiceEnvironmentsClient) ListSender(req *http.Request) (*http.
 func (client AppServiceEnvironmentsClient) ListResponder(resp *http.Response) (result AppServiceEnvironmentCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1278,6 +1264,9 @@ func (client AppServiceEnvironmentsClient) ListAppServicePlans(ctx context.Conte
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListAppServicePlans", resp, "Failure responding to request")
 	}
+	if result.aspc.hasNextLink() && result.aspc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1306,8 +1295,7 @@ func (client AppServiceEnvironmentsClient) ListAppServicePlansPreparer(ctx conte
 // ListAppServicePlansSender sends the ListAppServicePlans request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListAppServicePlansSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAppServicePlansResponder handles the response to the ListAppServicePlans request. The method always
@@ -1315,7 +1303,6 @@ func (client AppServiceEnvironmentsClient) ListAppServicePlansSender(req *http.R
 func (client AppServiceEnvironmentsClient) ListAppServicePlansResponder(resp *http.Response) (result AppServicePlanCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1400,6 +1387,9 @@ func (client AppServiceEnvironmentsClient) ListByResourceGroup(ctx context.Conte
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.asec.hasNextLink() && result.asec.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1427,8 +1417,7 @@ func (client AppServiceEnvironmentsClient) ListByResourceGroupPreparer(ctx conte
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -1436,7 +1425,6 @@ func (client AppServiceEnvironmentsClient) ListByResourceGroupSender(req *http.R
 func (client AppServiceEnvironmentsClient) ListByResourceGroupResponder(resp *http.Response) (result AppServiceEnvironmentCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1522,6 +1510,9 @@ func (client AppServiceEnvironmentsClient) ListCapacities(ctx context.Context, r
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListCapacities", resp, "Failure responding to request")
 	}
+	if result.scc.hasNextLink() && result.scc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1550,8 +1541,7 @@ func (client AppServiceEnvironmentsClient) ListCapacitiesPreparer(ctx context.Co
 // ListCapacitiesSender sends the ListCapacities request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListCapacitiesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListCapacitiesResponder handles the response to the ListCapacities request. The method always
@@ -1559,7 +1549,6 @@ func (client AppServiceEnvironmentsClient) ListCapacitiesSender(req *http.Reques
 func (client AppServiceEnvironmentsClient) ListCapacitiesResponder(resp *http.Response) (result StampCapacityCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1672,8 +1661,7 @@ func (client AppServiceEnvironmentsClient) ListDiagnosticsPreparer(ctx context.C
 // ListDiagnosticsSender sends the ListDiagnostics request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListDiagnosticsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListDiagnosticsResponder handles the response to the ListDiagnostics request. The method always
@@ -1681,7 +1669,6 @@ func (client AppServiceEnvironmentsClient) ListDiagnosticsSender(req *http.Reque
 func (client AppServiceEnvironmentsClient) ListDiagnosticsResponder(resp *http.Response) (result ListHostingEnvironmentDiagnostics, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -1757,8 +1744,7 @@ func (client AppServiceEnvironmentsClient) ListMetricDefinitionsPreparer(ctx con
 // ListMetricDefinitionsSender sends the ListMetricDefinitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricDefinitionsResponder handles the response to the ListMetricDefinitions request. The method always
@@ -1766,7 +1752,6 @@ func (client AppServiceEnvironmentsClient) ListMetricDefinitionsSender(req *http
 func (client AppServiceEnvironmentsClient) ListMetricDefinitionsResponder(resp *http.Response) (result MetricDefinition, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1819,6 +1804,9 @@ func (client AppServiceEnvironmentsClient) ListMetrics(ctx context.Context, reso
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMetrics", resp, "Failure responding to request")
 	}
+	if result.rmc.hasNextLink() && result.rmc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1853,8 +1841,7 @@ func (client AppServiceEnvironmentsClient) ListMetricsPreparer(ctx context.Conte
 // ListMetricsSender sends the ListMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMetricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMetricsResponder handles the response to the ListMetrics request. The method always
@@ -1862,7 +1849,6 @@ func (client AppServiceEnvironmentsClient) ListMetricsSender(req *http.Request) 
 func (client AppServiceEnvironmentsClient) ListMetricsResponder(resp *http.Response) (result ResourceMetricCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1948,6 +1934,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetricDefinitions(ctx co
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRoleMetricDefinitions", resp, "Failure responding to request")
 	}
+	if result.rmdc.hasNextLink() && result.rmdc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1976,8 +1965,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetricDefinitionsPrepare
 // ListMultiRoleMetricDefinitionsSender sends the ListMultiRoleMetricDefinitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRoleMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRoleMetricDefinitionsResponder handles the response to the ListMultiRoleMetricDefinitions request. The method always
@@ -1985,7 +1973,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetricDefinitionsSender(
 func (client AppServiceEnvironmentsClient) ListMultiRoleMetricDefinitionsResponder(resp *http.Response) (result ResourceMetricDefinitionCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2078,6 +2065,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetrics(ctx context.Cont
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRoleMetrics", resp, "Failure responding to request")
 	}
+	if result.rmc.hasNextLink() && result.rmc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2121,8 +2111,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetricsPreparer(ctx cont
 // ListMultiRoleMetricsSender sends the ListMultiRoleMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRoleMetricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRoleMetricsResponder handles the response to the ListMultiRoleMetrics request. The method always
@@ -2130,7 +2119,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleMetricsSender(req *http.
 func (client AppServiceEnvironmentsClient) ListMultiRoleMetricsResponder(resp *http.Response) (result ResourceMetricCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2218,6 +2206,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricDefini
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRolePoolInstanceMetricDefinitions", resp, "Failure responding to request")
 	}
+	if result.rmdc.hasNextLink() && result.rmdc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2247,8 +2238,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricDefini
 // ListMultiRolePoolInstanceMetricDefinitionsSender sends the ListMultiRolePoolInstanceMetricDefinitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRolePoolInstanceMetricDefinitionsResponder handles the response to the ListMultiRolePoolInstanceMetricDefinitions request. The method always
@@ -2256,7 +2246,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricDefini
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricDefinitionsResponder(resp *http.Response) (result ResourceMetricDefinitionCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2345,6 +2334,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetrics(ctx 
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRolePoolInstanceMetrics", resp, "Failure responding to request")
 	}
+	if result.rmc.hasNextLink() && result.rmc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2377,8 +2369,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricsPrepa
 // ListMultiRolePoolInstanceMetricsSender sends the ListMultiRolePoolInstanceMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRolePoolInstanceMetricsResponder handles the response to the ListMultiRolePoolInstanceMetrics request. The method always
@@ -2386,7 +2377,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricsSende
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolInstanceMetricsResponder(resp *http.Response) (result ResourceMetricCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2472,6 +2462,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePools(ctx context.Contex
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRolePools", resp, "Failure responding to request")
 	}
+	if result.wpc.hasNextLink() && result.wpc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2500,8 +2493,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolsPreparer(ctx contex
 // ListMultiRolePoolsSender sends the ListMultiRolePools request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRolePoolsResponder handles the response to the ListMultiRolePools request. The method always
@@ -2509,7 +2501,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolsSender(req *http.Re
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolsResponder(resp *http.Response) (result WorkerPoolCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2595,6 +2586,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolSkus(ctx context.Con
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRolePoolSkus", resp, "Failure responding to request")
 	}
+	if result.sic.hasNextLink() && result.sic.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2623,8 +2617,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolSkusPreparer(ctx con
 // ListMultiRolePoolSkusSender sends the ListMultiRolePoolSkus request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolSkusSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRolePoolSkusResponder handles the response to the ListMultiRolePoolSkus request. The method always
@@ -2632,7 +2625,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRolePoolSkusSender(req *http
 func (client AppServiceEnvironmentsClient) ListMultiRolePoolSkusResponder(resp *http.Response) (result SkuInfoCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2718,6 +2710,9 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleUsages(ctx context.Conte
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListMultiRoleUsages", resp, "Failure responding to request")
 	}
+	if result.uc.hasNextLink() && result.uc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2746,8 +2741,7 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleUsagesPreparer(ctx conte
 // ListMultiRoleUsagesSender sends the ListMultiRoleUsages request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListMultiRoleUsagesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListMultiRoleUsagesResponder handles the response to the ListMultiRoleUsages request. The method always
@@ -2755,7 +2749,6 @@ func (client AppServiceEnvironmentsClient) ListMultiRoleUsagesSender(req *http.R
 func (client AppServiceEnvironmentsClient) ListMultiRoleUsagesResponder(resp *http.Response) (result UsageCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2868,8 +2861,7 @@ func (client AppServiceEnvironmentsClient) ListOperationsPreparer(ctx context.Co
 // ListOperationsSender sends the ListOperations request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListOperationsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListOperationsResponder handles the response to the ListOperations request. The method always
@@ -2877,7 +2869,6 @@ func (client AppServiceEnvironmentsClient) ListOperationsSender(req *http.Reques
 func (client AppServiceEnvironmentsClient) ListOperationsResponder(resp *http.Response) (result ListOperation, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -2929,6 +2920,9 @@ func (client AppServiceEnvironmentsClient) ListUsages(ctx context.Context, resou
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListUsages", resp, "Failure responding to request")
 	}
+	if result.cuqc.hasNextLink() && result.cuqc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2960,8 +2954,7 @@ func (client AppServiceEnvironmentsClient) ListUsagesPreparer(ctx context.Contex
 // ListUsagesSender sends the ListUsages request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListUsagesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListUsagesResponder handles the response to the ListUsages request. The method always
@@ -2969,7 +2962,6 @@ func (client AppServiceEnvironmentsClient) ListUsagesSender(req *http.Request) (
 func (client AppServiceEnvironmentsClient) ListUsagesResponder(resp *http.Response) (result CsmUsageQuotaCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3082,8 +3074,7 @@ func (client AppServiceEnvironmentsClient) ListVipsPreparer(ctx context.Context,
 // ListVipsSender sends the ListVips request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListVipsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListVipsResponder handles the response to the ListVips request. The method always
@@ -3091,7 +3082,6 @@ func (client AppServiceEnvironmentsClient) ListVipsSender(req *http.Request) (*h
 func (client AppServiceEnvironmentsClient) ListVipsResponder(resp *http.Response) (result AddressResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3141,6 +3131,9 @@ func (client AppServiceEnvironmentsClient) ListWebApps(ctx context.Context, reso
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWebApps", resp, "Failure responding to request")
 	}
+	if result.ac.hasNextLink() && result.ac.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3172,8 +3165,7 @@ func (client AppServiceEnvironmentsClient) ListWebAppsPreparer(ctx context.Conte
 // ListWebAppsSender sends the ListWebApps request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWebAppsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWebAppsResponder handles the response to the ListWebApps request. The method always
@@ -3181,7 +3173,6 @@ func (client AppServiceEnvironmentsClient) ListWebAppsSender(req *http.Request) 
 func (client AppServiceEnvironmentsClient) ListWebAppsResponder(resp *http.Response) (result AppCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3268,6 +3259,9 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetricDefinitions(ctx co
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWebWorkerMetricDefinitions", resp, "Failure responding to request")
 	}
+	if result.rmdc.hasNextLink() && result.rmdc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3297,8 +3291,7 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetricDefinitionsPrepare
 // ListWebWorkerMetricDefinitionsSender sends the ListWebWorkerMetricDefinitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWebWorkerMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWebWorkerMetricDefinitionsResponder handles the response to the ListWebWorkerMetricDefinitions request. The method always
@@ -3306,7 +3299,6 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetricDefinitionsSender(
 func (client AppServiceEnvironmentsClient) ListWebWorkerMetricDefinitionsResponder(resp *http.Response) (result ResourceMetricDefinitionCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3397,6 +3389,9 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetrics(ctx context.Cont
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWebWorkerMetrics", resp, "Failure responding to request")
 	}
+	if result.rmc.hasNextLink() && result.rmc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3432,8 +3427,7 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetricsPreparer(ctx cont
 // ListWebWorkerMetricsSender sends the ListWebWorkerMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWebWorkerMetricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWebWorkerMetricsResponder handles the response to the ListWebWorkerMetrics request. The method always
@@ -3441,7 +3435,6 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerMetricsSender(req *http.
 func (client AppServiceEnvironmentsClient) ListWebWorkerMetricsResponder(resp *http.Response) (result ResourceMetricCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3528,6 +3521,9 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerUsages(ctx context.Conte
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWebWorkerUsages", resp, "Failure responding to request")
 	}
+	if result.uc.hasNextLink() && result.uc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3557,8 +3553,7 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerUsagesPreparer(ctx conte
 // ListWebWorkerUsagesSender sends the ListWebWorkerUsages request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWebWorkerUsagesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWebWorkerUsagesResponder handles the response to the ListWebWorkerUsages request. The method always
@@ -3566,7 +3561,6 @@ func (client AppServiceEnvironmentsClient) ListWebWorkerUsagesSender(req *http.R
 func (client AppServiceEnvironmentsClient) ListWebWorkerUsagesResponder(resp *http.Response) (result UsageCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3655,6 +3649,9 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricDefinitio
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWorkerPoolInstanceMetricDefinitions", resp, "Failure responding to request")
 	}
+	if result.rmdc.hasNextLink() && result.rmdc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3685,8 +3682,7 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricDefinitio
 // ListWorkerPoolInstanceMetricDefinitionsSender sends the ListWorkerPoolInstanceMetricDefinitions request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricDefinitionsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWorkerPoolInstanceMetricDefinitionsResponder handles the response to the ListWorkerPoolInstanceMetricDefinitions request. The method always
@@ -3694,7 +3690,6 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricDefinitio
 func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricDefinitionsResponder(resp *http.Response) (result ResourceMetricDefinitionCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3786,6 +3781,9 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetrics(ctx con
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWorkerPoolInstanceMetrics", resp, "Failure responding to request")
 	}
+	if result.rmc.hasNextLink() && result.rmc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3822,8 +3820,7 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricsPreparer
 // ListWorkerPoolInstanceMetricsSender sends the ListWorkerPoolInstanceMetrics request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWorkerPoolInstanceMetricsResponder handles the response to the ListWorkerPoolInstanceMetrics request. The method always
@@ -3831,7 +3828,6 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricsSender(r
 func (client AppServiceEnvironmentsClient) ListWorkerPoolInstanceMetricsResponder(resp *http.Response) (result ResourceMetricCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -3917,6 +3913,9 @@ func (client AppServiceEnvironmentsClient) ListWorkerPools(ctx context.Context, 
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWorkerPools", resp, "Failure responding to request")
 	}
+	if result.wpc.hasNextLink() && result.wpc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -3945,8 +3944,7 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolsPreparer(ctx context.C
 // ListWorkerPoolsSender sends the ListWorkerPools request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWorkerPoolsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWorkerPoolsResponder handles the response to the ListWorkerPools request. The method always
@@ -3954,7 +3952,6 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolsSender(req *http.Reque
 func (client AppServiceEnvironmentsClient) ListWorkerPoolsResponder(resp *http.Response) (result WorkerPoolCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -4041,6 +4038,9 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolSkus(ctx context.Contex
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "ListWorkerPoolSkus", resp, "Failure responding to request")
 	}
+	if result.sic.hasNextLink() && result.sic.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -4070,8 +4070,7 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolSkusPreparer(ctx contex
 // ListWorkerPoolSkusSender sends the ListWorkerPoolSkus request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ListWorkerPoolSkusSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListWorkerPoolSkusResponder handles the response to the ListWorkerPoolSkus request. The method always
@@ -4079,7 +4078,6 @@ func (client AppServiceEnvironmentsClient) ListWorkerPoolSkusSender(req *http.Re
 func (client AppServiceEnvironmentsClient) ListWorkerPoolSkusResponder(resp *http.Response) (result SkuInfoCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -4192,8 +4190,7 @@ func (client AppServiceEnvironmentsClient) RebootPreparer(ctx context.Context, r
 // RebootSender sends the Reboot request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) RebootSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // RebootResponder handles the response to the Reboot request. The method always
@@ -4201,7 +4198,6 @@ func (client AppServiceEnvironmentsClient) RebootSender(req *http.Request) (*htt
 func (client AppServiceEnvironmentsClient) RebootResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByClosing())
 	result.Response = resp
@@ -4270,9 +4266,8 @@ func (client AppServiceEnvironmentsClient) ResumePreparer(ctx context.Context, r
 // ResumeSender sends the Resume request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) ResumeSender(req *http.Request) (future AppServiceEnvironmentsResumeFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -4291,7 +4286,6 @@ func (client AppServiceEnvironmentsClient) ResumeResponder(resp *http.Response) 
 func (client AppServiceEnvironmentsClient) resumeResponder(resp *http.Response) (result AppCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -4309,8 +4303,7 @@ func (client AppServiceEnvironmentsClient) resumeNextResults(ctx context.Context
 		return
 	}
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "resumeNextResults", resp, "Failure sending next results request")
 	}
@@ -4397,9 +4390,8 @@ func (client AppServiceEnvironmentsClient) SuspendPreparer(ctx context.Context, 
 // SuspendSender sends the Suspend request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) SuspendSender(req *http.Request) (future AppServiceEnvironmentsSuspendFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -4418,7 +4410,6 @@ func (client AppServiceEnvironmentsClient) SuspendResponder(resp *http.Response)
 func (client AppServiceEnvironmentsClient) suspendResponder(resp *http.Response) (result AppCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -4436,8 +4427,7 @@ func (client AppServiceEnvironmentsClient) suspendNextResults(ctx context.Contex
 		return
 	}
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req,
-		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	resp, err = client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.AppServiceEnvironmentsClient", "suspendNextResults", resp, "Failure sending next results request")
 	}
@@ -4533,8 +4523,7 @@ func (client AppServiceEnvironmentsClient) UpdatePreparer(ctx context.Context, r
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -4542,7 +4531,6 @@ func (client AppServiceEnvironmentsClient) UpdateSender(req *http.Request) (*htt
 func (client AppServiceEnvironmentsClient) UpdateResponder(resp *http.Response) (result AppServiceEnvironmentResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -4621,8 +4609,7 @@ func (client AppServiceEnvironmentsClient) UpdateMultiRolePoolPreparer(ctx conte
 // UpdateMultiRolePoolSender sends the UpdateMultiRolePool request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) UpdateMultiRolePoolSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateMultiRolePoolResponder handles the response to the UpdateMultiRolePool request. The method always
@@ -4630,7 +4617,6 @@ func (client AppServiceEnvironmentsClient) UpdateMultiRolePoolSender(req *http.R
 func (client AppServiceEnvironmentsClient) UpdateMultiRolePoolResponder(resp *http.Response) (result WorkerPoolResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -4711,8 +4697,7 @@ func (client AppServiceEnvironmentsClient) UpdateWorkerPoolPreparer(ctx context.
 // UpdateWorkerPoolSender sends the UpdateWorkerPool request. The method will close the
 // http.Response Body if it receives an error.
 func (client AppServiceEnvironmentsClient) UpdateWorkerPoolSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateWorkerPoolResponder handles the response to the UpdateWorkerPool request. The method always
@@ -4720,7 +4705,6 @@ func (client AppServiceEnvironmentsClient) UpdateWorkerPoolSender(req *http.Requ
 func (client AppServiceEnvironmentsClient) UpdateWorkerPoolResponder(resp *http.Response) (result WorkerPoolResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusBadRequest, http.StatusNotFound, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

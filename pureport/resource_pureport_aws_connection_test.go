@@ -264,6 +264,32 @@ resource "pureport_aws_connection" "nat_mapping" {
 	return fmt.Sprintf(format, connection_name)
 }
 
+func testAccResourceAWSConnectionConfig_invalid_ha() string {
+	format := `
+resource "pureport_aws_connection" "basic" {
+  name = "%s"
+  speed = "100"
+  high_availability = false
+
+  location_href = "location/blah"
+  network_href = "network/blah"
+
+  aws_region = "us-east"
+  aws_account_id = "some-id"
+
+  tags = {
+    Environment = "tf-test"
+    Owner       = "ksk-aws"
+    sweep       = "TRUE"
+  }
+}
+`
+
+	connection_name := acctest.RandomWithPrefix("AwsDirectConnectTest")
+
+	return fmt.Sprintf(format, connection_name)
+}
+
 func TestResourceAWSConnection_basic(t *testing.T) {
 
 	resourceName := "pureport_aws_connection.basic"
@@ -476,6 +502,21 @@ func TestResourceAWSConnection_nat_mappings(t *testing.T) {
 						//					resource.TestCheckResourceAttrSet(resourceName, "nat_config.0.mappings.1.nat_cidr"),
 					),
 				),
+			},
+		},
+	})
+}
+
+func TestResourceAWSConnection_invalid_ha(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		IsUnitTest:   true,
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckAWSConnectionDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccResourceAWSConnectionConfig_invalid_ha(),
+				ExpectError: regexp.MustCompile("Cloud Connection with high availability required for speeds greater than 50Mbps"),
 			},
 		},
 	})

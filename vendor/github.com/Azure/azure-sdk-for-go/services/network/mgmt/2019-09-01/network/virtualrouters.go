@@ -36,7 +36,8 @@ func NewVirtualRoutersClient(subscriptionID string) VirtualRoutersClient {
 	return NewVirtualRoutersClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewVirtualRoutersClientWithBaseURI creates an instance of the VirtualRoutersClient client.
+// NewVirtualRoutersClientWithBaseURI creates an instance of the VirtualRoutersClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewVirtualRoutersClientWithBaseURI(baseURI string, subscriptionID string) VirtualRoutersClient {
 	return VirtualRoutersClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -62,7 +63,7 @@ func (client VirtualRoutersClient) CreateOrUpdate(ctx context.Context, resourceG
 			Constraints: []validation.Constraint{{Target: "parameters.VirtualRouterPropertiesFormat", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.VirtualRouterPropertiesFormat.VirtualRouterAsn", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "parameters.VirtualRouterPropertiesFormat.VirtualRouterAsn", Name: validation.InclusiveMaximum, Rule: int64(4294967295), Chain: nil},
-						{Target: "parameters.VirtualRouterPropertiesFormat.VirtualRouterAsn", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+						{Target: "parameters.VirtualRouterPropertiesFormat.VirtualRouterAsn", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil},
 					}},
 				}}}}}); err != nil {
 		return result, validation.NewError("network.VirtualRoutersClient", "CreateOrUpdate", err.Error())
@@ -110,9 +111,8 @@ func (client VirtualRoutersClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client VirtualRoutersClient) CreateOrUpdateSender(req *http.Request) (future VirtualRoutersCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -125,7 +125,6 @@ func (client VirtualRoutersClient) CreateOrUpdateSender(req *http.Request) (futu
 func (client VirtualRoutersClient) CreateOrUpdateResponder(resp *http.Response) (result VirtualRouter, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -187,9 +186,8 @@ func (client VirtualRoutersClient) DeletePreparer(ctx context.Context, resourceG
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client VirtualRoutersClient) DeleteSender(req *http.Request) (future VirtualRoutersDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -202,7 +200,6 @@ func (client VirtualRoutersClient) DeleteSender(req *http.Request) (future Virtu
 func (client VirtualRoutersClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -273,8 +270,7 @@ func (client VirtualRoutersClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client VirtualRoutersClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -282,7 +278,6 @@ func (client VirtualRoutersClient) GetSender(req *http.Request) (*http.Response,
 func (client VirtualRoutersClient) GetResponder(resp *http.Response) (result VirtualRouter, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -320,6 +315,9 @@ func (client VirtualRoutersClient) List(ctx context.Context) (result VirtualRout
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VirtualRoutersClient", "List", resp, "Failure responding to request")
 	}
+	if result.vrlr.hasNextLink() && result.vrlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -346,8 +344,7 @@ func (client VirtualRoutersClient) ListPreparer(ctx context.Context) (*http.Requ
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client VirtualRoutersClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -355,7 +352,6 @@ func (client VirtualRoutersClient) ListSender(req *http.Request) (*http.Response
 func (client VirtualRoutersClient) ListResponder(resp *http.Response) (result VirtualRouterListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -432,6 +428,9 @@ func (client VirtualRoutersClient) ListByResourceGroup(ctx context.Context, reso
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VirtualRoutersClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.vrlr.hasNextLink() && result.vrlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -459,8 +458,7 @@ func (client VirtualRoutersClient) ListByResourceGroupPreparer(ctx context.Conte
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client VirtualRoutersClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -468,7 +466,6 @@ func (client VirtualRoutersClient) ListByResourceGroupSender(req *http.Request) 
 func (client VirtualRoutersClient) ListByResourceGroupResponder(resp *http.Response) (result VirtualRouterListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

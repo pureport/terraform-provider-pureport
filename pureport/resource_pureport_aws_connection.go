@@ -8,6 +8,7 @@ import (
 	"sort"
 
 	"github.com/antihax/optional"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -77,6 +78,14 @@ func resourceAWSConnection() *schema.Resource {
 			Create: schema.DefaultTimeout(connection.CreateTimeout),
 			Delete: schema.DefaultTimeout(connection.DeleteTimeout),
 		},
+		CustomizeDiff: customdiff.If(
+			customdiff.ResourceConditionFunc(func(d *schema.ResourceDiff, meta interface{}) bool {
+				return d.HasChange("speed") || d.HasChange("high_availability")
+			}),
+			schema.CustomizeDiffFunc(func(d *schema.ResourceDiff, meta interface{}) error {
+				return connection.CloudResourceDiff(d)
+			}),
+		),
 	}
 }
 
@@ -88,14 +97,14 @@ func expandAWSConnection(d *schema.ResourceData) client.AwsDirectConnectConnecti
 
 	// Create the body of the request
 	c := client.AwsDirectConnectConnection{
-		Type_:       "AWS_DIRECT_CONNECT",
+		Type:        "AWS_DIRECT_CONNECT",
 		Name:        d.Get("name").(string),
 		Speed:       int32(speed),
 		CustomerASN: int64(customer_asn),
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		AwsAccountId: d.Get("aws_account_id").(string),
@@ -131,7 +140,7 @@ func resourceAWSConnectionCreate(d *schema.ResourceData, m interface{}) error {
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -143,7 +152,7 @@ func resourceAWSConnectionCreate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 
 		http_err := err
-		json_response := string(err.(client.GenericSwaggerError).Body()[:])
+		json_response := string(err.(client.GenericOpenAPIError).Body()[:])
 		response, err := structure.ExpandJsonFromString(json_response)
 
 		if err != nil {
@@ -214,7 +223,7 @@ func resourceAWSConnectionRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("high_availability", conn.HighAvailability)
 	d.Set("href", conn.Href)
 	d.Set("name", conn.Name)
-	d.Set("peering_type", conn.Peering.Type_)
+	d.Set("peering_type", conn.Peering.Type)
 	d.Set("speed", conn.Speed)
 	d.Set("state", conn.State)
 
@@ -271,24 +280,19 @@ func resourceAWSConnectionUpdate(d *schema.ResourceData, m interface{}) error {
 
 	c := expandAWSConnection(d)
 
-	d.Partial(true)
-
 	config := m.(*configuration.Config)
 	ctx := config.Session.GetSessionContext()
 
 	if d.HasChange("name") {
 		c.Name = d.Get("name").(string)
-		d.SetPartial("name")
 	}
 
 	if d.HasChange("description") {
 		c.Description = d.Get("description").(string)
-		d.SetPartial("description")
 	}
 
 	if d.HasChange("speed") {
 		c.Speed = int32(d.Get("speed").(int))
-		d.SetPartial("speed")
 	}
 
 	if d.HasChange("customer_networks") {
@@ -313,7 +317,7 @@ func resourceAWSConnectionUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -324,7 +328,7 @@ func resourceAWSConnectionUpdate(d *schema.ResourceData, m interface{}) error {
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)
@@ -347,8 +351,6 @@ func resourceAWSConnectionUpdate(d *schema.ResourceData, m interface{}) error {
 	if err := connection.WaitForConnection(connection.AwsConnectionName, d, m); err != nil {
 		return fmt.Errorf("Error waiting for %s: err=%s", connection.AwsConnectionName, err)
 	}
-
-	d.Partial(false)
 
 	return resourceAWSConnectionRead(d, m)
 }

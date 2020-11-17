@@ -36,7 +36,8 @@ func NewLogProfilesClient(subscriptionID string) LogProfilesClient {
 	return NewLogProfilesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewLogProfilesClientWithBaseURI creates an instance of the LogProfilesClient client.
+// NewLogProfilesClientWithBaseURI creates an instance of the LogProfilesClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewLogProfilesClientWithBaseURI(baseURI string, subscriptionID string) LogProfilesClient {
 	return LogProfilesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -64,7 +65,7 @@ func (client LogProfilesClient) CreateOrUpdate(ctx context.Context, logProfileNa
 					{Target: "parameters.LogProfileProperties.RetentionPolicy", Name: validation.Null, Rule: true,
 						Chain: []validation.Constraint{{Target: "parameters.LogProfileProperties.RetentionPolicy.Enabled", Name: validation.Null, Rule: true, Chain: nil},
 							{Target: "parameters.LogProfileProperties.RetentionPolicy.Days", Name: validation.Null, Rule: true,
-								Chain: []validation.Constraint{{Target: "parameters.LogProfileProperties.RetentionPolicy.Days", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}},
+								Chain: []validation.Constraint{{Target: "parameters.LogProfileProperties.RetentionPolicy.Days", Name: validation.InclusiveMinimum, Rule: int64(0), Chain: nil}}},
 						}},
 				}}}}}); err != nil {
 		return result, validation.NewError("insights.LogProfilesClient", "CreateOrUpdate", err.Error())
@@ -116,8 +117,7 @@ func (client LogProfilesClient) CreateOrUpdatePreparer(ctx context.Context, logP
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client LogProfilesClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -125,7 +125,6 @@ func (client LogProfilesClient) CreateOrUpdateSender(req *http.Request) (*http.R
 func (client LogProfilesClient) CreateOrUpdateResponder(resp *http.Response) (result LogProfileResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -191,8 +190,7 @@ func (client LogProfilesClient) DeletePreparer(ctx context.Context, logProfileNa
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client LogProfilesClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -200,7 +198,6 @@ func (client LogProfilesClient) DeleteSender(req *http.Request) (*http.Response,
 func (client LogProfilesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -265,8 +262,7 @@ func (client LogProfilesClient) GetPreparer(ctx context.Context, logProfileName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client LogProfilesClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -274,7 +270,6 @@ func (client LogProfilesClient) GetSender(req *http.Request) (*http.Response, er
 func (client LogProfilesClient) GetResponder(resp *http.Response) (result LogProfileResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -337,8 +332,7 @@ func (client LogProfilesClient) ListPreparer(ctx context.Context) (*http.Request
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client LogProfilesClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -346,7 +340,6 @@ func (client LogProfilesClient) ListSender(req *http.Request) (*http.Response, e
 func (client LogProfilesClient) ListResponder(resp *http.Response) (result LogProfileCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -415,8 +408,7 @@ func (client LogProfilesClient) UpdatePreparer(ctx context.Context, logProfileNa
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client LogProfilesClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -424,7 +416,6 @@ func (client LogProfilesClient) UpdateSender(req *http.Request) (*http.Response,
 func (client LogProfilesClient) UpdateResponder(resp *http.Response) (result LogProfileResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

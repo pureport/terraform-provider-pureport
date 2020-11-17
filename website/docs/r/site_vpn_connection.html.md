@@ -41,8 +41,6 @@ resource "pureport_site_vpn_connection" "main" {
   location_href = data.pureport_locations.main.locations.0.href
   network_href = data.pureport_networks.main.networks.0.href
 
-  ike_version = "V2"
-
   routing_type = "ROUTE_BASED_BGP"
   customer_asn = 30000
 
@@ -62,7 +60,7 @@ The following arguments are supported:
 
 * `auth_type` - (Optional) The Authentication Type to use. (Currently only `PSK` is supported.)
 * `enable_bgp_password` - (Optional) Enable BGP password authentication. (Default:  false)
-* `ike_version` - (Required) the IKE Version to use. Valid values are `V1`, `V2`.
+* `ike_version` - (Optional) the IKE Version to use. Valid values are `V1`, `V2` (default = `V2`).
 
 * `ike_config` - (Optional) IKE Configuration to use:
     * `esp` - Encapsulating Security Payload
@@ -85,7 +83,7 @@ The following arguments are supported:
 
 * `name` - (Required) The name for the connection
 * `location_href` - (Required) HREF for the Pureport Location to attach the connection.
-* `network_href` - (Required) HREF for the network to associate the connection.
+* `network_href` - (Required) HREF for the network to associate with the connection.
 * `speed` - (Required) The maximum QoS for this connection. Valid values are 50, 100, 200, 300, 400, 500, 1000, 10000 in Mbps.
 
 - - -

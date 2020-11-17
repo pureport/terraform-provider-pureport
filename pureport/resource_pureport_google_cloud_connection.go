@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/antihax/optional"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/customdiff"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/structure"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -63,6 +64,14 @@ func resourceGoogleCloudConnection() *schema.Resource {
 			Create: schema.DefaultTimeout(connection.CreateTimeout),
 			Delete: schema.DefaultTimeout(connection.DeleteTimeout),
 		},
+		CustomizeDiff: customdiff.If(
+			customdiff.ResourceConditionFunc(func(d *schema.ResourceDiff, meta interface{}) bool {
+				return d.HasChange("speed") || d.HasChange("high_availability")
+			}),
+			schema.CustomizeDiffFunc(func(d *schema.ResourceDiff, meta interface{}) error {
+				return connection.CloudResourceDiff(d)
+			}),
+		),
 	}
 }
 
@@ -76,13 +85,13 @@ func expandGoogleCloudConnection(d *schema.ResourceData) client.GoogleCloudInter
 
 	// Create the body of the request
 	c := client.GoogleCloudInterconnectConnection{
-		Type_: "GOOGLE_CLOUD_INTERCONNECT",
+		Type:  "GOOGLE_CLOUD_INTERCONNECT",
 		Name:  d.Get("name").(string),
 		Speed: int32(speed),
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		BillingTerm:       d.Get("billing_term").(string),
@@ -121,7 +130,7 @@ func resourceGoogleCloudConnectionCreate(d *schema.ResourceData, m interface{}) 
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -135,7 +144,7 @@ func resourceGoogleCloudConnectionCreate(d *schema.ResourceData, m interface{}) 
 		http_err := err
 
 		switch e := err.(type) {
-		case client.GenericSwaggerError:
+		case client.GenericOpenAPIError:
 			json_response := string(e.Body()[:])
 			response, err := structure.ExpandJsonFromString(json_response)
 
@@ -252,24 +261,19 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 
 	c := expandGoogleCloudConnection(d)
 
-	d.Partial(true)
-
 	config := m.(*configuration.Config)
 	ctx := config.Session.GetSessionContext()
 
 	if d.HasChange("name") {
 		c.Name = d.Get("name").(string)
-		d.SetPartial("name")
 	}
 
 	if d.HasChange("description") {
 		c.Description = d.Get("description").(string)
-		d.SetPartial("description")
 	}
 
 	if d.HasChange("speed") {
 		c.Speed = int32(d.Get("speed").(int))
-		d.SetPartial("speed")
 	}
 
 	if d.HasChange("customer_networks") {
@@ -290,7 +294,7 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -301,7 +305,7 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)
@@ -324,8 +328,6 @@ func resourceGoogleCloudConnectionUpdate(d *schema.ResourceData, m interface{}) 
 	if err := connection.WaitForConnection(connection.GoogleConnectionName, d, m); err != nil {
 		return fmt.Errorf("Error waiting for %s: err=%s", connection.GoogleConnectionName, err)
 	}
-
-	d.Partial(false)
 
 	return resourceGoogleCloudConnectionRead(d, m)
 }

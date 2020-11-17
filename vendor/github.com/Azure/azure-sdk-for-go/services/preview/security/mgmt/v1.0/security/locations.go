@@ -36,7 +36,8 @@ func NewLocationsClient(subscriptionID string, ascLocation string) LocationsClie
 	return NewLocationsClientWithBaseURI(DefaultBaseURI, subscriptionID, ascLocation)
 }
 
-// NewLocationsClientWithBaseURI creates an instance of the LocationsClient client.
+// NewLocationsClientWithBaseURI creates an instance of the LocationsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) LocationsClient {
 	return LocationsClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -103,8 +104,7 @@ func (client LocationsClient) GetPreparer(ctx context.Context) (*http.Request, e
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client LocationsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -112,7 +112,6 @@ func (client LocationsClient) GetSender(req *http.Request) (*http.Response, erro
 func (client LocationsClient) GetResponder(resp *http.Response) (result AscLocation, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -158,6 +157,9 @@ func (client LocationsClient) List(ctx context.Context) (result AscLocationListP
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.LocationsClient", "List", resp, "Failure responding to request")
 	}
+	if result.all.hasNextLink() && result.all.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -184,8 +186,7 @@ func (client LocationsClient) ListPreparer(ctx context.Context) (*http.Request, 
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client LocationsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -193,7 +194,6 @@ func (client LocationsClient) ListSender(req *http.Request) (*http.Response, err
 func (client LocationsClient) ListResponder(resp *http.Response) (result AscLocationList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

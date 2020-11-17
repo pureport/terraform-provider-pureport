@@ -25,195 +25,28 @@ import (
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
 	"github.com/Azure/go-autorest/tracing"
+	"github.com/satori/go.uuid"
 	"net/http"
 )
 
 // The package's fully qualified name.
 const fqdn = "github.com/Azure/azure-sdk-for-go/services/mysql/mgmt/2017-12-01/mysql"
 
-// CreateMode enumerates the values for create mode.
-type CreateMode string
-
-const (
-	// CreateModeDefault ...
-	CreateModeDefault CreateMode = "Default"
-	// CreateModeGeoRestore ...
-	CreateModeGeoRestore CreateMode = "GeoRestore"
-	// CreateModePointInTimeRestore ...
-	CreateModePointInTimeRestore CreateMode = "PointInTimeRestore"
-	// CreateModeReplica ...
-	CreateModeReplica CreateMode = "Replica"
-	// CreateModeServerPropertiesForCreate ...
-	CreateModeServerPropertiesForCreate CreateMode = "ServerPropertiesForCreate"
-)
-
-// PossibleCreateModeValues returns an array of possible values for the CreateMode const type.
-func PossibleCreateModeValues() []CreateMode {
-	return []CreateMode{CreateModeDefault, CreateModeGeoRestore, CreateModePointInTimeRestore, CreateModeReplica, CreateModeServerPropertiesForCreate}
-}
-
-// GeoRedundantBackup enumerates the values for geo redundant backup.
-type GeoRedundantBackup string
-
-const (
-	// Disabled ...
-	Disabled GeoRedundantBackup = "Disabled"
-	// Enabled ...
-	Enabled GeoRedundantBackup = "Enabled"
-)
-
-// PossibleGeoRedundantBackupValues returns an array of possible values for the GeoRedundantBackup const type.
-func PossibleGeoRedundantBackupValues() []GeoRedundantBackup {
-	return []GeoRedundantBackup{Disabled, Enabled}
-}
-
-// OperationOrigin enumerates the values for operation origin.
-type OperationOrigin string
-
-const (
-	// NotSpecified ...
-	NotSpecified OperationOrigin = "NotSpecified"
-	// System ...
-	System OperationOrigin = "system"
-	// User ...
-	User OperationOrigin = "user"
-)
-
-// PossibleOperationOriginValues returns an array of possible values for the OperationOrigin const type.
-func PossibleOperationOriginValues() []OperationOrigin {
-	return []OperationOrigin{NotSpecified, System, User}
-}
-
-// ServerSecurityAlertPolicyState enumerates the values for server security alert policy state.
-type ServerSecurityAlertPolicyState string
-
-const (
-	// ServerSecurityAlertPolicyStateDisabled ...
-	ServerSecurityAlertPolicyStateDisabled ServerSecurityAlertPolicyState = "Disabled"
-	// ServerSecurityAlertPolicyStateEnabled ...
-	ServerSecurityAlertPolicyStateEnabled ServerSecurityAlertPolicyState = "Enabled"
-)
-
-// PossibleServerSecurityAlertPolicyStateValues returns an array of possible values for the ServerSecurityAlertPolicyState const type.
-func PossibleServerSecurityAlertPolicyStateValues() []ServerSecurityAlertPolicyState {
-	return []ServerSecurityAlertPolicyState{ServerSecurityAlertPolicyStateDisabled, ServerSecurityAlertPolicyStateEnabled}
-}
-
-// ServerState enumerates the values for server state.
-type ServerState string
-
-const (
-	// ServerStateDisabled ...
-	ServerStateDisabled ServerState = "Disabled"
-	// ServerStateDropping ...
-	ServerStateDropping ServerState = "Dropping"
-	// ServerStateReady ...
-	ServerStateReady ServerState = "Ready"
-)
-
-// PossibleServerStateValues returns an array of possible values for the ServerState const type.
-func PossibleServerStateValues() []ServerState {
-	return []ServerState{ServerStateDisabled, ServerStateDropping, ServerStateReady}
-}
-
-// ServerVersion enumerates the values for server version.
-type ServerVersion string
-
-const (
-	// FiveFullStopSeven ...
-	FiveFullStopSeven ServerVersion = "5.7"
-	// FiveFullStopSix ...
-	FiveFullStopSix ServerVersion = "5.6"
-)
-
-// PossibleServerVersionValues returns an array of possible values for the ServerVersion const type.
-func PossibleServerVersionValues() []ServerVersion {
-	return []ServerVersion{FiveFullStopSeven, FiveFullStopSix}
-}
-
-// SkuTier enumerates the values for sku tier.
-type SkuTier string
-
-const (
-	// Basic ...
-	Basic SkuTier = "Basic"
-	// GeneralPurpose ...
-	GeneralPurpose SkuTier = "GeneralPurpose"
-	// MemoryOptimized ...
-	MemoryOptimized SkuTier = "MemoryOptimized"
-)
-
-// PossibleSkuTierValues returns an array of possible values for the SkuTier const type.
-func PossibleSkuTierValues() []SkuTier {
-	return []SkuTier{Basic, GeneralPurpose, MemoryOptimized}
-}
-
-// SslEnforcementEnum enumerates the values for ssl enforcement enum.
-type SslEnforcementEnum string
-
-const (
-	// SslEnforcementEnumDisabled ...
-	SslEnforcementEnumDisabled SslEnforcementEnum = "Disabled"
-	// SslEnforcementEnumEnabled ...
-	SslEnforcementEnumEnabled SslEnforcementEnum = "Enabled"
-)
-
-// PossibleSslEnforcementEnumValues returns an array of possible values for the SslEnforcementEnum const type.
-func PossibleSslEnforcementEnumValues() []SslEnforcementEnum {
-	return []SslEnforcementEnum{SslEnforcementEnumDisabled, SslEnforcementEnumEnabled}
-}
-
-// StorageAutogrow enumerates the values for storage autogrow.
-type StorageAutogrow string
-
-const (
-	// StorageAutogrowDisabled ...
-	StorageAutogrowDisabled StorageAutogrow = "Disabled"
-	// StorageAutogrowEnabled ...
-	StorageAutogrowEnabled StorageAutogrow = "Enabled"
-)
-
-// PossibleStorageAutogrowValues returns an array of possible values for the StorageAutogrow const type.
-func PossibleStorageAutogrowValues() []StorageAutogrow {
-	return []StorageAutogrow{StorageAutogrowDisabled, StorageAutogrowEnabled}
-}
-
-// VirtualNetworkRuleState enumerates the values for virtual network rule state.
-type VirtualNetworkRuleState string
-
-const (
-	// Deleting ...
-	Deleting VirtualNetworkRuleState = "Deleting"
-	// Initializing ...
-	Initializing VirtualNetworkRuleState = "Initializing"
-	// InProgress ...
-	InProgress VirtualNetworkRuleState = "InProgress"
-	// Ready ...
-	Ready VirtualNetworkRuleState = "Ready"
-	// Unknown ...
-	Unknown VirtualNetworkRuleState = "Unknown"
-)
-
-// PossibleVirtualNetworkRuleStateValues returns an array of possible values for the VirtualNetworkRuleState const type.
-func PossibleVirtualNetworkRuleStateValues() []VirtualNetworkRuleState {
-	return []VirtualNetworkRuleState{Deleting, Initializing, InProgress, Ready, Unknown}
+// AzureEntityResource the resource model definition for a Azure Resource Manager resource with an etag.
+type AzureEntityResource struct {
+	// Etag - READ-ONLY; Resource Etag.
+	Etag *string `json:"etag,omitempty"`
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
 }
 
 // CloudError an error response from the Batch service.
 type CloudError struct {
-	Error *CloudErrorBody `json:"error,omitempty"`
-}
-
-// CloudErrorBody an error response from the Batch service.
-type CloudErrorBody struct {
-	// Code - An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
-	Code *string `json:"code,omitempty"`
-	// Message - A message describing the error, intended to be suitable for display in a user interface.
-	Message *string `json:"message,omitempty"`
-	// Target - The target of the particular error. For example, the name of the property in error.
-	Target *string `json:"target,omitempty"`
-	// Details - A list of additional details about the error.
-	Details *[]CloudErrorBody `json:"details,omitempty"`
+	Error *ErrorResponse `json:"error,omitempty"`
 }
 
 // Configuration represents a Configuration.
@@ -221,11 +54,11 @@ type Configuration struct {
 	autorest.Response `json:"-"`
 	// ConfigurationProperties - The properties of a configuration.
 	*ConfigurationProperties `json:"properties,omitempty"`
-	// ID - READ-ONLY; Resource ID
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -312,6 +145,18 @@ type ConfigurationProperties struct {
 	Source *string `json:"source,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for ConfigurationProperties.
+func (cp ConfigurationProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cp.Value != nil {
+		objectMap["value"] = cp.Value
+	}
+	if cp.Source != nil {
+		objectMap["source"] = cp.Source
+	}
+	return json.Marshal(objectMap)
+}
+
 // ConfigurationsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
 // long-running operation.
 type ConfigurationsCreateOrUpdateFuture struct {
@@ -346,11 +191,11 @@ type Database struct {
 	autorest.Response `json:"-"`
 	// DatabaseProperties - The properties of a database.
 	*DatabaseProperties `json:"properties,omitempty"`
-	// ID - READ-ONLY; Resource ID
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -458,8 +303,7 @@ func (future *DatabasesCreateOrUpdateFuture) Result(client DatabasesClient) (d D
 	return
 }
 
-// DatabasesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// DatabasesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type DatabasesDeleteFuture struct {
 	azure.Future
 }
@@ -481,16 +325,38 @@ func (future *DatabasesDeleteFuture) Result(client DatabasesClient) (ar autorest
 	return
 }
 
+// ErrorAdditionalInfo the resource management error additional info.
+type ErrorAdditionalInfo struct {
+	// Type - READ-ONLY; The additional info type.
+	Type *string `json:"type,omitempty"`
+	// Info - READ-ONLY; The additional info.
+	Info interface{} `json:"info,omitempty"`
+}
+
+// ErrorResponse the resource management error response.
+type ErrorResponse struct {
+	// Code - READ-ONLY; The error code.
+	Code *string `json:"code,omitempty"`
+	// Message - READ-ONLY; The error message.
+	Message *string `json:"message,omitempty"`
+	// Target - READ-ONLY; The error target.
+	Target *string `json:"target,omitempty"`
+	// Details - READ-ONLY; The error details.
+	Details *[]ErrorResponse `json:"details,omitempty"`
+	// AdditionalInfo - READ-ONLY; The error additional info.
+	AdditionalInfo *[]ErrorAdditionalInfo `json:"additionalInfo,omitempty"`
+}
+
 // FirewallRule represents a server firewall rule.
 type FirewallRule struct {
 	autorest.Response `json:"-"`
 	// FirewallRuleProperties - The properties of a firewall rule.
 	*FirewallRuleProperties `json:"properties,omitempty"`
-	// ID - READ-ONLY; Resource ID
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -569,8 +435,8 @@ type FirewallRuleProperties struct {
 	EndIPAddress *string `json:"endIpAddress,omitempty"`
 }
 
-// FirewallRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// FirewallRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type FirewallRulesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -625,11 +491,11 @@ func (future *FirewallRulesDeleteFuture) Result(client FirewallRulesClient) (ar 
 type LogFile struct {
 	// LogFileProperties - The properties of the log file.
 	*LogFileProperties `json:"properties,omitempty"`
-	// ID - READ-ONLY; Resource ID
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -712,6 +578,21 @@ type LogFileProperties struct {
 	Type *string `json:"type,omitempty"`
 	// URL - The url to download the log file from.
 	URL *string `json:"url,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for LogFileProperties.
+func (lfp LogFileProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if lfp.SizeInKB != nil {
+		objectMap["sizeInKB"] = lfp.SizeInKB
+	}
+	if lfp.Type != nil {
+		objectMap["type"] = lfp.Type
+	}
+	if lfp.URL != nil {
+		objectMap["url"] = lfp.URL
+	}
+	return json.Marshal(objectMap)
 }
 
 // NameAvailability represents a resource name availability.
@@ -805,14 +686,50 @@ type PerformanceTierServiceLevelObjectives struct {
 	MinStorageMB *int32 `json:"minStorageMB,omitempty"`
 }
 
-// ProxyResource resource properties.
-type ProxyResource struct {
-	// ID - READ-ONLY; Resource ID
+// PrivateEndpointProperty ...
+type PrivateEndpointProperty struct {
+	// ID - Resource id of the private endpoint.
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+}
+
+// ProxyResource the resource model definition for a ARM proxy resource. It will have everything other than
+// required location and tags
+type ProxyResource struct {
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
+}
+
+// Resource ...
+type Resource struct {
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
+}
+
+// ResourceIdentity azure Active Directory identity configuration for a resource.
+type ResourceIdentity struct {
+	// PrincipalID - READ-ONLY; The Azure Active Directory principal id.
+	PrincipalID *uuid.UUID `json:"principalId,omitempty"`
+	// Type - The identity type. Set this to 'SystemAssigned' in order to automatically create and assign an Azure Active Directory principal for the resource. Possible values include: 'SystemAssigned'
+	Type IdentityType `json:"type,omitempty"`
+	// TenantID - READ-ONLY; The Azure Active Directory tenant id.
+	TenantID *uuid.UUID `json:"tenantId,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ResourceIdentity.
+func (ri ResourceIdentity) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ri.Type != "" {
+		objectMap["type"] = ri.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // SecurityAlertPolicyProperties properties of a security alert policy.
@@ -836,36 +753,41 @@ type SecurityAlertPolicyProperties struct {
 // Server represents a server.
 type Server struct {
 	autorest.Response `json:"-"`
+	// Identity - The Azure Active Directory identity of the server.
+	Identity *ResourceIdentity `json:"identity,omitempty"`
 	// Sku - The SKU (pricing tier) of the server.
 	Sku *Sku `json:"sku,omitempty"`
 	// ServerProperties - Properties of the server.
 	*ServerProperties `json:"properties,omitempty"`
-	// Location - The location the resource resides in.
-	Location *string `json:"location,omitempty"`
-	// Tags - Application-specific metadata in the form of key-value pairs.
+	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// ID - READ-ONLY; Resource ID
+	// Location - The geo-location where the resource lives
+	Location *string `json:"location,omitempty"`
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Server.
 func (s Server) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
+	if s.Identity != nil {
+		objectMap["identity"] = s.Identity
+	}
 	if s.Sku != nil {
 		objectMap["sku"] = s.Sku
 	}
 	if s.ServerProperties != nil {
 		objectMap["properties"] = s.ServerProperties
 	}
-	if s.Location != nil {
-		objectMap["location"] = s.Location
-	}
 	if s.Tags != nil {
 		objectMap["tags"] = s.Tags
+	}
+	if s.Location != nil {
+		objectMap["location"] = s.Location
 	}
 	return json.Marshal(objectMap)
 }
@@ -879,6 +801,15 @@ func (s *Server) UnmarshalJSON(body []byte) error {
 	}
 	for k, v := range m {
 		switch k {
+		case "identity":
+			if v != nil {
+				var identity ResourceIdentity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				s.Identity = &identity
+			}
 		case "sku":
 			if v != nil {
 				var sku Sku
@@ -897,15 +828,6 @@ func (s *Server) UnmarshalJSON(body []byte) error {
 				}
 				s.ServerProperties = &serverProperties
 			}
-		case "location":
-			if v != nil {
-				var location string
-				err = json.Unmarshal(*v, &location)
-				if err != nil {
-					return err
-				}
-				s.Location = &location
-			}
 		case "tags":
 			if v != nil {
 				var tags map[string]*string
@@ -914,6 +836,15 @@ func (s *Server) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				s.Tags = tags
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				s.Location = &location
 			}
 		case "id":
 			if v != nil {
@@ -948,8 +879,154 @@ func (s *Server) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// ServerAdministratorProperties the properties of an server Administrator.
+type ServerAdministratorProperties struct {
+	// AdministratorType - The type of administrator.
+	AdministratorType *string `json:"administratorType,omitempty"`
+	// Login - The server administrator login account name.
+	Login *string `json:"login,omitempty"`
+	// Sid - The server administrator Sid (Secure ID).
+	Sid *uuid.UUID `json:"sid,omitempty"`
+	// TenantID - The server Active Directory Administrator tenant id.
+	TenantID *uuid.UUID `json:"tenantId,omitempty"`
+}
+
+// ServerAdministratorResource represents a and external administrator to be created.
+type ServerAdministratorResource struct {
+	autorest.Response `json:"-"`
+	// ServerAdministratorProperties - Properties of the server AAD administrator.
+	*ServerAdministratorProperties `json:"properties,omitempty"`
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; The name of the resource
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
+	Type *string `json:"type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServerAdministratorResource.
+func (sar ServerAdministratorResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sar.ServerAdministratorProperties != nil {
+		objectMap["properties"] = sar.ServerAdministratorProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for ServerAdministratorResource struct.
+func (sar *ServerAdministratorResource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var serverAdministratorProperties ServerAdministratorProperties
+				err = json.Unmarshal(*v, &serverAdministratorProperties)
+				if err != nil {
+					return err
+				}
+				sar.ServerAdministratorProperties = &serverAdministratorProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sar.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sar.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sar.Type = &typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// ServerAdministratorResourceListResult the response to a list Active Directory Administrators request.
+type ServerAdministratorResourceListResult struct {
+	autorest.Response `json:"-"`
+	// Value - The list of server Active Directory Administrators for the server.
+	Value *[]ServerAdministratorResource `json:"value,omitempty"`
+}
+
+// ServerAdministratorsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ServerAdministratorsCreateOrUpdateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ServerAdministratorsCreateOrUpdateFuture) Result(client ServerAdministratorsClient) (sar ServerAdministratorResource, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "mysql.ServerAdministratorsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("mysql.ServerAdministratorsCreateOrUpdateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if sar.Response.Response, err = future.GetResult(sender); err == nil && sar.Response.Response.StatusCode != http.StatusNoContent {
+		sar, err = client.CreateOrUpdateResponder(sar.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "mysql.ServerAdministratorsCreateOrUpdateFuture", "Result", sar.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ServerAdministratorsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type ServerAdministratorsDeleteFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ServerAdministratorsDeleteFuture) Result(client ServerAdministratorsClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "mysql.ServerAdministratorsDeleteFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("mysql.ServerAdministratorsDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
 // ServerForCreate represents a server to be created.
 type ServerForCreate struct {
+	// Identity - The Azure Active Directory identity of the server.
+	Identity *ResourceIdentity `json:"identity,omitempty"`
 	// Sku - The SKU (pricing tier) of the server.
 	Sku *Sku `json:"sku,omitempty"`
 	// Properties - Properties of the server.
@@ -963,6 +1040,9 @@ type ServerForCreate struct {
 // MarshalJSON is the custom marshaler for ServerForCreate.
 func (sfc ServerForCreate) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
+	if sfc.Identity != nil {
+		objectMap["identity"] = sfc.Identity
+	}
 	if sfc.Sku != nil {
 		objectMap["sku"] = sfc.Sku
 	}
@@ -985,6 +1065,15 @@ func (sfc *ServerForCreate) UnmarshalJSON(body []byte) error {
 	}
 	for k, v := range m {
 		switch k {
+		case "identity":
+			if v != nil {
+				var identity ResourceIdentity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				sfc.Identity = &identity
+			}
 		case "sku":
 			if v != nil {
 				var sku Sku
@@ -1033,15 +1122,73 @@ type ServerListResult struct {
 	Value *[]Server `json:"value,omitempty"`
 }
 
+// ServerPrivateEndpointConnection a private endpoint connection under a server
+type ServerPrivateEndpointConnection struct {
+	// ID - READ-ONLY; Resource Id of the private endpoint connection.
+	ID *string `json:"id,omitempty"`
+	// Properties - READ-ONLY; Private endpoint connection properties
+	Properties *ServerPrivateEndpointConnectionProperties `json:"properties,omitempty"`
+}
+
+// ServerPrivateEndpointConnectionProperties properties of a private endpoint connection.
+type ServerPrivateEndpointConnectionProperties struct {
+	// PrivateEndpoint - Private endpoint which the connection belongs to.
+	PrivateEndpoint *PrivateEndpointProperty `json:"privateEndpoint,omitempty"`
+	// PrivateLinkServiceConnectionState - Connection state of the private endpoint connection.
+	PrivateLinkServiceConnectionState *ServerPrivateLinkServiceConnectionStateProperty `json:"privateLinkServiceConnectionState,omitempty"`
+	// ProvisioningState - READ-ONLY; State of the private endpoint connection. Possible values include: 'Approving', 'Ready', 'Dropping', 'Failed', 'Rejecting'
+	ProvisioningState PrivateEndpointProvisioningState `json:"provisioningState,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServerPrivateEndpointConnectionProperties.
+func (specp ServerPrivateEndpointConnectionProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if specp.PrivateEndpoint != nil {
+		objectMap["privateEndpoint"] = specp.PrivateEndpoint
+	}
+	if specp.PrivateLinkServiceConnectionState != nil {
+		objectMap["privateLinkServiceConnectionState"] = specp.PrivateLinkServiceConnectionState
+	}
+	return json.Marshal(objectMap)
+}
+
+// ServerPrivateLinkServiceConnectionStateProperty ...
+type ServerPrivateLinkServiceConnectionStateProperty struct {
+	// Status - The private link service connection status. Possible values include: 'Approved', 'Pending', 'Rejected', 'Disconnected'
+	Status PrivateLinkServiceConnectionStateStatus `json:"status,omitempty"`
+	// Description - The private link service connection description.
+	Description *string `json:"description,omitempty"`
+	// ActionsRequired - READ-ONLY; The actions required for private link service connection. Possible values include: 'None'
+	ActionsRequired PrivateLinkServiceConnectionStateActionsRequire `json:"actionsRequired,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServerPrivateLinkServiceConnectionStateProperty.
+func (splscsp ServerPrivateLinkServiceConnectionStateProperty) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if splscsp.Status != "" {
+		objectMap["status"] = splscsp.Status
+	}
+	if splscsp.Description != nil {
+		objectMap["description"] = splscsp.Description
+	}
+	return json.Marshal(objectMap)
+}
+
 // ServerProperties the properties of a server.
 type ServerProperties struct {
 	// AdministratorLogin - The administrator's login name of a server. Can only be specified when the server is being created (and is required for creation).
 	AdministratorLogin *string `json:"administratorLogin,omitempty"`
-	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
-	// UserVisibleState - A state of a server that is visible to user. Possible values include: 'ServerStateReady', 'ServerStateDropping', 'ServerStateDisabled'
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// ByokEnforcement - READ-ONLY; Status showing whether the server data encryption is enabled with customer-managed keys.
+	ByokEnforcement *string `json:"byokEnforcement,omitempty"`
+	// InfrastructureEncryption - Status showing whether the server enabled infrastructure encryption. Possible values include: 'InfrastructureEncryptionEnabled', 'InfrastructureEncryptionDisabled'
+	InfrastructureEncryption InfrastructureEncryption `json:"infrastructureEncryption,omitempty"`
+	// UserVisibleState - A state of a server that is visible to user. Possible values include: 'ServerStateReady', 'ServerStateDropping', 'ServerStateDisabled', 'ServerStateInaccessible'
 	UserVisibleState ServerState `json:"userVisibleState,omitempty"`
 	// FullyQualifiedDomainName - The fully qualified domain name of a server.
 	FullyQualifiedDomainName *string `json:"fullyQualifiedDomainName,omitempty"`
@@ -1055,6 +1202,55 @@ type ServerProperties struct {
 	MasterServerID *string `json:"masterServerId,omitempty"`
 	// ReplicaCapacity - The maximum number of replicas that a master server can have.
 	ReplicaCapacity *int32 `json:"replicaCapacity,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
+	// PrivateEndpointConnections - READ-ONLY; List of private endpoint connections on a server
+	PrivateEndpointConnections *[]ServerPrivateEndpointConnection `json:"privateEndpointConnections,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServerProperties.
+func (sp ServerProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sp.AdministratorLogin != nil {
+		objectMap["administratorLogin"] = sp.AdministratorLogin
+	}
+	if sp.Version != "" {
+		objectMap["version"] = sp.Version
+	}
+	if sp.SslEnforcement != "" {
+		objectMap["sslEnforcement"] = sp.SslEnforcement
+	}
+	if sp.MinimalTLSVersion != "" {
+		objectMap["minimalTlsVersion"] = sp.MinimalTLSVersion
+	}
+	if sp.InfrastructureEncryption != "" {
+		objectMap["infrastructureEncryption"] = sp.InfrastructureEncryption
+	}
+	if sp.UserVisibleState != "" {
+		objectMap["userVisibleState"] = sp.UserVisibleState
+	}
+	if sp.FullyQualifiedDomainName != nil {
+		objectMap["fullyQualifiedDomainName"] = sp.FullyQualifiedDomainName
+	}
+	if sp.EarliestRestoreDate != nil {
+		objectMap["earliestRestoreDate"] = sp.EarliestRestoreDate
+	}
+	if sp.StorageProfile != nil {
+		objectMap["storageProfile"] = sp.StorageProfile
+	}
+	if sp.ReplicationRole != nil {
+		objectMap["replicationRole"] = sp.ReplicationRole
+	}
+	if sp.MasterServerID != nil {
+		objectMap["masterServerId"] = sp.MasterServerID
+	}
+	if sp.ReplicaCapacity != nil {
+		objectMap["replicaCapacity"] = sp.ReplicaCapacity
+	}
+	if sp.PublicNetworkAccess != "" {
+		objectMap["publicNetworkAccess"] = sp.PublicNetworkAccess
+	}
+	return json.Marshal(objectMap)
 }
 
 // BasicServerPropertiesForCreate the properties used to create a new server.
@@ -1068,10 +1264,16 @@ type BasicServerPropertiesForCreate interface {
 
 // ServerPropertiesForCreate the properties used to create a new server.
 type ServerPropertiesForCreate struct {
-	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// InfrastructureEncryption - Status showing whether the server enabled infrastructure encryption. Possible values include: 'InfrastructureEncryptionEnabled', 'InfrastructureEncryptionDisabled'
+	InfrastructureEncryption InfrastructureEncryption `json:"infrastructureEncryption,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
@@ -1137,6 +1339,15 @@ func (spfc ServerPropertiesForCreate) MarshalJSON() ([]byte, error) {
 	if spfc.SslEnforcement != "" {
 		objectMap["sslEnforcement"] = spfc.SslEnforcement
 	}
+	if spfc.MinimalTLSVersion != "" {
+		objectMap["minimalTlsVersion"] = spfc.MinimalTLSVersion
+	}
+	if spfc.InfrastructureEncryption != "" {
+		objectMap["infrastructureEncryption"] = spfc.InfrastructureEncryption
+	}
+	if spfc.PublicNetworkAccess != "" {
+		objectMap["publicNetworkAccess"] = spfc.PublicNetworkAccess
+	}
 	if spfc.StorageProfile != nil {
 		objectMap["storageProfile"] = spfc.StorageProfile
 	}
@@ -1182,10 +1393,16 @@ type ServerPropertiesForDefaultCreate struct {
 	AdministratorLogin *string `json:"administratorLogin,omitempty"`
 	// AdministratorLoginPassword - The password of the administrator login.
 	AdministratorLoginPassword *string `json:"administratorLoginPassword,omitempty"`
-	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// InfrastructureEncryption - Status showing whether the server enabled infrastructure encryption. Possible values include: 'InfrastructureEncryptionEnabled', 'InfrastructureEncryptionDisabled'
+	InfrastructureEncryption InfrastructureEncryption `json:"infrastructureEncryption,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
@@ -1207,6 +1424,15 @@ func (spfdc ServerPropertiesForDefaultCreate) MarshalJSON() ([]byte, error) {
 	}
 	if spfdc.SslEnforcement != "" {
 		objectMap["sslEnforcement"] = spfdc.SslEnforcement
+	}
+	if spfdc.MinimalTLSVersion != "" {
+		objectMap["minimalTlsVersion"] = spfdc.MinimalTLSVersion
+	}
+	if spfdc.InfrastructureEncryption != "" {
+		objectMap["infrastructureEncryption"] = spfdc.InfrastructureEncryption
+	}
+	if spfdc.PublicNetworkAccess != "" {
+		objectMap["publicNetworkAccess"] = spfdc.PublicNetworkAccess
 	}
 	if spfdc.StorageProfile != nil {
 		objectMap["storageProfile"] = spfdc.StorageProfile
@@ -1247,15 +1473,21 @@ func (spfdc ServerPropertiesForDefaultCreate) AsBasicServerPropertiesForCreate()
 	return &spfdc, true
 }
 
-// ServerPropertiesForGeoRestore the properties used to create a new server by restoring to a different
-// region from a geo replicated backup.
+// ServerPropertiesForGeoRestore the properties used to create a new server by restoring to a different region
+// from a geo replicated backup.
 type ServerPropertiesForGeoRestore struct {
 	// SourceServerID - The source server id to restore from.
 	SourceServerID *string `json:"sourceServerId,omitempty"`
-	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// InfrastructureEncryption - Status showing whether the server enabled infrastructure encryption. Possible values include: 'InfrastructureEncryptionEnabled', 'InfrastructureEncryptionDisabled'
+	InfrastructureEncryption InfrastructureEncryption `json:"infrastructureEncryption,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
@@ -1274,6 +1506,15 @@ func (spfgr ServerPropertiesForGeoRestore) MarshalJSON() ([]byte, error) {
 	}
 	if spfgr.SslEnforcement != "" {
 		objectMap["sslEnforcement"] = spfgr.SslEnforcement
+	}
+	if spfgr.MinimalTLSVersion != "" {
+		objectMap["minimalTlsVersion"] = spfgr.MinimalTLSVersion
+	}
+	if spfgr.InfrastructureEncryption != "" {
+		objectMap["infrastructureEncryption"] = spfgr.InfrastructureEncryption
+	}
+	if spfgr.PublicNetworkAccess != "" {
+		objectMap["publicNetworkAccess"] = spfgr.PublicNetworkAccess
 	}
 	if spfgr.StorageProfile != nil {
 		objectMap["storageProfile"] = spfgr.StorageProfile
@@ -1318,10 +1559,16 @@ func (spfgr ServerPropertiesForGeoRestore) AsBasicServerPropertiesForCreate() (B
 type ServerPropertiesForReplica struct {
 	// SourceServerID - The master server id to create replica from.
 	SourceServerID *string `json:"sourceServerId,omitempty"`
-	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// InfrastructureEncryption - Status showing whether the server enabled infrastructure encryption. Possible values include: 'InfrastructureEncryptionEnabled', 'InfrastructureEncryptionDisabled'
+	InfrastructureEncryption InfrastructureEncryption `json:"infrastructureEncryption,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
@@ -1340,6 +1587,15 @@ func (spfr ServerPropertiesForReplica) MarshalJSON() ([]byte, error) {
 	}
 	if spfr.SslEnforcement != "" {
 		objectMap["sslEnforcement"] = spfr.SslEnforcement
+	}
+	if spfr.MinimalTLSVersion != "" {
+		objectMap["minimalTlsVersion"] = spfr.MinimalTLSVersion
+	}
+	if spfr.InfrastructureEncryption != "" {
+		objectMap["infrastructureEncryption"] = spfr.InfrastructureEncryption
+	}
+	if spfr.PublicNetworkAccess != "" {
+		objectMap["publicNetworkAccess"] = spfr.PublicNetworkAccess
 	}
 	if spfr.StorageProfile != nil {
 		objectMap["storageProfile"] = spfr.StorageProfile
@@ -1386,10 +1642,16 @@ type ServerPropertiesForRestore struct {
 	SourceServerID *string `json:"sourceServerId,omitempty"`
 	// RestorePointInTime - Restore point creation time (ISO8601 format), specifying the time to restore from.
 	RestorePointInTime *date.Time `json:"restorePointInTime,omitempty"`
-	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - Server version. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// InfrastructureEncryption - Status showing whether the server enabled infrastructure encryption. Possible values include: 'InfrastructureEncryptionEnabled', 'InfrastructureEncryptionDisabled'
+	InfrastructureEncryption InfrastructureEncryption `json:"infrastructureEncryption,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
@@ -1411,6 +1673,15 @@ func (spfr ServerPropertiesForRestore) MarshalJSON() ([]byte, error) {
 	}
 	if spfr.SslEnforcement != "" {
 		objectMap["sslEnforcement"] = spfr.SslEnforcement
+	}
+	if spfr.MinimalTLSVersion != "" {
+		objectMap["minimalTlsVersion"] = spfr.MinimalTLSVersion
+	}
+	if spfr.InfrastructureEncryption != "" {
+		objectMap["infrastructureEncryption"] = spfr.InfrastructureEncryption
+	}
+	if spfr.PublicNetworkAccess != "" {
+		objectMap["publicNetworkAccess"] = spfr.PublicNetworkAccess
 	}
 	if spfr.StorageProfile != nil {
 		objectMap["storageProfile"] = spfr.StorageProfile
@@ -1451,8 +1722,7 @@ func (spfr ServerPropertiesForRestore) AsBasicServerPropertiesForCreate() (Basic
 	return &spfr, true
 }
 
-// ServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServersCreateFuture struct {
 	azure.Future
 }
@@ -1480,8 +1750,7 @@ func (future *ServersCreateFuture) Result(client ServersClient) (s Server, err e
 	return
 }
 
-// ServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServersDeleteFuture struct {
 	azure.Future
 }
@@ -1503,8 +1772,8 @@ func (future *ServersDeleteFuture) Result(client ServersClient) (ar autorest.Res
 	return
 }
 
-// ServerSecurityAlertPoliciesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ServerSecurityAlertPoliciesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ServerSecurityAlertPoliciesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1537,11 +1806,11 @@ type ServerSecurityAlertPolicy struct {
 	autorest.Response `json:"-"`
 	// SecurityAlertPolicyProperties - Resource properties.
 	*SecurityAlertPolicyProperties `json:"properties,omitempty"`
-	// ID - READ-ONLY; Resource ID
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1605,8 +1874,7 @@ func (ssap *ServerSecurityAlertPolicy) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ServersRestartFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServersRestartFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServersRestartFuture struct {
 	azure.Future
 }
@@ -1628,8 +1896,7 @@ func (future *ServersRestartFuture) Result(client ServersClient) (ar autorest.Re
 	return
 }
 
-// ServersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ServersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type ServersUpdateFuture struct {
 	azure.Future
 }
@@ -1659,6 +1926,8 @@ func (future *ServersUpdateFuture) Result(client ServersClient) (s Server, err e
 
 // ServerUpdateParameters parameters allowed to update for a server.
 type ServerUpdateParameters struct {
+	// Identity - The Azure Active Directory identity of the server.
+	Identity *ResourceIdentity `json:"identity,omitempty"`
 	// Sku - The SKU (pricing tier) of the server.
 	Sku *Sku `json:"sku,omitempty"`
 	// ServerUpdateParametersProperties - The properties that can be updated for a server.
@@ -1670,6 +1939,9 @@ type ServerUpdateParameters struct {
 // MarshalJSON is the custom marshaler for ServerUpdateParameters.
 func (sup ServerUpdateParameters) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
+	if sup.Identity != nil {
+		objectMap["identity"] = sup.Identity
+	}
 	if sup.Sku != nil {
 		objectMap["sku"] = sup.Sku
 	}
@@ -1691,6 +1963,15 @@ func (sup *ServerUpdateParameters) UnmarshalJSON(body []byte) error {
 	}
 	for k, v := range m {
 		switch k {
+		case "identity":
+			if v != nil {
+				var identity ResourceIdentity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				sup.Identity = &identity
+			}
 		case "sku":
 			if v != nil {
 				var sku Sku
@@ -1730,10 +2011,14 @@ type ServerUpdateParametersProperties struct {
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
 	// AdministratorLoginPassword - The password of the administrator login.
 	AdministratorLoginPassword *string `json:"administratorLoginPassword,omitempty"`
-	// Version - The version of a server. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven'
+	// Version - The version of a server. Possible values include: 'FiveFullStopSix', 'FiveFullStopSeven', 'EightFullStopZero'
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// MinimalTLSVersion - Enforce a minimal Tls version for the server. Possible values include: 'TLS10', 'TLS11', 'TLS12', 'TLSEnforcementDisabled'
+	MinimalTLSVersion MinimalTLSVersionEnum `json:"minimalTlsVersion,omitempty"`
+	// PublicNetworkAccess - Whether or not public network access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. Possible values include: 'PublicNetworkAccessEnumEnabled', 'PublicNetworkAccessEnumDisabled'
+	PublicNetworkAccess PublicNetworkAccessEnum `json:"publicNetworkAccess,omitempty"`
 	// ReplicationRole - The replication role of the server.
 	ReplicationRole *string `json:"replicationRole,omitempty"`
 }
@@ -1764,28 +2049,28 @@ type StorageProfile struct {
 	StorageAutogrow StorageAutogrow `json:"storageAutogrow,omitempty"`
 }
 
-// TrackedResource resource properties including location and tags for track resources.
+// TrackedResource the resource model definition for a ARM tracked top level resource
 type TrackedResource struct {
-	// Location - The location the resource resides in.
-	Location *string `json:"location,omitempty"`
-	// Tags - Application-specific metadata in the form of key-value pairs.
+	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// ID - READ-ONLY; Resource ID
+	// Location - The geo-location where the resource lives
+	Location *string `json:"location,omitempty"`
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for TrackedResource.
 func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if tr.Location != nil {
-		objectMap["location"] = tr.Location
-	}
 	if tr.Tags != nil {
 		objectMap["tags"] = tr.Tags
+	}
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
 	}
 	return json.Marshal(objectMap)
 }
@@ -1795,11 +2080,11 @@ type VirtualNetworkRule struct {
 	autorest.Response `json:"-"`
 	// VirtualNetworkRuleProperties - Resource properties.
 	*VirtualNetworkRuleProperties `json:"properties,omitempty"`
-	// ID - READ-ONLY; Resource ID
+	// ID - READ-ONLY; Fully qualified resource Id for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
+	// Type - READ-ONLY; The type of the resource. Ex- Microsoft.Compute/virtualMachines or Microsoft.Storage/storageAccounts.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1940,10 +2225,15 @@ func (vnrlr VirtualNetworkRuleListResult) IsEmpty() bool {
 	return vnrlr.Value == nil || len(*vnrlr.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (vnrlr VirtualNetworkRuleListResult) hasNextLink() bool {
+	return vnrlr.NextLink != nil && len(*vnrlr.NextLink) != 0
+}
+
 // virtualNetworkRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
-	if vnrlr.NextLink == nil || len(to.String(vnrlr.NextLink)) < 1 {
+	if !vnrlr.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -1971,11 +2261,16 @@ func (page *VirtualNetworkRuleListResultPage) NextWithContext(ctx context.Contex
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.vnrlr)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.vnrlr)
+		if err != nil {
+			return err
+		}
+		page.vnrlr = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.vnrlr = next
 	return nil
 }
 
@@ -2015,8 +2310,20 @@ type VirtualNetworkRuleProperties struct {
 	VirtualNetworkSubnetID *string `json:"virtualNetworkSubnetId,omitempty"`
 	// IgnoreMissingVnetServiceEndpoint - Create firewall rule before the virtual network has vnet service endpoint enabled.
 	IgnoreMissingVnetServiceEndpoint *bool `json:"ignoreMissingVnetServiceEndpoint,omitempty"`
-	// State - READ-ONLY; Virtual Network Rule State. Possible values include: 'Initializing', 'InProgress', 'Ready', 'Deleting', 'Unknown'
+	// State - READ-ONLY; Virtual Network Rule State. Possible values include: 'VirtualNetworkRuleStateInitializing', 'VirtualNetworkRuleStateInProgress', 'VirtualNetworkRuleStateReady', 'VirtualNetworkRuleStateDeleting', 'VirtualNetworkRuleStateUnknown'
 	State VirtualNetworkRuleState `json:"state,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VirtualNetworkRuleProperties.
+func (vnrp VirtualNetworkRuleProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if vnrp.VirtualNetworkSubnetID != nil {
+		objectMap["virtualNetworkSubnetId"] = vnrp.VirtualNetworkSubnetID
+	}
+	if vnrp.IgnoreMissingVnetServiceEndpoint != nil {
+		objectMap["ignoreMissingVnetServiceEndpoint"] = vnrp.IgnoreMissingVnetServiceEndpoint
+	}
+	return json.Marshal(objectMap)
 }
 
 // VirtualNetworkRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
@@ -2048,8 +2355,8 @@ func (future *VirtualNetworkRulesCreateOrUpdateFuture) Result(client VirtualNetw
 	return
 }
 
-// VirtualNetworkRulesDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// VirtualNetworkRulesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VirtualNetworkRulesDeleteFuture struct {
 	azure.Future
 }

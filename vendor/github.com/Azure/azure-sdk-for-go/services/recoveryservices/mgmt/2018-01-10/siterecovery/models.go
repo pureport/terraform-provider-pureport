@@ -31,1263 +31,6 @@ import (
 // The package's fully qualified name.
 const fqdn = "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2018-01-10/siterecovery"
 
-// A2ARpRecoveryPointType enumerates the values for a2a rp recovery point type.
-type A2ARpRecoveryPointType string
-
-const (
-	// Latest ...
-	Latest A2ARpRecoveryPointType = "Latest"
-	// LatestApplicationConsistent ...
-	LatestApplicationConsistent A2ARpRecoveryPointType = "LatestApplicationConsistent"
-	// LatestCrashConsistent ...
-	LatestCrashConsistent A2ARpRecoveryPointType = "LatestCrashConsistent"
-	// LatestProcessed ...
-	LatestProcessed A2ARpRecoveryPointType = "LatestProcessed"
-)
-
-// PossibleA2ARpRecoveryPointTypeValues returns an array of possible values for the A2ARpRecoveryPointType const type.
-func PossibleA2ARpRecoveryPointTypeValues() []A2ARpRecoveryPointType {
-	return []A2ARpRecoveryPointType{Latest, LatestApplicationConsistent, LatestCrashConsistent, LatestProcessed}
-}
-
-// AgentAutoUpdateStatus enumerates the values for agent auto update status.
-type AgentAutoUpdateStatus string
-
-const (
-	// Disabled ...
-	Disabled AgentAutoUpdateStatus = "Disabled"
-	// Enabled ...
-	Enabled AgentAutoUpdateStatus = "Enabled"
-)
-
-// PossibleAgentAutoUpdateStatusValues returns an array of possible values for the AgentAutoUpdateStatus const type.
-func PossibleAgentAutoUpdateStatusValues() []AgentAutoUpdateStatus {
-	return []AgentAutoUpdateStatus{Disabled, Enabled}
-}
-
-// AgentVersionStatus enumerates the values for agent version status.
-type AgentVersionStatus string
-
-const (
-	// Deprecated ...
-	Deprecated AgentVersionStatus = "Deprecated"
-	// NotSupported ...
-	NotSupported AgentVersionStatus = "NotSupported"
-	// SecurityUpdateRequired ...
-	SecurityUpdateRequired AgentVersionStatus = "SecurityUpdateRequired"
-	// Supported ...
-	Supported AgentVersionStatus = "Supported"
-	// UpdateRequired ...
-	UpdateRequired AgentVersionStatus = "UpdateRequired"
-)
-
-// PossibleAgentVersionStatusValues returns an array of possible values for the AgentVersionStatus const type.
-func PossibleAgentVersionStatusValues() []AgentVersionStatus {
-	return []AgentVersionStatus{Deprecated, NotSupported, SecurityUpdateRequired, Supported, UpdateRequired}
-}
-
-// AlternateLocationRecoveryOption enumerates the values for alternate location recovery option.
-type AlternateLocationRecoveryOption string
-
-const (
-	// CreateVMIfNotFound ...
-	CreateVMIfNotFound AlternateLocationRecoveryOption = "CreateVmIfNotFound"
-	// NoAction ...
-	NoAction AlternateLocationRecoveryOption = "NoAction"
-)
-
-// PossibleAlternateLocationRecoveryOptionValues returns an array of possible values for the AlternateLocationRecoveryOption const type.
-func PossibleAlternateLocationRecoveryOptionValues() []AlternateLocationRecoveryOption {
-	return []AlternateLocationRecoveryOption{CreateVMIfNotFound, NoAction}
-}
-
-// DataSyncStatus enumerates the values for data sync status.
-type DataSyncStatus string
-
-const (
-	// ForDownTime ...
-	ForDownTime DataSyncStatus = "ForDownTime"
-	// ForSynchronization ...
-	ForSynchronization DataSyncStatus = "ForSynchronization"
-)
-
-// PossibleDataSyncStatusValues returns an array of possible values for the DataSyncStatus const type.
-func PossibleDataSyncStatusValues() []DataSyncStatus {
-	return []DataSyncStatus{ForDownTime, ForSynchronization}
-}
-
-// DisableProtectionReason enumerates the values for disable protection reason.
-type DisableProtectionReason string
-
-const (
-	// MigrationComplete ...
-	MigrationComplete DisableProtectionReason = "MigrationComplete"
-	// NotSpecified ...
-	NotSpecified DisableProtectionReason = "NotSpecified"
-)
-
-// PossibleDisableProtectionReasonValues returns an array of possible values for the DisableProtectionReason const type.
-func PossibleDisableProtectionReasonValues() []DisableProtectionReason {
-	return []DisableProtectionReason{MigrationComplete, NotSpecified}
-}
-
-// DiskAccountType enumerates the values for disk account type.
-type DiskAccountType string
-
-const (
-	// PremiumLRS ...
-	PremiumLRS DiskAccountType = "Premium_LRS"
-	// StandardLRS ...
-	StandardLRS DiskAccountType = "Standard_LRS"
-	// StandardSSDLRS ...
-	StandardSSDLRS DiskAccountType = "StandardSSD_LRS"
-)
-
-// PossibleDiskAccountTypeValues returns an array of possible values for the DiskAccountType const type.
-func PossibleDiskAccountTypeValues() []DiskAccountType {
-	return []DiskAccountType{PremiumLRS, StandardLRS, StandardSSDLRS}
-}
-
-// DiskType enumerates the values for disk type.
-type DiskType string
-
-const (
-	// DiskTypePremiumLRS ...
-	DiskTypePremiumLRS DiskType = "Premium_LRS"
-	// DiskTypeStandardLRS ...
-	DiskTypeStandardLRS DiskType = "Standard_LRS"
-	// DiskTypeStandardSSDLRS ...
-	DiskTypeStandardSSDLRS DiskType = "StandardSSD_LRS"
-)
-
-// PossibleDiskTypeValues returns an array of possible values for the DiskType const type.
-func PossibleDiskTypeValues() []DiskType {
-	return []DiskType{DiskTypePremiumLRS, DiskTypeStandardLRS, DiskTypeStandardSSDLRS}
-}
-
-// EthernetAddressType enumerates the values for ethernet address type.
-type EthernetAddressType string
-
-const (
-	// Dynamic ...
-	Dynamic EthernetAddressType = "Dynamic"
-	// Static ...
-	Static EthernetAddressType = "Static"
-)
-
-// PossibleEthernetAddressTypeValues returns an array of possible values for the EthernetAddressType const type.
-func PossibleEthernetAddressTypeValues() []EthernetAddressType {
-	return []EthernetAddressType{Dynamic, Static}
-}
-
-// FailoverDeploymentModel enumerates the values for failover deployment model.
-type FailoverDeploymentModel string
-
-const (
-	// Classic ...
-	Classic FailoverDeploymentModel = "Classic"
-	// NotApplicable ...
-	NotApplicable FailoverDeploymentModel = "NotApplicable"
-	// ResourceManager ...
-	ResourceManager FailoverDeploymentModel = "ResourceManager"
-)
-
-// PossibleFailoverDeploymentModelValues returns an array of possible values for the FailoverDeploymentModel const type.
-func PossibleFailoverDeploymentModelValues() []FailoverDeploymentModel {
-	return []FailoverDeploymentModel{Classic, NotApplicable, ResourceManager}
-}
-
-// HealthErrorCategory enumerates the values for health error category.
-type HealthErrorCategory string
-
-const (
-	// AgentAutoUpdate ...
-	AgentAutoUpdate HealthErrorCategory = "AgentAutoUpdate"
-	// Configuration ...
-	Configuration HealthErrorCategory = "Configuration"
-	// FabricInfrastructure ...
-	FabricInfrastructure HealthErrorCategory = "FabricInfrastructure"
-	// None ...
-	None HealthErrorCategory = "None"
-	// Replication ...
-	Replication HealthErrorCategory = "Replication"
-	// TestFailover ...
-	TestFailover HealthErrorCategory = "TestFailover"
-	// VersionExpiry ...
-	VersionExpiry HealthErrorCategory = "VersionExpiry"
-)
-
-// PossibleHealthErrorCategoryValues returns an array of possible values for the HealthErrorCategory const type.
-func PossibleHealthErrorCategoryValues() []HealthErrorCategory {
-	return []HealthErrorCategory{AgentAutoUpdate, Configuration, FabricInfrastructure, None, Replication, TestFailover, VersionExpiry}
-}
-
-// HyperVReplicaAzureRpRecoveryPointType enumerates the values for hyper v replica azure rp recovery point
-// type.
-type HyperVReplicaAzureRpRecoveryPointType string
-
-const (
-	// HyperVReplicaAzureRpRecoveryPointTypeLatest ...
-	HyperVReplicaAzureRpRecoveryPointTypeLatest HyperVReplicaAzureRpRecoveryPointType = "Latest"
-	// HyperVReplicaAzureRpRecoveryPointTypeLatestApplicationConsistent ...
-	HyperVReplicaAzureRpRecoveryPointTypeLatestApplicationConsistent HyperVReplicaAzureRpRecoveryPointType = "LatestApplicationConsistent"
-	// HyperVReplicaAzureRpRecoveryPointTypeLatestProcessed ...
-	HyperVReplicaAzureRpRecoveryPointTypeLatestProcessed HyperVReplicaAzureRpRecoveryPointType = "LatestProcessed"
-)
-
-// PossibleHyperVReplicaAzureRpRecoveryPointTypeValues returns an array of possible values for the HyperVReplicaAzureRpRecoveryPointType const type.
-func PossibleHyperVReplicaAzureRpRecoveryPointTypeValues() []HyperVReplicaAzureRpRecoveryPointType {
-	return []HyperVReplicaAzureRpRecoveryPointType{HyperVReplicaAzureRpRecoveryPointTypeLatest, HyperVReplicaAzureRpRecoveryPointTypeLatestApplicationConsistent, HyperVReplicaAzureRpRecoveryPointTypeLatestProcessed}
-}
-
-// InMageV2RpRecoveryPointType enumerates the values for in mage v2 rp recovery point type.
-type InMageV2RpRecoveryPointType string
-
-const (
-	// InMageV2RpRecoveryPointTypeLatest ...
-	InMageV2RpRecoveryPointTypeLatest InMageV2RpRecoveryPointType = "Latest"
-	// InMageV2RpRecoveryPointTypeLatestApplicationConsistent ...
-	InMageV2RpRecoveryPointTypeLatestApplicationConsistent InMageV2RpRecoveryPointType = "LatestApplicationConsistent"
-	// InMageV2RpRecoveryPointTypeLatestCrashConsistent ...
-	InMageV2RpRecoveryPointTypeLatestCrashConsistent InMageV2RpRecoveryPointType = "LatestCrashConsistent"
-	// InMageV2RpRecoveryPointTypeLatestProcessed ...
-	InMageV2RpRecoveryPointTypeLatestProcessed InMageV2RpRecoveryPointType = "LatestProcessed"
-)
-
-// PossibleInMageV2RpRecoveryPointTypeValues returns an array of possible values for the InMageV2RpRecoveryPointType const type.
-func PossibleInMageV2RpRecoveryPointTypeValues() []InMageV2RpRecoveryPointType {
-	return []InMageV2RpRecoveryPointType{InMageV2RpRecoveryPointTypeLatest, InMageV2RpRecoveryPointTypeLatestApplicationConsistent, InMageV2RpRecoveryPointTypeLatestCrashConsistent, InMageV2RpRecoveryPointTypeLatestProcessed}
-}
-
-// InstanceType enumerates the values for instance type.
-type InstanceType string
-
-const (
-	// InstanceTypeA2A ...
-	InstanceTypeA2A InstanceType = "A2A"
-	// InstanceTypeApplyRecoveryPointProviderSpecificInput ...
-	InstanceTypeApplyRecoveryPointProviderSpecificInput InstanceType = "ApplyRecoveryPointProviderSpecificInput"
-	// InstanceTypeHyperVReplicaAzure ...
-	InstanceTypeHyperVReplicaAzure InstanceType = "HyperVReplicaAzure"
-	// InstanceTypeInMageAzureV2 ...
-	InstanceTypeInMageAzureV2 InstanceType = "InMageAzureV2"
-)
-
-// PossibleInstanceTypeValues returns an array of possible values for the InstanceType const type.
-func PossibleInstanceTypeValues() []InstanceType {
-	return []InstanceType{InstanceTypeA2A, InstanceTypeApplyRecoveryPointProviderSpecificInput, InstanceTypeHyperVReplicaAzure, InstanceTypeInMageAzureV2}
-}
-
-// InstanceTypeBasicConfigurationSettings enumerates the values for instance type basic configuration settings.
-type InstanceTypeBasicConfigurationSettings string
-
-const (
-	// InstanceTypeConfigurationSettings ...
-	InstanceTypeConfigurationSettings InstanceTypeBasicConfigurationSettings = "ConfigurationSettings"
-	// InstanceTypeHyperVVirtualMachine ...
-	InstanceTypeHyperVVirtualMachine InstanceTypeBasicConfigurationSettings = "HyperVVirtualMachine"
-	// InstanceTypeReplicationGroupDetails ...
-	InstanceTypeReplicationGroupDetails InstanceTypeBasicConfigurationSettings = "ReplicationGroupDetails"
-	// InstanceTypeVmmVirtualMachine ...
-	InstanceTypeVmmVirtualMachine InstanceTypeBasicConfigurationSettings = "VmmVirtualMachine"
-	// InstanceTypeVMwareVirtualMachine ...
-	InstanceTypeVMwareVirtualMachine InstanceTypeBasicConfigurationSettings = "VMwareVirtualMachine"
-)
-
-// PossibleInstanceTypeBasicConfigurationSettingsValues returns an array of possible values for the InstanceTypeBasicConfigurationSettings const type.
-func PossibleInstanceTypeBasicConfigurationSettingsValues() []InstanceTypeBasicConfigurationSettings {
-	return []InstanceTypeBasicConfigurationSettings{InstanceTypeConfigurationSettings, InstanceTypeHyperVVirtualMachine, InstanceTypeReplicationGroupDetails, InstanceTypeVmmVirtualMachine, InstanceTypeVMwareVirtualMachine}
-}
-
-// InstanceTypeBasicDisableProtectionProviderSpecificInput enumerates the values for instance type basic
-// disable protection provider specific input.
-type InstanceTypeBasicDisableProtectionProviderSpecificInput string
-
-const (
-	// InstanceTypeDisableProtectionProviderSpecificInput ...
-	InstanceTypeDisableProtectionProviderSpecificInput InstanceTypeBasicDisableProtectionProviderSpecificInput = "DisableProtectionProviderSpecificInput"
-	// InstanceTypeInMage ...
-	InstanceTypeInMage InstanceTypeBasicDisableProtectionProviderSpecificInput = "InMage"
-)
-
-// PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicDisableProtectionProviderSpecificInput const type.
-func PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues() []InstanceTypeBasicDisableProtectionProviderSpecificInput {
-	return []InstanceTypeBasicDisableProtectionProviderSpecificInput{InstanceTypeDisableProtectionProviderSpecificInput, InstanceTypeInMage}
-}
-
-// InstanceTypeBasicEnableMigrationProviderSpecificInput enumerates the values for instance type basic enable
-// migration provider specific input.
-type InstanceTypeBasicEnableMigrationProviderSpecificInput string
-
-const (
-	// InstanceTypeEnableMigrationProviderSpecificInput ...
-	InstanceTypeEnableMigrationProviderSpecificInput InstanceTypeBasicEnableMigrationProviderSpecificInput = "EnableMigrationProviderSpecificInput"
-	// InstanceTypeVMwareCbt ...
-	InstanceTypeVMwareCbt InstanceTypeBasicEnableMigrationProviderSpecificInput = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicEnableMigrationProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicEnableMigrationProviderSpecificInput const type.
-func PossibleInstanceTypeBasicEnableMigrationProviderSpecificInputValues() []InstanceTypeBasicEnableMigrationProviderSpecificInput {
-	return []InstanceTypeBasicEnableMigrationProviderSpecificInput{InstanceTypeEnableMigrationProviderSpecificInput, InstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicEnableProtectionProviderSpecificInput enumerates the values for instance type basic enable
-// protection provider specific input.
-type InstanceTypeBasicEnableProtectionProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeA2A ...
-	InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeA2A InstanceTypeBasicEnableProtectionProviderSpecificInput = "A2A"
-	// InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeEnableProtectionProviderSpecificInput ...
-	InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeEnableProtectionProviderSpecificInput InstanceTypeBasicEnableProtectionProviderSpecificInput = "EnableProtectionProviderSpecificInput"
-	// InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeHyperVReplicaAzure InstanceTypeBasicEnableProtectionProviderSpecificInput = "HyperVReplicaAzure"
-	// InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMage ...
-	InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMage InstanceTypeBasicEnableProtectionProviderSpecificInput = "InMage"
-	// InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMageAzureV2 InstanceTypeBasicEnableProtectionProviderSpecificInput = "InMageAzureV2"
-	// InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeSan ...
-	InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeSan InstanceTypeBasicEnableProtectionProviderSpecificInput = "San"
-)
-
-// PossibleInstanceTypeBasicEnableProtectionProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicEnableProtectionProviderSpecificInput const type.
-func PossibleInstanceTypeBasicEnableProtectionProviderSpecificInputValues() []InstanceTypeBasicEnableProtectionProviderSpecificInput {
-	return []InstanceTypeBasicEnableProtectionProviderSpecificInput{InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeA2A, InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeEnableProtectionProviderSpecificInput, InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeHyperVReplicaAzure, InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMage, InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeInMageAzureV2, InstanceTypeBasicEnableProtectionProviderSpecificInputInstanceTypeSan}
-}
-
-// InstanceTypeBasicEventProviderSpecificDetails enumerates the values for instance type basic event provider
-// specific details.
-type InstanceTypeBasicEventProviderSpecificDetails string
-
-const (
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A InstanceTypeBasicEventProviderSpecificDetails = "A2A"
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails InstanceTypeBasicEventProviderSpecificDetails = "EventProviderSpecificDetails"
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012 ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012 InstanceTypeBasicEventProviderSpecificDetails = "HyperVReplica2012"
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2 ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2 InstanceTypeBasicEventProviderSpecificDetails = "HyperVReplica2012R2"
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure InstanceTypeBasicEventProviderSpecificDetails = "HyperVReplicaAzure"
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails InstanceTypeBasicEventProviderSpecificDetails = "HyperVReplicaBaseEventDetails"
-	// InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2 InstanceTypeBasicEventProviderSpecificDetails = "InMageAzureV2"
-)
-
-// PossibleInstanceTypeBasicEventProviderSpecificDetailsValues returns an array of possible values for the InstanceTypeBasicEventProviderSpecificDetails const type.
-func PossibleInstanceTypeBasicEventProviderSpecificDetailsValues() []InstanceTypeBasicEventProviderSpecificDetails {
-	return []InstanceTypeBasicEventProviderSpecificDetails{InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A, InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails, InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012, InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2, InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure, InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails, InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2}
-}
-
-// InstanceTypeBasicEventSpecificDetails enumerates the values for instance type basic event specific details.
-type InstanceTypeBasicEventSpecificDetails string
-
-const (
-	// InstanceTypeEventSpecificDetails ...
-	InstanceTypeEventSpecificDetails InstanceTypeBasicEventSpecificDetails = "EventSpecificDetails"
-	// InstanceTypeJobStatus ...
-	InstanceTypeJobStatus InstanceTypeBasicEventSpecificDetails = "JobStatus"
-)
-
-// PossibleInstanceTypeBasicEventSpecificDetailsValues returns an array of possible values for the InstanceTypeBasicEventSpecificDetails const type.
-func PossibleInstanceTypeBasicEventSpecificDetailsValues() []InstanceTypeBasicEventSpecificDetails {
-	return []InstanceTypeBasicEventSpecificDetails{InstanceTypeEventSpecificDetails, InstanceTypeJobStatus}
-}
-
-// InstanceTypeBasicFabricSpecificCreateNetworkMappingInput enumerates the values for instance type basic
-// fabric specific create network mapping input.
-type InstanceTypeBasicFabricSpecificCreateNetworkMappingInput string
-
-const (
-	// InstanceTypeAzureToAzure ...
-	InstanceTypeAzureToAzure InstanceTypeBasicFabricSpecificCreateNetworkMappingInput = "AzureToAzure"
-	// InstanceTypeFabricSpecificCreateNetworkMappingInput ...
-	InstanceTypeFabricSpecificCreateNetworkMappingInput InstanceTypeBasicFabricSpecificCreateNetworkMappingInput = "FabricSpecificCreateNetworkMappingInput"
-	// InstanceTypeVmmToAzure ...
-	InstanceTypeVmmToAzure InstanceTypeBasicFabricSpecificCreateNetworkMappingInput = "VmmToAzure"
-	// InstanceTypeVmmToVmm ...
-	InstanceTypeVmmToVmm InstanceTypeBasicFabricSpecificCreateNetworkMappingInput = "VmmToVmm"
-)
-
-// PossibleInstanceTypeBasicFabricSpecificCreateNetworkMappingInputValues returns an array of possible values for the InstanceTypeBasicFabricSpecificCreateNetworkMappingInput const type.
-func PossibleInstanceTypeBasicFabricSpecificCreateNetworkMappingInputValues() []InstanceTypeBasicFabricSpecificCreateNetworkMappingInput {
-	return []InstanceTypeBasicFabricSpecificCreateNetworkMappingInput{InstanceTypeAzureToAzure, InstanceTypeFabricSpecificCreateNetworkMappingInput, InstanceTypeVmmToAzure, InstanceTypeVmmToVmm}
-}
-
-// InstanceTypeBasicFabricSpecificCreationInput enumerates the values for instance type basic fabric specific
-// creation input.
-type InstanceTypeBasicFabricSpecificCreationInput string
-
-const (
-	// InstanceTypeAzure ...
-	InstanceTypeAzure InstanceTypeBasicFabricSpecificCreationInput = "Azure"
-	// InstanceTypeFabricSpecificCreationInput ...
-	InstanceTypeFabricSpecificCreationInput InstanceTypeBasicFabricSpecificCreationInput = "FabricSpecificCreationInput"
-	// InstanceTypeVMwareV2 ...
-	InstanceTypeVMwareV2 InstanceTypeBasicFabricSpecificCreationInput = "VMwareV2"
-)
-
-// PossibleInstanceTypeBasicFabricSpecificCreationInputValues returns an array of possible values for the InstanceTypeBasicFabricSpecificCreationInput const type.
-func PossibleInstanceTypeBasicFabricSpecificCreationInputValues() []InstanceTypeBasicFabricSpecificCreationInput {
-	return []InstanceTypeBasicFabricSpecificCreationInput{InstanceTypeAzure, InstanceTypeFabricSpecificCreationInput, InstanceTypeVMwareV2}
-}
-
-// InstanceTypeBasicFabricSpecificDetails enumerates the values for instance type basic fabric specific
-// details.
-type InstanceTypeBasicFabricSpecificDetails string
-
-const (
-	// InstanceTypeBasicFabricSpecificDetailsInstanceTypeAzure ...
-	InstanceTypeBasicFabricSpecificDetailsInstanceTypeAzure InstanceTypeBasicFabricSpecificDetails = "Azure"
-	// InstanceTypeBasicFabricSpecificDetailsInstanceTypeFabricSpecificDetails ...
-	InstanceTypeBasicFabricSpecificDetailsInstanceTypeFabricSpecificDetails InstanceTypeBasicFabricSpecificDetails = "FabricSpecificDetails"
-	// InstanceTypeBasicFabricSpecificDetailsInstanceTypeHyperVSite ...
-	InstanceTypeBasicFabricSpecificDetailsInstanceTypeHyperVSite InstanceTypeBasicFabricSpecificDetails = "HyperVSite"
-	// InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMM ...
-	InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMM InstanceTypeBasicFabricSpecificDetails = "VMM"
-	// InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMware ...
-	InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMware InstanceTypeBasicFabricSpecificDetails = "VMware"
-	// InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMwareV2 ...
-	InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMwareV2 InstanceTypeBasicFabricSpecificDetails = "VMwareV2"
-)
-
-// PossibleInstanceTypeBasicFabricSpecificDetailsValues returns an array of possible values for the InstanceTypeBasicFabricSpecificDetails const type.
-func PossibleInstanceTypeBasicFabricSpecificDetailsValues() []InstanceTypeBasicFabricSpecificDetails {
-	return []InstanceTypeBasicFabricSpecificDetails{InstanceTypeBasicFabricSpecificDetailsInstanceTypeAzure, InstanceTypeBasicFabricSpecificDetailsInstanceTypeFabricSpecificDetails, InstanceTypeBasicFabricSpecificDetailsInstanceTypeHyperVSite, InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMM, InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMware, InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMwareV2}
-}
-
-// InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput enumerates the values for instance type basic
-// fabric specific update network mapping input.
-type InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput string
-
-const (
-	// InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeAzureToAzure ...
-	InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeAzureToAzure InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput = "AzureToAzure"
-	// InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeFabricSpecificUpdateNetworkMappingInput ...
-	InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeFabricSpecificUpdateNetworkMappingInput InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput = "FabricSpecificUpdateNetworkMappingInput"
-	// InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToAzure ...
-	InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToAzure InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput = "VmmToAzure"
-	// InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToVmm ...
-	InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToVmm InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput = "VmmToVmm"
-)
-
-// PossibleInstanceTypeBasicFabricSpecificUpdateNetworkMappingInputValues returns an array of possible values for the InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput const type.
-func PossibleInstanceTypeBasicFabricSpecificUpdateNetworkMappingInputValues() []InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput {
-	return []InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput{InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeAzureToAzure, InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeFabricSpecificUpdateNetworkMappingInput, InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToAzure, InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToVmm}
-}
-
-// InstanceTypeBasicGroupTaskDetails enumerates the values for instance type basic group task details.
-type InstanceTypeBasicGroupTaskDetails string
-
-const (
-	// InstanceTypeGroupTaskDetails ...
-	InstanceTypeGroupTaskDetails InstanceTypeBasicGroupTaskDetails = "GroupTaskDetails"
-	// InstanceTypeInlineWorkflowTaskDetails ...
-	InstanceTypeInlineWorkflowTaskDetails InstanceTypeBasicGroupTaskDetails = "InlineWorkflowTaskDetails"
-	// InstanceTypeRecoveryPlanGroupTaskDetails ...
-	InstanceTypeRecoveryPlanGroupTaskDetails InstanceTypeBasicGroupTaskDetails = "RecoveryPlanGroupTaskDetails"
-	// InstanceTypeRecoveryPlanShutdownGroupTaskDetails ...
-	InstanceTypeRecoveryPlanShutdownGroupTaskDetails InstanceTypeBasicGroupTaskDetails = "RecoveryPlanShutdownGroupTaskDetails"
-)
-
-// PossibleInstanceTypeBasicGroupTaskDetailsValues returns an array of possible values for the InstanceTypeBasicGroupTaskDetails const type.
-func PossibleInstanceTypeBasicGroupTaskDetailsValues() []InstanceTypeBasicGroupTaskDetails {
-	return []InstanceTypeBasicGroupTaskDetails{InstanceTypeGroupTaskDetails, InstanceTypeInlineWorkflowTaskDetails, InstanceTypeRecoveryPlanGroupTaskDetails, InstanceTypeRecoveryPlanShutdownGroupTaskDetails}
-}
-
-// InstanceTypeBasicJobDetails enumerates the values for instance type basic job details.
-type InstanceTypeBasicJobDetails string
-
-const (
-	// InstanceTypeAsrJobDetails ...
-	InstanceTypeAsrJobDetails InstanceTypeBasicJobDetails = "AsrJobDetails"
-	// InstanceTypeExportJobDetails ...
-	InstanceTypeExportJobDetails InstanceTypeBasicJobDetails = "ExportJobDetails"
-	// InstanceTypeFailoverJobDetails ...
-	InstanceTypeFailoverJobDetails InstanceTypeBasicJobDetails = "FailoverJobDetails"
-	// InstanceTypeJobDetails ...
-	InstanceTypeJobDetails InstanceTypeBasicJobDetails = "JobDetails"
-	// InstanceTypeSwitchProtectionJobDetails ...
-	InstanceTypeSwitchProtectionJobDetails InstanceTypeBasicJobDetails = "SwitchProtectionJobDetails"
-	// InstanceTypeTestFailoverJobDetails ...
-	InstanceTypeTestFailoverJobDetails InstanceTypeBasicJobDetails = "TestFailoverJobDetails"
-)
-
-// PossibleInstanceTypeBasicJobDetailsValues returns an array of possible values for the InstanceTypeBasicJobDetails const type.
-func PossibleInstanceTypeBasicJobDetailsValues() []InstanceTypeBasicJobDetails {
-	return []InstanceTypeBasicJobDetails{InstanceTypeAsrJobDetails, InstanceTypeExportJobDetails, InstanceTypeFailoverJobDetails, InstanceTypeJobDetails, InstanceTypeSwitchProtectionJobDetails, InstanceTypeTestFailoverJobDetails}
-}
-
-// InstanceTypeBasicMigrateProviderSpecificInput enumerates the values for instance type basic migrate provider
-// specific input.
-type InstanceTypeBasicMigrateProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput ...
-	InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput InstanceTypeBasicMigrateProviderSpecificInput = "MigrateProviderSpecificInput"
-	// InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt ...
-	InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicMigrateProviderSpecificInput = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicMigrateProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicMigrateProviderSpecificInput const type.
-func PossibleInstanceTypeBasicMigrateProviderSpecificInputValues() []InstanceTypeBasicMigrateProviderSpecificInput {
-	return []InstanceTypeBasicMigrateProviderSpecificInput{InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput, InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicMigrationProviderSpecificSettings enumerates the values for instance type basic migration
-// provider specific settings.
-type InstanceTypeBasicMigrationProviderSpecificSettings string
-
-const (
-	// InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings ...
-	InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings InstanceTypeBasicMigrationProviderSpecificSettings = "MigrationProviderSpecificSettings"
-	// InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt ...
-	InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt InstanceTypeBasicMigrationProviderSpecificSettings = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicMigrationProviderSpecificSettingsValues returns an array of possible values for the InstanceTypeBasicMigrationProviderSpecificSettings const type.
-func PossibleInstanceTypeBasicMigrationProviderSpecificSettingsValues() []InstanceTypeBasicMigrationProviderSpecificSettings {
-	return []InstanceTypeBasicMigrationProviderSpecificSettings{InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings, InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicNetworkMappingFabricSpecificSettings enumerates the values for instance type basic network
-// mapping fabric specific settings.
-type InstanceTypeBasicNetworkMappingFabricSpecificSettings string
-
-const (
-	// InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeAzureToAzure ...
-	InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeAzureToAzure InstanceTypeBasicNetworkMappingFabricSpecificSettings = "AzureToAzure"
-	// InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeNetworkMappingFabricSpecificSettings ...
-	InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeNetworkMappingFabricSpecificSettings InstanceTypeBasicNetworkMappingFabricSpecificSettings = "NetworkMappingFabricSpecificSettings"
-	// InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeVmmToAzure ...
-	InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeVmmToAzure InstanceTypeBasicNetworkMappingFabricSpecificSettings = "VmmToAzure"
-	// InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeVmmToVmm ...
-	InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeVmmToVmm InstanceTypeBasicNetworkMappingFabricSpecificSettings = "VmmToVmm"
-)
-
-// PossibleInstanceTypeBasicNetworkMappingFabricSpecificSettingsValues returns an array of possible values for the InstanceTypeBasicNetworkMappingFabricSpecificSettings const type.
-func PossibleInstanceTypeBasicNetworkMappingFabricSpecificSettingsValues() []InstanceTypeBasicNetworkMappingFabricSpecificSettings {
-	return []InstanceTypeBasicNetworkMappingFabricSpecificSettings{InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeAzureToAzure, InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeNetworkMappingFabricSpecificSettings, InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeVmmToAzure, InstanceTypeBasicNetworkMappingFabricSpecificSettingsInstanceTypeVmmToVmm}
-}
-
-// InstanceTypeBasicPolicyProviderSpecificDetails enumerates the values for instance type basic policy provider
-// specific details.
-type InstanceTypeBasicPolicyProviderSpecificDetails string
-
-const (
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeA2A ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeA2A InstanceTypeBasicPolicyProviderSpecificDetails = "A2A"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplica2012 ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplica2012 InstanceTypeBasicPolicyProviderSpecificDetails = "HyperVReplica2012"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplica2012R2 ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplica2012R2 InstanceTypeBasicPolicyProviderSpecificDetails = "HyperVReplica2012R2"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplicaAzure InstanceTypeBasicPolicyProviderSpecificDetails = "HyperVReplicaAzure"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplicaBasePolicyDetails ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplicaBasePolicyDetails InstanceTypeBasicPolicyProviderSpecificDetails = "HyperVReplicaBasePolicyDetails"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMage ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMage InstanceTypeBasicPolicyProviderSpecificDetails = "InMage"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMageAzureV2 InstanceTypeBasicPolicyProviderSpecificDetails = "InMageAzureV2"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMageBasePolicyDetails ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMageBasePolicyDetails InstanceTypeBasicPolicyProviderSpecificDetails = "InMageBasePolicyDetails"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypePolicyProviderSpecificDetails ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypePolicyProviderSpecificDetails InstanceTypeBasicPolicyProviderSpecificDetails = "PolicyProviderSpecificDetails"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeRcmAzureMigration ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeRcmAzureMigration InstanceTypeBasicPolicyProviderSpecificDetails = "RcmAzureMigration"
-	// InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeVMwareCbt ...
-	InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeVMwareCbt InstanceTypeBasicPolicyProviderSpecificDetails = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicPolicyProviderSpecificDetailsValues returns an array of possible values for the InstanceTypeBasicPolicyProviderSpecificDetails const type.
-func PossibleInstanceTypeBasicPolicyProviderSpecificDetailsValues() []InstanceTypeBasicPolicyProviderSpecificDetails {
-	return []InstanceTypeBasicPolicyProviderSpecificDetails{InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeA2A, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplica2012, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplica2012R2, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplicaAzure, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeHyperVReplicaBasePolicyDetails, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMage, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMageAzureV2, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeInMageBasePolicyDetails, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypePolicyProviderSpecificDetails, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeRcmAzureMigration, InstanceTypeBasicPolicyProviderSpecificDetailsInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicPolicyProviderSpecificInput enumerates the values for instance type basic policy provider
-// specific input.
-type InstanceTypeBasicPolicyProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeA2A ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeA2A InstanceTypeBasicPolicyProviderSpecificInput = "A2A"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplica2012 ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplica2012 InstanceTypeBasicPolicyProviderSpecificInput = "HyperVReplica2012"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplica2012R2 ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplica2012R2 InstanceTypeBasicPolicyProviderSpecificInput = "HyperVReplica2012R2"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplicaAzure InstanceTypeBasicPolicyProviderSpecificInput = "HyperVReplicaAzure"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeInMage ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeInMage InstanceTypeBasicPolicyProviderSpecificInput = "InMage"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeInMageAzureV2 InstanceTypeBasicPolicyProviderSpecificInput = "InMageAzureV2"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypePolicyProviderSpecificInput ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypePolicyProviderSpecificInput InstanceTypeBasicPolicyProviderSpecificInput = "PolicyProviderSpecificInput"
-	// InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeVMwareCbt ...
-	InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicPolicyProviderSpecificInput = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicPolicyProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicPolicyProviderSpecificInput const type.
-func PossibleInstanceTypeBasicPolicyProviderSpecificInputValues() []InstanceTypeBasicPolicyProviderSpecificInput {
-	return []InstanceTypeBasicPolicyProviderSpecificInput{InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeA2A, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplica2012, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplica2012R2, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeHyperVReplicaAzure, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeInMage, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeInMageAzureV2, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypePolicyProviderSpecificInput, InstanceTypeBasicPolicyProviderSpecificInputInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails enumerates the values for instance type
-// basic protection container mapping provider specific details.
-type InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails string
-
-const (
-	// InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A ...
-	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = "A2A"
-	// InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails ...
-	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = "ProtectionContainerMappingProviderSpecificDetails"
-	// InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt ...
-	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues returns an array of possible values for the InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails const type.
-func PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues() []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails {
-	return []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails{InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A, InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails, InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicProviderSpecificFailoverInput enumerates the values for instance type basic provider
-// specific failover input.
-type InstanceTypeBasicProviderSpecificFailoverInput string
-
-const (
-	// InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeA2A ...
-	InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeA2A InstanceTypeBasicProviderSpecificFailoverInput = "A2A"
-	// InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzure InstanceTypeBasicProviderSpecificFailoverInput = "HyperVReplicaAzure"
-	// InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzureFailback ...
-	InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzureFailback InstanceTypeBasicProviderSpecificFailoverInput = "HyperVReplicaAzureFailback"
-	// InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeInMage ...
-	InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeInMage InstanceTypeBasicProviderSpecificFailoverInput = "InMage"
-	// InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeInMageAzureV2 InstanceTypeBasicProviderSpecificFailoverInput = "InMageAzureV2"
-	// InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeProviderSpecificFailoverInput ...
-	InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeProviderSpecificFailoverInput InstanceTypeBasicProviderSpecificFailoverInput = "ProviderSpecificFailoverInput"
-)
-
-// PossibleInstanceTypeBasicProviderSpecificFailoverInputValues returns an array of possible values for the InstanceTypeBasicProviderSpecificFailoverInput const type.
-func PossibleInstanceTypeBasicProviderSpecificFailoverInputValues() []InstanceTypeBasicProviderSpecificFailoverInput {
-	return []InstanceTypeBasicProviderSpecificFailoverInput{InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeA2A, InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzure, InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzureFailback, InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeInMage, InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeInMageAzureV2, InstanceTypeBasicProviderSpecificFailoverInputInstanceTypeProviderSpecificFailoverInput}
-}
-
-// InstanceTypeBasicProviderSpecificRecoveryPointDetails enumerates the values for instance type basic provider
-// specific recovery point details.
-type InstanceTypeBasicProviderSpecificRecoveryPointDetails string
-
-const (
-	// InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeA2A ...
-	InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeA2A InstanceTypeBasicProviderSpecificRecoveryPointDetails = "A2A"
-	// InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeInMageAzureV2 InstanceTypeBasicProviderSpecificRecoveryPointDetails = "InMageAzureV2"
-	// InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeProviderSpecificRecoveryPointDetails ...
-	InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeProviderSpecificRecoveryPointDetails InstanceTypeBasicProviderSpecificRecoveryPointDetails = "ProviderSpecificRecoveryPointDetails"
-)
-
-// PossibleInstanceTypeBasicProviderSpecificRecoveryPointDetailsValues returns an array of possible values for the InstanceTypeBasicProviderSpecificRecoveryPointDetails const type.
-func PossibleInstanceTypeBasicProviderSpecificRecoveryPointDetailsValues() []InstanceTypeBasicProviderSpecificRecoveryPointDetails {
-	return []InstanceTypeBasicProviderSpecificRecoveryPointDetails{InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeA2A, InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeInMageAzureV2, InstanceTypeBasicProviderSpecificRecoveryPointDetailsInstanceTypeProviderSpecificRecoveryPointDetails}
-}
-
-// InstanceTypeBasicRecoveryPlanActionDetails enumerates the values for instance type basic recovery plan
-// action details.
-type InstanceTypeBasicRecoveryPlanActionDetails string
-
-const (
-	// InstanceTypeAutomationRunbookActionDetails ...
-	InstanceTypeAutomationRunbookActionDetails InstanceTypeBasicRecoveryPlanActionDetails = "AutomationRunbookActionDetails"
-	// InstanceTypeManualActionDetails ...
-	InstanceTypeManualActionDetails InstanceTypeBasicRecoveryPlanActionDetails = "ManualActionDetails"
-	// InstanceTypeRecoveryPlanActionDetails ...
-	InstanceTypeRecoveryPlanActionDetails InstanceTypeBasicRecoveryPlanActionDetails = "RecoveryPlanActionDetails"
-	// InstanceTypeScriptActionDetails ...
-	InstanceTypeScriptActionDetails InstanceTypeBasicRecoveryPlanActionDetails = "ScriptActionDetails"
-)
-
-// PossibleInstanceTypeBasicRecoveryPlanActionDetailsValues returns an array of possible values for the InstanceTypeBasicRecoveryPlanActionDetails const type.
-func PossibleInstanceTypeBasicRecoveryPlanActionDetailsValues() []InstanceTypeBasicRecoveryPlanActionDetails {
-	return []InstanceTypeBasicRecoveryPlanActionDetails{InstanceTypeAutomationRunbookActionDetails, InstanceTypeManualActionDetails, InstanceTypeRecoveryPlanActionDetails, InstanceTypeScriptActionDetails}
-}
-
-// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput enumerates the values for instance type basic
-// recovery plan provider specific failover input.
-type InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput string
-
-const (
-	// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeA2A ...
-	InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeA2A InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput = "A2A"
-	// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzure InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput = "HyperVReplicaAzure"
-	// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzureFailback ...
-	InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzureFailback InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput = "HyperVReplicaAzureFailback"
-	// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeInMage ...
-	InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeInMage InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput = "InMage"
-	// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeInMageAzureV2 InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput = "InMageAzureV2"
-	// InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeRecoveryPlanProviderSpecificFailoverInput ...
-	InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeRecoveryPlanProviderSpecificFailoverInput InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput = "RecoveryPlanProviderSpecificFailoverInput"
-)
-
-// PossibleInstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputValues returns an array of possible values for the InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput const type.
-func PossibleInstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputValues() []InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput {
-	return []InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput{InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeA2A, InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzure, InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeHyperVReplicaAzureFailback, InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeInMage, InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeInMageAzureV2, InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputInstanceTypeRecoveryPlanProviderSpecificFailoverInput}
-}
-
-// InstanceTypeBasicReplicationProviderSpecificContainerCreationInput enumerates the values for instance type
-// basic replication provider specific container creation input.
-type InstanceTypeBasicReplicationProviderSpecificContainerCreationInput string
-
-const (
-	// InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A ...
-	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = "A2A"
-	// InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput ...
-	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = "ReplicationProviderSpecificContainerCreationInput"
-	// InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero ...
-	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = "6c7da455-506f-43ff-a16a-8eb101aebb70"
-)
-
-// PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues returns an array of possible values for the InstanceTypeBasicReplicationProviderSpecificContainerCreationInput const type.
-func PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput {
-	return []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput{InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput, InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero}
-}
-
-// InstanceTypeBasicReplicationProviderSpecificContainerMappingInput enumerates the values for instance type
-// basic replication provider specific container mapping input.
-type InstanceTypeBasicReplicationProviderSpecificContainerMappingInput string
-
-const (
-	// InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A ...
-	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = "A2A"
-	// InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput ...
-	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = "ReplicationProviderSpecificContainerMappingInput"
-	// InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt ...
-	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues returns an array of possible values for the InstanceTypeBasicReplicationProviderSpecificContainerMappingInput const type.
-func PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput {
-	return []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput{InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput, InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicReplicationProviderSpecificSettings enumerates the values for instance type basic
-// replication provider specific settings.
-type InstanceTypeBasicReplicationProviderSpecificSettings string
-
-const (
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeA2A ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeA2A InstanceTypeBasicReplicationProviderSpecificSettings = "A2A"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplica2012 ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplica2012 InstanceTypeBasicReplicationProviderSpecificSettings = "HyperVReplica2012"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplica2012R2 ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplica2012R2 InstanceTypeBasicReplicationProviderSpecificSettings = "HyperVReplica2012R2"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplicaAzure InstanceTypeBasicReplicationProviderSpecificSettings = "HyperVReplicaAzure"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplicaBaseReplicationDetails ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplicaBaseReplicationDetails InstanceTypeBasicReplicationProviderSpecificSettings = "HyperVReplicaBaseReplicationDetails"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeInMage ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeInMage InstanceTypeBasicReplicationProviderSpecificSettings = "InMage"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeInMageAzureV2 InstanceTypeBasicReplicationProviderSpecificSettings = "InMageAzureV2"
-	// InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeReplicationProviderSpecificSettings ...
-	InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeReplicationProviderSpecificSettings InstanceTypeBasicReplicationProviderSpecificSettings = "ReplicationProviderSpecificSettings"
-)
-
-// PossibleInstanceTypeBasicReplicationProviderSpecificSettingsValues returns an array of possible values for the InstanceTypeBasicReplicationProviderSpecificSettings const type.
-func PossibleInstanceTypeBasicReplicationProviderSpecificSettingsValues() []InstanceTypeBasicReplicationProviderSpecificSettings {
-	return []InstanceTypeBasicReplicationProviderSpecificSettings{InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplica2012, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplica2012R2, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplicaAzure, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeHyperVReplicaBaseReplicationDetails, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeInMage, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeInMageAzureV2, InstanceTypeBasicReplicationProviderSpecificSettingsInstanceTypeReplicationProviderSpecificSettings}
-}
-
-// InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput enumerates the values for instance
-// type basic replication provider specific update container mapping input.
-type InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput string
-
-const (
-	// InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeA2A ...
-	InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeA2A InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput = "A2A"
-	// InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeReplicationProviderSpecificUpdateContainerMappingInput ...
-	InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeReplicationProviderSpecificUpdateContainerMappingInput InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput = "ReplicationProviderSpecificUpdateContainerMappingInput"
-)
-
-// PossibleInstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputValues returns an array of possible values for the InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput const type.
-func PossibleInstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput {
-	return []InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput{InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeA2A, InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputInstanceTypeReplicationProviderSpecificUpdateContainerMappingInput}
-}
-
-// InstanceTypeBasicReverseReplicationProviderSpecificInput enumerates the values for instance type basic
-// reverse replication provider specific input.
-type InstanceTypeBasicReverseReplicationProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeA2A ...
-	InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeA2A InstanceTypeBasicReverseReplicationProviderSpecificInput = "A2A"
-	// InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeHyperVReplicaAzure InstanceTypeBasicReverseReplicationProviderSpecificInput = "HyperVReplicaAzure"
-	// InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeInMage ...
-	InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeInMage InstanceTypeBasicReverseReplicationProviderSpecificInput = "InMage"
-	// InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeInMageAzureV2 InstanceTypeBasicReverseReplicationProviderSpecificInput = "InMageAzureV2"
-	// InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeReverseReplicationProviderSpecificInput ...
-	InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeReverseReplicationProviderSpecificInput InstanceTypeBasicReverseReplicationProviderSpecificInput = "ReverseReplicationProviderSpecificInput"
-)
-
-// PossibleInstanceTypeBasicReverseReplicationProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicReverseReplicationProviderSpecificInput const type.
-func PossibleInstanceTypeBasicReverseReplicationProviderSpecificInputValues() []InstanceTypeBasicReverseReplicationProviderSpecificInput {
-	return []InstanceTypeBasicReverseReplicationProviderSpecificInput{InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeA2A, InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeHyperVReplicaAzure, InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeInMage, InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeInMageAzureV2, InstanceTypeBasicReverseReplicationProviderSpecificInputInstanceTypeReverseReplicationProviderSpecificInput}
-}
-
-// InstanceTypeBasicSwitchProtectionProviderSpecificInput enumerates the values for instance type basic switch
-// protection provider specific input.
-type InstanceTypeBasicSwitchProtectionProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeA2A ...
-	InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeA2A InstanceTypeBasicSwitchProtectionProviderSpecificInput = "A2A"
-	// InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeSwitchProtectionProviderSpecificInput ...
-	InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeSwitchProtectionProviderSpecificInput InstanceTypeBasicSwitchProtectionProviderSpecificInput = "SwitchProtectionProviderSpecificInput"
-)
-
-// PossibleInstanceTypeBasicSwitchProtectionProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicSwitchProtectionProviderSpecificInput const type.
-func PossibleInstanceTypeBasicSwitchProtectionProviderSpecificInputValues() []InstanceTypeBasicSwitchProtectionProviderSpecificInput {
-	return []InstanceTypeBasicSwitchProtectionProviderSpecificInput{InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeA2A, InstanceTypeBasicSwitchProtectionProviderSpecificInputInstanceTypeSwitchProtectionProviderSpecificInput}
-}
-
-// InstanceTypeBasicTaskTypeDetails enumerates the values for instance type basic task type details.
-type InstanceTypeBasicTaskTypeDetails string
-
-const (
-	// InstanceTypeAutomationRunbookTaskDetails ...
-	InstanceTypeAutomationRunbookTaskDetails InstanceTypeBasicTaskTypeDetails = "AutomationRunbookTaskDetails"
-	// InstanceTypeConsistencyCheckTaskDetails ...
-	InstanceTypeConsistencyCheckTaskDetails InstanceTypeBasicTaskTypeDetails = "ConsistencyCheckTaskDetails"
-	// InstanceTypeFabricReplicationGroupTaskDetails ...
-	InstanceTypeFabricReplicationGroupTaskDetails InstanceTypeBasicTaskTypeDetails = "FabricReplicationGroupTaskDetails"
-	// InstanceTypeJobTaskDetails ...
-	InstanceTypeJobTaskDetails InstanceTypeBasicTaskTypeDetails = "JobTaskDetails"
-	// InstanceTypeManualActionTaskDetails ...
-	InstanceTypeManualActionTaskDetails InstanceTypeBasicTaskTypeDetails = "ManualActionTaskDetails"
-	// InstanceTypeScriptActionTaskDetails ...
-	InstanceTypeScriptActionTaskDetails InstanceTypeBasicTaskTypeDetails = "ScriptActionTaskDetails"
-	// InstanceTypeTaskTypeDetails ...
-	InstanceTypeTaskTypeDetails InstanceTypeBasicTaskTypeDetails = "TaskTypeDetails"
-	// InstanceTypeVirtualMachineTaskDetails ...
-	InstanceTypeVirtualMachineTaskDetails InstanceTypeBasicTaskTypeDetails = "VirtualMachineTaskDetails"
-	// InstanceTypeVMNicUpdatesTaskDetails ...
-	InstanceTypeVMNicUpdatesTaskDetails InstanceTypeBasicTaskTypeDetails = "VmNicUpdatesTaskDetails"
-)
-
-// PossibleInstanceTypeBasicTaskTypeDetailsValues returns an array of possible values for the InstanceTypeBasicTaskTypeDetails const type.
-func PossibleInstanceTypeBasicTaskTypeDetailsValues() []InstanceTypeBasicTaskTypeDetails {
-	return []InstanceTypeBasicTaskTypeDetails{InstanceTypeAutomationRunbookTaskDetails, InstanceTypeConsistencyCheckTaskDetails, InstanceTypeFabricReplicationGroupTaskDetails, InstanceTypeJobTaskDetails, InstanceTypeManualActionTaskDetails, InstanceTypeScriptActionTaskDetails, InstanceTypeTaskTypeDetails, InstanceTypeVirtualMachineTaskDetails, InstanceTypeVMNicUpdatesTaskDetails}
-}
-
-// InstanceTypeBasicTestMigrateProviderSpecificInput enumerates the values for instance type basic test migrate
-// provider specific input.
-type InstanceTypeBasicTestMigrateProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput ...
-	InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput InstanceTypeBasicTestMigrateProviderSpecificInput = "TestMigrateProviderSpecificInput"
-	// InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt ...
-	InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicTestMigrateProviderSpecificInput = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicTestMigrateProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicTestMigrateProviderSpecificInput const type.
-func PossibleInstanceTypeBasicTestMigrateProviderSpecificInputValues() []InstanceTypeBasicTestMigrateProviderSpecificInput {
-	return []InstanceTypeBasicTestMigrateProviderSpecificInput{InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput, InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicUpdateMigrationItemProviderSpecificInput enumerates the values for instance type basic
-// update migration item provider specific input.
-type InstanceTypeBasicUpdateMigrationItemProviderSpecificInput string
-
-const (
-	// InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput ...
-	InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = "UpdateMigrationItemProviderSpecificInput"
-	// InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt ...
-	InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = "VMwareCbt"
-)
-
-// PossibleInstanceTypeBasicUpdateMigrationItemProviderSpecificInputValues returns an array of possible values for the InstanceTypeBasicUpdateMigrationItemProviderSpecificInput const type.
-func PossibleInstanceTypeBasicUpdateMigrationItemProviderSpecificInputValues() []InstanceTypeBasicUpdateMigrationItemProviderSpecificInput {
-	return []InstanceTypeBasicUpdateMigrationItemProviderSpecificInput{InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput, InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt}
-}
-
-// InstanceTypeBasicUpdateReplicationProtectedItemProviderInput enumerates the values for instance type basic
-// update replication protected item provider input.
-type InstanceTypeBasicUpdateReplicationProtectedItemProviderInput string
-
-const (
-	// InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeA2A ...
-	InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeA2A InstanceTypeBasicUpdateReplicationProtectedItemProviderInput = "A2A"
-	// InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeHyperVReplicaAzure ...
-	InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeHyperVReplicaAzure InstanceTypeBasicUpdateReplicationProtectedItemProviderInput = "HyperVReplicaAzure"
-	// InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeInMageAzureV2 ...
-	InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeInMageAzureV2 InstanceTypeBasicUpdateReplicationProtectedItemProviderInput = "InMageAzureV2"
-	// InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeUpdateReplicationProtectedItemProviderInput ...
-	InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeUpdateReplicationProtectedItemProviderInput InstanceTypeBasicUpdateReplicationProtectedItemProviderInput = "UpdateReplicationProtectedItemProviderInput"
-)
-
-// PossibleInstanceTypeBasicUpdateReplicationProtectedItemProviderInputValues returns an array of possible values for the InstanceTypeBasicUpdateReplicationProtectedItemProviderInput const type.
-func PossibleInstanceTypeBasicUpdateReplicationProtectedItemProviderInputValues() []InstanceTypeBasicUpdateReplicationProtectedItemProviderInput {
-	return []InstanceTypeBasicUpdateReplicationProtectedItemProviderInput{InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeA2A, InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeHyperVReplicaAzure, InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeInMageAzureV2, InstanceTypeBasicUpdateReplicationProtectedItemProviderInputInstanceTypeUpdateReplicationProtectedItemProviderInput}
-}
-
-// LicenseType enumerates the values for license type.
-type LicenseType string
-
-const (
-	// LicenseTypeNoLicenseType ...
-	LicenseTypeNoLicenseType LicenseType = "NoLicenseType"
-	// LicenseTypeNotSpecified ...
-	LicenseTypeNotSpecified LicenseType = "NotSpecified"
-	// LicenseTypeWindowsServer ...
-	LicenseTypeWindowsServer LicenseType = "WindowsServer"
-)
-
-// PossibleLicenseTypeValues returns an array of possible values for the LicenseType const type.
-func PossibleLicenseTypeValues() []LicenseType {
-	return []LicenseType{LicenseTypeNoLicenseType, LicenseTypeNotSpecified, LicenseTypeWindowsServer}
-}
-
-// MigrationItemOperation enumerates the values for migration item operation.
-type MigrationItemOperation string
-
-const (
-	// DisableMigration ...
-	DisableMigration MigrationItemOperation = "DisableMigration"
-	// Migrate ...
-	Migrate MigrationItemOperation = "Migrate"
-	// TestMigrate ...
-	TestMigrate MigrationItemOperation = "TestMigrate"
-	// TestMigrateCleanup ...
-	TestMigrateCleanup MigrationItemOperation = "TestMigrateCleanup"
-)
-
-// PossibleMigrationItemOperationValues returns an array of possible values for the MigrationItemOperation const type.
-func PossibleMigrationItemOperationValues() []MigrationItemOperation {
-	return []MigrationItemOperation{DisableMigration, Migrate, TestMigrate, TestMigrateCleanup}
-}
-
-// MigrationRecoveryPointType enumerates the values for migration recovery point type.
-type MigrationRecoveryPointType string
-
-const (
-	// MigrationRecoveryPointTypeApplicationConsistent ...
-	MigrationRecoveryPointTypeApplicationConsistent MigrationRecoveryPointType = "ApplicationConsistent"
-	// MigrationRecoveryPointTypeCrashConsistent ...
-	MigrationRecoveryPointTypeCrashConsistent MigrationRecoveryPointType = "CrashConsistent"
-	// MigrationRecoveryPointTypeNotSpecified ...
-	MigrationRecoveryPointTypeNotSpecified MigrationRecoveryPointType = "NotSpecified"
-)
-
-// PossibleMigrationRecoveryPointTypeValues returns an array of possible values for the MigrationRecoveryPointType const type.
-func PossibleMigrationRecoveryPointTypeValues() []MigrationRecoveryPointType {
-	return []MigrationRecoveryPointType{MigrationRecoveryPointTypeApplicationConsistent, MigrationRecoveryPointTypeCrashConsistent, MigrationRecoveryPointTypeNotSpecified}
-}
-
-// MigrationState enumerates the values for migration state.
-type MigrationState string
-
-const (
-	// MigrationStateDisableMigrationFailed ...
-	MigrationStateDisableMigrationFailed MigrationState = "DisableMigrationFailed"
-	// MigrationStateDisableMigrationInProgress ...
-	MigrationStateDisableMigrationInProgress MigrationState = "DisableMigrationInProgress"
-	// MigrationStateEnableMigrationFailed ...
-	MigrationStateEnableMigrationFailed MigrationState = "EnableMigrationFailed"
-	// MigrationStateEnableMigrationInProgress ...
-	MigrationStateEnableMigrationInProgress MigrationState = "EnableMigrationInProgress"
-	// MigrationStateInitialSeedingFailed ...
-	MigrationStateInitialSeedingFailed MigrationState = "InitialSeedingFailed"
-	// MigrationStateInitialSeedingInProgress ...
-	MigrationStateInitialSeedingInProgress MigrationState = "InitialSeedingInProgress"
-	// MigrationStateMigrationFailed ...
-	MigrationStateMigrationFailed MigrationState = "MigrationFailed"
-	// MigrationStateMigrationInProgress ...
-	MigrationStateMigrationInProgress MigrationState = "MigrationInProgress"
-	// MigrationStateMigrationSucceeded ...
-	MigrationStateMigrationSucceeded MigrationState = "MigrationSucceeded"
-	// MigrationStateNone ...
-	MigrationStateNone MigrationState = "None"
-	// MigrationStateReplicating ...
-	MigrationStateReplicating MigrationState = "Replicating"
-)
-
-// PossibleMigrationStateValues returns an array of possible values for the MigrationState const type.
-func PossibleMigrationStateValues() []MigrationState {
-	return []MigrationState{MigrationStateDisableMigrationFailed, MigrationStateDisableMigrationInProgress, MigrationStateEnableMigrationFailed, MigrationStateEnableMigrationInProgress, MigrationStateInitialSeedingFailed, MigrationStateInitialSeedingInProgress, MigrationStateMigrationFailed, MigrationStateMigrationInProgress, MigrationStateMigrationSucceeded, MigrationStateNone, MigrationStateReplicating}
-}
-
-// MultiVMGroupCreateOption enumerates the values for multi vm group create option.
-type MultiVMGroupCreateOption string
-
-const (
-	// AutoCreated ...
-	AutoCreated MultiVMGroupCreateOption = "AutoCreated"
-	// UserSpecified ...
-	UserSpecified MultiVMGroupCreateOption = "UserSpecified"
-)
-
-// PossibleMultiVMGroupCreateOptionValues returns an array of possible values for the MultiVMGroupCreateOption const type.
-func PossibleMultiVMGroupCreateOptionValues() []MultiVMGroupCreateOption {
-	return []MultiVMGroupCreateOption{AutoCreated, UserSpecified}
-}
-
-// MultiVMSyncPointOption enumerates the values for multi vm sync point option.
-type MultiVMSyncPointOption string
-
-const (
-	// UseMultiVMSyncRecoveryPoint ...
-	UseMultiVMSyncRecoveryPoint MultiVMSyncPointOption = "UseMultiVmSyncRecoveryPoint"
-	// UsePerVMRecoveryPoint ...
-	UsePerVMRecoveryPoint MultiVMSyncPointOption = "UsePerVmRecoveryPoint"
-)
-
-// PossibleMultiVMSyncPointOptionValues returns an array of possible values for the MultiVMSyncPointOption const type.
-func PossibleMultiVMSyncPointOptionValues() []MultiVMSyncPointOption {
-	return []MultiVMSyncPointOption{UseMultiVMSyncRecoveryPoint, UsePerVMRecoveryPoint}
-}
-
-// MultiVMSyncStatus enumerates the values for multi vm sync status.
-type MultiVMSyncStatus string
-
-const (
-	// MultiVMSyncStatusDisabled ...
-	MultiVMSyncStatusDisabled MultiVMSyncStatus = "Disabled"
-	// MultiVMSyncStatusEnabled ...
-	MultiVMSyncStatusEnabled MultiVMSyncStatus = "Enabled"
-)
-
-// PossibleMultiVMSyncStatusValues returns an array of possible values for the MultiVMSyncStatus const type.
-func PossibleMultiVMSyncStatusValues() []MultiVMSyncStatus {
-	return []MultiVMSyncStatus{MultiVMSyncStatusDisabled, MultiVMSyncStatusEnabled}
-}
-
-// PossibleOperationsDirections enumerates the values for possible operations directions.
-type PossibleOperationsDirections string
-
-const (
-	// PrimaryToRecovery ...
-	PrimaryToRecovery PossibleOperationsDirections = "PrimaryToRecovery"
-	// RecoveryToPrimary ...
-	RecoveryToPrimary PossibleOperationsDirections = "RecoveryToPrimary"
-)
-
-// PossiblePossibleOperationsDirectionsValues returns an array of possible values for the PossibleOperationsDirections const type.
-func PossiblePossibleOperationsDirectionsValues() []PossibleOperationsDirections {
-	return []PossibleOperationsDirections{PrimaryToRecovery, RecoveryToPrimary}
-}
-
-// PresenceStatus enumerates the values for presence status.
-type PresenceStatus string
-
-const (
-	// NotPresent ...
-	NotPresent PresenceStatus = "NotPresent"
-	// Present ...
-	Present PresenceStatus = "Present"
-	// Unknown ...
-	Unknown PresenceStatus = "Unknown"
-)
-
-// PossiblePresenceStatusValues returns an array of possible values for the PresenceStatus const type.
-func PossiblePresenceStatusValues() []PresenceStatus {
-	return []PresenceStatus{NotPresent, Present, Unknown}
-}
-
-// RecoveryPlanActionLocation enumerates the values for recovery plan action location.
-type RecoveryPlanActionLocation string
-
-const (
-	// Primary ...
-	Primary RecoveryPlanActionLocation = "Primary"
-	// Recovery ...
-	Recovery RecoveryPlanActionLocation = "Recovery"
-)
-
-// PossibleRecoveryPlanActionLocationValues returns an array of possible values for the RecoveryPlanActionLocation const type.
-func PossibleRecoveryPlanActionLocationValues() []RecoveryPlanActionLocation {
-	return []RecoveryPlanActionLocation{Primary, Recovery}
-}
-
-// RecoveryPlanGroupType enumerates the values for recovery plan group type.
-type RecoveryPlanGroupType string
-
-const (
-	// Boot ...
-	Boot RecoveryPlanGroupType = "Boot"
-	// Failover ...
-	Failover RecoveryPlanGroupType = "Failover"
-	// Shutdown ...
-	Shutdown RecoveryPlanGroupType = "Shutdown"
-)
-
-// PossibleRecoveryPlanGroupTypeValues returns an array of possible values for the RecoveryPlanGroupType const type.
-func PossibleRecoveryPlanGroupTypeValues() []RecoveryPlanGroupType {
-	return []RecoveryPlanGroupType{Boot, Failover, Shutdown}
-}
-
-// RecoveryPointSyncType enumerates the values for recovery point sync type.
-type RecoveryPointSyncType string
-
-const (
-	// MultiVMSyncRecoveryPoint ...
-	MultiVMSyncRecoveryPoint RecoveryPointSyncType = "MultiVmSyncRecoveryPoint"
-	// PerVMRecoveryPoint ...
-	PerVMRecoveryPoint RecoveryPointSyncType = "PerVmRecoveryPoint"
-)
-
-// PossibleRecoveryPointSyncTypeValues returns an array of possible values for the RecoveryPointSyncType const type.
-func PossibleRecoveryPointSyncTypeValues() []RecoveryPointSyncType {
-	return []RecoveryPointSyncType{MultiVMSyncRecoveryPoint, PerVMRecoveryPoint}
-}
-
-// RecoveryPointType enumerates the values for recovery point type.
-type RecoveryPointType string
-
-const (
-	// Custom ...
-	Custom RecoveryPointType = "Custom"
-	// LatestTag ...
-	LatestTag RecoveryPointType = "LatestTag"
-	// LatestTime ...
-	LatestTime RecoveryPointType = "LatestTime"
-)
-
-// PossibleRecoveryPointTypeValues returns an array of possible values for the RecoveryPointType const type.
-func PossibleRecoveryPointTypeValues() []RecoveryPointType {
-	return []RecoveryPointType{Custom, LatestTag, LatestTime}
-}
-
-// ReplicationProtectedItemOperation enumerates the values for replication protected item operation.
-type ReplicationProtectedItemOperation string
-
-const (
-	// ReplicationProtectedItemOperationChangePit ...
-	ReplicationProtectedItemOperationChangePit ReplicationProtectedItemOperation = "ChangePit"
-	// ReplicationProtectedItemOperationCommit ...
-	ReplicationProtectedItemOperationCommit ReplicationProtectedItemOperation = "Commit"
-	// ReplicationProtectedItemOperationCompleteMigration ...
-	ReplicationProtectedItemOperationCompleteMigration ReplicationProtectedItemOperation = "CompleteMigration"
-	// ReplicationProtectedItemOperationDisableProtection ...
-	ReplicationProtectedItemOperationDisableProtection ReplicationProtectedItemOperation = "DisableProtection"
-	// ReplicationProtectedItemOperationFailback ...
-	ReplicationProtectedItemOperationFailback ReplicationProtectedItemOperation = "Failback"
-	// ReplicationProtectedItemOperationFinalizeFailback ...
-	ReplicationProtectedItemOperationFinalizeFailback ReplicationProtectedItemOperation = "FinalizeFailback"
-	// ReplicationProtectedItemOperationPlannedFailover ...
-	ReplicationProtectedItemOperationPlannedFailover ReplicationProtectedItemOperation = "PlannedFailover"
-	// ReplicationProtectedItemOperationRepairReplication ...
-	ReplicationProtectedItemOperationRepairReplication ReplicationProtectedItemOperation = "RepairReplication"
-	// ReplicationProtectedItemOperationReverseReplicate ...
-	ReplicationProtectedItemOperationReverseReplicate ReplicationProtectedItemOperation = "ReverseReplicate"
-	// ReplicationProtectedItemOperationSwitchProtection ...
-	ReplicationProtectedItemOperationSwitchProtection ReplicationProtectedItemOperation = "SwitchProtection"
-	// ReplicationProtectedItemOperationTestFailover ...
-	ReplicationProtectedItemOperationTestFailover ReplicationProtectedItemOperation = "TestFailover"
-	// ReplicationProtectedItemOperationTestFailoverCleanup ...
-	ReplicationProtectedItemOperationTestFailoverCleanup ReplicationProtectedItemOperation = "TestFailoverCleanup"
-	// ReplicationProtectedItemOperationUnplannedFailover ...
-	ReplicationProtectedItemOperationUnplannedFailover ReplicationProtectedItemOperation = "UnplannedFailover"
-)
-
-// PossibleReplicationProtectedItemOperationValues returns an array of possible values for the ReplicationProtectedItemOperation const type.
-func PossibleReplicationProtectedItemOperationValues() []ReplicationProtectedItemOperation {
-	return []ReplicationProtectedItemOperation{ReplicationProtectedItemOperationChangePit, ReplicationProtectedItemOperationCommit, ReplicationProtectedItemOperationCompleteMigration, ReplicationProtectedItemOperationDisableProtection, ReplicationProtectedItemOperationFailback, ReplicationProtectedItemOperationFinalizeFailback, ReplicationProtectedItemOperationPlannedFailover, ReplicationProtectedItemOperationRepairReplication, ReplicationProtectedItemOperationReverseReplicate, ReplicationProtectedItemOperationSwitchProtection, ReplicationProtectedItemOperationTestFailover, ReplicationProtectedItemOperationTestFailoverCleanup, ReplicationProtectedItemOperationUnplannedFailover}
-}
-
-// RpInMageRecoveryPointType enumerates the values for rp in mage recovery point type.
-type RpInMageRecoveryPointType string
-
-const (
-	// RpInMageRecoveryPointTypeCustom ...
-	RpInMageRecoveryPointTypeCustom RpInMageRecoveryPointType = "Custom"
-	// RpInMageRecoveryPointTypeLatestTag ...
-	RpInMageRecoveryPointTypeLatestTag RpInMageRecoveryPointType = "LatestTag"
-	// RpInMageRecoveryPointTypeLatestTime ...
-	RpInMageRecoveryPointTypeLatestTime RpInMageRecoveryPointType = "LatestTime"
-)
-
-// PossibleRpInMageRecoveryPointTypeValues returns an array of possible values for the RpInMageRecoveryPointType const type.
-func PossibleRpInMageRecoveryPointTypeValues() []RpInMageRecoveryPointType {
-	return []RpInMageRecoveryPointType{RpInMageRecoveryPointTypeCustom, RpInMageRecoveryPointTypeLatestTag, RpInMageRecoveryPointTypeLatestTime}
-}
-
-// SetMultiVMSyncStatus enumerates the values for set multi vm sync status.
-type SetMultiVMSyncStatus string
-
-const (
-	// Disable ...
-	Disable SetMultiVMSyncStatus = "Disable"
-	// Enable ...
-	Enable SetMultiVMSyncStatus = "Enable"
-)
-
-// PossibleSetMultiVMSyncStatusValues returns an array of possible values for the SetMultiVMSyncStatus const type.
-func PossibleSetMultiVMSyncStatusValues() []SetMultiVMSyncStatus {
-	return []SetMultiVMSyncStatus{Disable, Enable}
-}
-
-// Severity enumerates the values for severity.
-type Severity string
-
-const (
-	// Error ...
-	Error Severity = "Error"
-	// Info ...
-	Info Severity = "Info"
-	// NONE ...
-	NONE Severity = "NONE"
-	// Warning ...
-	Warning Severity = "Warning"
-)
-
-// PossibleSeverityValues returns an array of possible values for the Severity const type.
-func PossibleSeverityValues() []Severity {
-	return []Severity{Error, Info, NONE, Warning}
-}
-
-// SourceSiteOperations enumerates the values for source site operations.
-type SourceSiteOperations string
-
-const (
-	// NotRequired ...
-	NotRequired SourceSiteOperations = "NotRequired"
-	// Required ...
-	Required SourceSiteOperations = "Required"
-)
-
-// PossibleSourceSiteOperationsValues returns an array of possible values for the SourceSiteOperations const type.
-func PossibleSourceSiteOperationsValues() []SourceSiteOperations {
-	return []SourceSiteOperations{NotRequired, Required}
-}
-
-// TestMigrationState enumerates the values for test migration state.
-type TestMigrationState string
-
-const (
-	// TestMigrationStateNone ...
-	TestMigrationStateNone TestMigrationState = "None"
-	// TestMigrationStateTestMigrationCleanupInProgress ...
-	TestMigrationStateTestMigrationCleanupInProgress TestMigrationState = "TestMigrationCleanupInProgress"
-	// TestMigrationStateTestMigrationFailed ...
-	TestMigrationStateTestMigrationFailed TestMigrationState = "TestMigrationFailed"
-	// TestMigrationStateTestMigrationInProgress ...
-	TestMigrationStateTestMigrationInProgress TestMigrationState = "TestMigrationInProgress"
-	// TestMigrationStateTestMigrationSucceeded ...
-	TestMigrationStateTestMigrationSucceeded TestMigrationState = "TestMigrationSucceeded"
-)
-
-// PossibleTestMigrationStateValues returns an array of possible values for the TestMigrationState const type.
-func PossibleTestMigrationStateValues() []TestMigrationState {
-	return []TestMigrationState{TestMigrationStateNone, TestMigrationStateTestMigrationCleanupInProgress, TestMigrationStateTestMigrationFailed, TestMigrationStateTestMigrationInProgress, TestMigrationStateTestMigrationSucceeded}
-}
-
 // A2AApplyRecoveryPointInput applyRecoveryPoint input specific to A2A provider.
 type A2AApplyRecoveryPointInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeApplyRecoveryPointProviderSpecificInput', 'InstanceTypeA2A', 'InstanceTypeHyperVReplicaAzure', 'InstanceTypeInMageAzureV2'
@@ -1331,7 +74,7 @@ func (aarpi A2AApplyRecoveryPointInput) AsBasicApplyRecoveryPointProviderSpecifi
 
 // A2AContainerCreationInput a2A cloud creation input.
 type A2AContainerCreationInput struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerCreationInput `json:"instanceType,omitempty"`
 }
 
@@ -1526,7 +269,7 @@ type A2AEventDetails struct {
 	RemoteFabricName *string `json:"remoteFabricName,omitempty"`
 	// RemoteFabricLocation - Remote fabric location.
 	RemoteFabricLocation *string `json:"remoteFabricLocation,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -1585,6 +328,11 @@ func (aed A2AEventDetails) AsHyperVReplicaBaseEventDetails() (*HyperVReplicaBase
 
 // AsInMageAzureV2EventDetails is the BasicEventProviderSpecificDetails implementation for A2AEventDetails.
 func (aed A2AEventDetails) AsInMageAzureV2EventDetails() (*InMageAzureV2EventDetails, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for A2AEventDetails.
+func (aed A2AEventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
 	return nil, false
 }
 
@@ -2586,6 +1334,18 @@ type Alert struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Alert.
+func (a Alert) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if a.Properties != nil {
+		objectMap["properties"] = a.Properties
+	}
+	if a.Location != nil {
+		objectMap["location"] = a.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // AlertCollection collection of alerts.
 type AlertCollection struct {
 	autorest.Response `json:"-"`
@@ -2663,10 +1423,15 @@ func (ac AlertCollection) IsEmpty() bool {
 	return ac.Value == nil || len(*ac.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (ac AlertCollection) hasNextLink() bool {
+	return ac.NextLink != nil && len(*ac.NextLink) != 0
+}
+
 // alertCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (ac AlertCollection) alertCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if ac.NextLink == nil || len(to.String(ac.NextLink)) < 1 {
+	if !ac.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -2694,11 +1459,16 @@ func (page *AlertCollectionPage) NextWithContext(ctx context.Context) (err error
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.ac)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.ac)
+		if err != nil {
+			return err
+		}
+		page.ac = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.ac = next
 	return nil
 }
 
@@ -3300,8 +2070,8 @@ func (afsd AzureFabricSpecificDetails) AsBasicFabricSpecificDetails() (BasicFabr
 	return &afsd, true
 }
 
-// AzureToAzureCreateNetworkMappingInput create network mappings input properties/behavior specific to
-// Azure to Azure Network mapping.
+// AzureToAzureCreateNetworkMappingInput create network mappings input properties/behavior specific to Azure to
+// Azure Network mapping.
 type AzureToAzureCreateNetworkMappingInput struct {
 	// PrimaryNetworkID - The primary azure vnet Id.
 	PrimaryNetworkID *string `json:"primaryNetworkId,omitempty"`
@@ -3487,8 +2257,7 @@ type AzureVMDiskDetails struct {
 	LunID *string `json:"lunId,omitempty"`
 }
 
-// ComputeSizeErrorDetails represents the error used to indicate why the target compute size is not
-// applicable.
+// ComputeSizeErrorDetails represents the error used to indicate why the target compute size is not applicable.
 type ComputeSizeErrorDetails struct {
 	// Message - The error message.
 	Message *string `json:"message,omitempty"`
@@ -4096,9 +2865,9 @@ type DiskVolumeDetails struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// Display contains the localized display information for this particular operation / action. These value
-// will be used by several clients for (1) custom role definitions for RBAC; (2) complex query filters for
-// the event service; and (3) audit history / records for management operations.
+// Display contains the localized display information for this particular operation / action. These value will
+// be used by several clients for (1) custom role definitions for RBAC; (2) complex query filters for the event
+// service; and (3) audit history / records for management operations.
 type Display struct {
 	// Provider - The provider. The localized friendly form of the resource provider name – it is expected to also include the publisher/company responsible. It should use Title Casing and begin with "Microsoft" for 1st party services. e.g. "Microsoft Monitoring Insights" or "Microsoft Compute."
 	Provider *string `json:"provider,omitempty"`
@@ -4426,6 +3195,18 @@ type Event struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Event.
+func (e Event) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if e.Properties != nil {
+		objectMap["properties"] = e.Properties
+	}
+	if e.Location != nil {
+		objectMap["location"] = e.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // EventCollection collection of fabric details.
 type EventCollection struct {
 	autorest.Response `json:"-"`
@@ -4503,10 +3284,15 @@ func (ec EventCollection) IsEmpty() bool {
 	return ec.Value == nil || len(*ec.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (ec EventCollection) hasNextLink() bool {
+	return ec.NextLink != nil && len(*ec.NextLink) != 0
+}
+
 // eventCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (ec EventCollection) eventCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if ec.NextLink == nil || len(to.String(ec.NextLink)) < 1 {
+	if !ec.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -4534,11 +3320,16 @@ func (page *EventCollectionPage) NextWithContext(ctx context.Context) (err error
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.ec)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.ec)
+		if err != nil {
+			return err
+		}
+		page.ec = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.ec = next
 	return nil
 }
 
@@ -4582,6 +3373,8 @@ type EventProperties struct {
 	EventType *string `json:"eventType,omitempty"`
 	// AffectedObjectFriendlyName - The friendly name of the source of the event on which it is raised (for example, VM, VMM etc).
 	AffectedObjectFriendlyName *string `json:"affectedObjectFriendlyName,omitempty"`
+	// AffectedObjectCorrelationID - READ-ONLY; The affected object correlationId for the event.
+	AffectedObjectCorrelationID *string `json:"affectedObjectCorrelationId,omitempty"`
 	// Severity - The severity of the event.
 	Severity *string `json:"severity,omitempty"`
 	// TimeOfOccurrence - The time of occurrence of the event.
@@ -4594,6 +3387,38 @@ type EventProperties struct {
 	EventSpecificDetails BasicEventSpecificDetails `json:"eventSpecificDetails,omitempty"`
 	// HealthErrors - The list of errors / warnings capturing details associated with the issue(s).
 	HealthErrors *[]HealthError `json:"healthErrors,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EventProperties.
+func (ep EventProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ep.EventCode != nil {
+		objectMap["eventCode"] = ep.EventCode
+	}
+	if ep.Description != nil {
+		objectMap["description"] = ep.Description
+	}
+	if ep.EventType != nil {
+		objectMap["eventType"] = ep.EventType
+	}
+	if ep.AffectedObjectFriendlyName != nil {
+		objectMap["affectedObjectFriendlyName"] = ep.AffectedObjectFriendlyName
+	}
+	if ep.Severity != nil {
+		objectMap["severity"] = ep.Severity
+	}
+	if ep.TimeOfOccurrence != nil {
+		objectMap["timeOfOccurrence"] = ep.TimeOfOccurrence
+	}
+	if ep.FabricID != nil {
+		objectMap["fabricId"] = ep.FabricID
+	}
+	objectMap["providerSpecificDetails"] = ep.ProviderSpecificDetails
+	objectMap["eventSpecificDetails"] = ep.EventSpecificDetails
+	if ep.HealthErrors != nil {
+		objectMap["healthErrors"] = ep.HealthErrors
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for EventProperties struct.
@@ -4640,6 +3465,15 @@ func (ep *EventProperties) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				ep.AffectedObjectFriendlyName = &affectedObjectFriendlyName
+			}
+		case "affectedObjectCorrelationId":
+			if v != nil {
+				var affectedObjectCorrelationID string
+				err = json.Unmarshal(*v, &affectedObjectCorrelationID)
+				if err != nil {
+					return err
+				}
+				ep.AffectedObjectCorrelationID = &affectedObjectCorrelationID
 			}
 		case "severity":
 			if v != nil {
@@ -4707,12 +3541,13 @@ type BasicEventProviderSpecificDetails interface {
 	AsHyperVReplicaAzureEventDetails() (*HyperVReplicaAzureEventDetails, bool)
 	AsHyperVReplicaBaseEventDetails() (*HyperVReplicaBaseEventDetails, bool)
 	AsInMageAzureV2EventDetails() (*InMageAzureV2EventDetails, bool)
+	AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool)
 	AsEventProviderSpecificDetails() (*EventProviderSpecificDetails, bool)
 }
 
 // EventProviderSpecificDetails model class for provider specific details for an event.
 type EventProviderSpecificDetails struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -4748,6 +3583,10 @@ func unmarshalBasicEventProviderSpecificDetails(body []byte) (BasicEventProvider
 		var imaved InMageAzureV2EventDetails
 		err := json.Unmarshal(body, &imaved)
 		return imaved, err
+	case string(InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt):
+		var vmced VMwareCbtEventDetails
+		err := json.Unmarshal(body, &vmced)
+		return vmced, err
 	default:
 		var epsd EventProviderSpecificDetails
 		err := json.Unmarshal(body, &epsd)
@@ -4813,6 +3652,11 @@ func (epsd EventProviderSpecificDetails) AsInMageAzureV2EventDetails() (*InMageA
 	return nil, false
 }
 
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for EventProviderSpecificDetails.
+func (epsd EventProviderSpecificDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
+	return nil, false
+}
+
 // AsEventProviderSpecificDetails is the BasicEventProviderSpecificDetails implementation for EventProviderSpecificDetails.
 func (epsd EventProviderSpecificDetails) AsEventProviderSpecificDetails() (*EventProviderSpecificDetails, bool) {
 	return &epsd, true
@@ -4835,10 +3679,39 @@ type EventQueryParameter struct {
 	FabricName *string `json:"fabricName,omitempty"`
 	// AffectedObjectFriendlyName - The affected object name of the events to be queried.
 	AffectedObjectFriendlyName *string `json:"affectedObjectFriendlyName,omitempty"`
+	// AffectedObjectCorrelationID - READ-ONLY; The affected object correlationId for the events to be queried.
+	AffectedObjectCorrelationID *string `json:"affectedObjectCorrelationId,omitempty"`
 	// StartTime - The start time of the time range within which the events are to be queried.
 	StartTime *date.Time `json:"startTime,omitempty"`
 	// EndTime - The end time of the time range within which the events are to be queried.
 	EndTime *date.Time `json:"endTime,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EventQueryParameter.
+func (eqp EventQueryParameter) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if eqp.EventCode != nil {
+		objectMap["eventCode"] = eqp.EventCode
+	}
+	if eqp.Severity != nil {
+		objectMap["severity"] = eqp.Severity
+	}
+	if eqp.EventType != nil {
+		objectMap["eventType"] = eqp.EventType
+	}
+	if eqp.FabricName != nil {
+		objectMap["fabricName"] = eqp.FabricName
+	}
+	if eqp.AffectedObjectFriendlyName != nil {
+		objectMap["affectedObjectFriendlyName"] = eqp.AffectedObjectFriendlyName
+	}
+	if eqp.StartTime != nil {
+		objectMap["startTime"] = eqp.StartTime
+	}
+	if eqp.EndTime != nil {
+		objectMap["endTime"] = eqp.EndTime
+	}
+	return json.Marshal(objectMap)
 }
 
 // BasicEventSpecificDetails model class for event specific details for an event.
@@ -4996,6 +3869,18 @@ type Fabric struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Fabric.
+func (f Fabric) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if f.Properties != nil {
+		objectMap["properties"] = f.Properties
+	}
+	if f.Location != nil {
+		objectMap["location"] = f.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // FabricCollection collection of fabric details.
 type FabricCollection struct {
 	autorest.Response `json:"-"`
@@ -5073,10 +3958,15 @@ func (fc FabricCollection) IsEmpty() bool {
 	return fc.Value == nil || len(*fc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (fc FabricCollection) hasNextLink() bool {
+	return fc.NextLink != nil && len(*fc.NextLink) != 0
+}
+
 // fabricCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (fc FabricCollection) fabricCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if fc.NextLink == nil || len(to.String(fc.NextLink)) < 1 {
+	if !fc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -5104,11 +3994,16 @@ func (page *FabricCollectionPage) NextWithContext(ctx context.Context) (err erro
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.fc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.fc)
+		if err != nil {
+			return err
+		}
+		page.fc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.fc = next
 	return nil
 }
 
@@ -6012,7 +4907,7 @@ type HyperVReplica2012EventDetails struct {
 	RemoteContainerName *string `json:"remoteContainerName,omitempty"`
 	// RemoteFabricName - The remote fabric name.
 	RemoteFabricName *string `json:"remoteFabricName,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -6068,6 +4963,11 @@ func (hvr2ed HyperVReplica2012EventDetails) AsInMageAzureV2EventDetails() (*InMa
 	return nil, false
 }
 
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplica2012EventDetails.
+func (hvr2ed HyperVReplica2012EventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
+	return nil, false
+}
+
 // AsEventProviderSpecificDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplica2012EventDetails.
 func (hvr2ed HyperVReplica2012EventDetails) AsEventProviderSpecificDetails() (*EventProviderSpecificDetails, bool) {
 	return nil, false
@@ -6088,7 +4988,7 @@ type HyperVReplica2012R2EventDetails struct {
 	RemoteContainerName *string `json:"remoteContainerName,omitempty"`
 	// RemoteFabricName - The remote fabric name.
 	RemoteFabricName *string `json:"remoteFabricName,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -6144,6 +5044,11 @@ func (hvr2ed HyperVReplica2012R2EventDetails) AsInMageAzureV2EventDetails() (*In
 	return nil, false
 }
 
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplica2012R2EventDetails.
+func (hvr2ed HyperVReplica2012R2EventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
+	return nil, false
+}
+
 // AsEventProviderSpecificDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplica2012R2EventDetails.
 func (hvr2ed HyperVReplica2012R2EventDetails) AsEventProviderSpecificDetails() (*EventProviderSpecificDetails, bool) {
 	return nil, false
@@ -6154,8 +5059,7 @@ func (hvr2ed HyperVReplica2012R2EventDetails) AsBasicEventProviderSpecificDetail
 	return &hvr2ed, true
 }
 
-// HyperVReplicaAzureApplyRecoveryPointInput applyRecoveryPoint input specific to HyperVReplicaAzure
-// provider.
+// HyperVReplicaAzureApplyRecoveryPointInput applyRecoveryPoint input specific to HyperVReplicaAzure provider.
 type HyperVReplicaAzureApplyRecoveryPointInput struct {
 	// VaultLocation - The vault location where the recovery Vm resides.
 	VaultLocation *string `json:"vaultLocation,omitempty"`
@@ -6340,7 +5244,7 @@ type HyperVReplicaAzureEventDetails struct {
 	FabricName *string `json:"fabricName,omitempty"`
 	// RemoteContainerName - The remote container name.
 	RemoteContainerName *string `json:"remoteContainerName,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -6390,6 +5294,11 @@ func (hvraed HyperVReplicaAzureEventDetails) AsHyperVReplicaBaseEventDetails() (
 
 // AsInMageAzureV2EventDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplicaAzureEventDetails.
 func (hvraed HyperVReplicaAzureEventDetails) AsInMageAzureV2EventDetails() (*InMageAzureV2EventDetails, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplicaAzureEventDetails.
+func (hvraed HyperVReplicaAzureEventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
 	return nil, false
 }
 
@@ -7056,7 +5965,7 @@ type HyperVReplicaBaseEventDetails struct {
 	RemoteContainerName *string `json:"remoteContainerName,omitempty"`
 	// RemoteFabricName - The remote fabric name.
 	RemoteFabricName *string `json:"remoteFabricName,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -7109,6 +6018,11 @@ func (hvrbed HyperVReplicaBaseEventDetails) AsHyperVReplicaBaseEventDetails() (*
 
 // AsInMageAzureV2EventDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplicaBaseEventDetails.
 func (hvrbed HyperVReplicaBaseEventDetails) AsInMageAzureV2EventDetails() (*InMageAzureV2EventDetails, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for HyperVReplicaBaseEventDetails.
+func (hvrbed HyperVReplicaBaseEventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
 	return nil, false
 }
 
@@ -8464,7 +7378,7 @@ type InMageAzureV2EventDetails struct {
 	Summary *string `json:"summary,omitempty"`
 	// SiteName - VMware Site name.
 	SiteName *string `json:"siteName,omitempty"`
-	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2'
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
 }
 
@@ -8527,6 +7441,11 @@ func (imaved InMageAzureV2EventDetails) AsHyperVReplicaBaseEventDetails() (*Hype
 // AsInMageAzureV2EventDetails is the BasicEventProviderSpecificDetails implementation for InMageAzureV2EventDetails.
 func (imaved InMageAzureV2EventDetails) AsInMageAzureV2EventDetails() (*InMageAzureV2EventDetails, bool) {
 	return &imaved, true
+}
+
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for InMageAzureV2EventDetails.
+func (imaved InMageAzureV2EventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
+	return nil, false
 }
 
 // AsEventProviderSpecificDetails is the BasicEventProviderSpecificDetails implementation for InMageAzureV2EventDetails.
@@ -9249,8 +8168,7 @@ func (imavri InMageAzureV2ReprotectInput) AsBasicReverseReplicationProviderSpeci
 	return &imavri, true
 }
 
-// InMageAzureV2UpdateReplicationProtectedItemInput inMage Azure V2 input to update replication protected
-// item.
+// InMageAzureV2UpdateReplicationProtectedItemInput inMage Azure V2 input to update replication protected item.
 type InMageAzureV2UpdateReplicationProtectedItemInput struct {
 	// RecoveryAzureV1ResourceGroupID - The recovery Azure resource group Id for classic deployment.
 	RecoveryAzureV1ResourceGroupID *string `json:"recoveryAzureV1ResourceGroupId,omitempty"`
@@ -10175,8 +9093,8 @@ func (imri InMageReprotectInput) AsBasicReverseReplicationProviderSpecificInput(
 	return &imri, true
 }
 
-// InMageVolumeExclusionOptions guest disk signature based disk exclusion option when doing enable
-// protection of virtual machine in InMage provider.
+// InMageVolumeExclusionOptions guest disk signature based disk exclusion option when doing enable protection
+// of virtual machine in InMage provider.
 type InMageVolumeExclusionOptions struct {
 	// VolumeLabel - The volume label. The disk having any volume with this label will be excluded from replication.
 	VolumeLabel *string `json:"volumeLabel,omitempty"`
@@ -10184,10 +9102,10 @@ type InMageVolumeExclusionOptions struct {
 	OnlyExcludeIfSingleVolume *string `json:"onlyExcludeIfSingleVolume,omitempty"`
 }
 
-// InnerHealthError implements InnerHealthError class. HealthError object has a list of InnerHealthErrors
-// as child errors. InnerHealthError is used because this will prevent an infinite loop of structures when
-// Hydra tries to auto-generate the contract. We are exposing the related health errors as inner health
-// errors and all API consumers can utilize this in the same fashion as Exception -&gt; InnerException.
+// InnerHealthError implements InnerHealthError class. HealthError object has a list of InnerHealthErrors as
+// child errors. InnerHealthError is used because this will prevent an infinite loop of structures when Hydra
+// tries to auto-generate the contract. We are exposing the related health errors as inner health errors and
+// all API consumers can utilize this in the same fashion as Exception -&gt; InnerException.
 type InnerHealthError struct {
 	// ErrorSource - Source of error.
 	ErrorSource *string `json:"errorSource,omitempty"`
@@ -10240,6 +9158,18 @@ type Job struct {
 	Type *string `json:"type,omitempty"`
 	// Location - Resource Location
 	Location *string `json:"location,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Job.
+func (j Job) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if j.Properties != nil {
+		objectMap["properties"] = j.Properties
+	}
+	if j.Location != nil {
+		objectMap["location"] = j.Location
+	}
+	return json.Marshal(objectMap)
 }
 
 // JobCollection collection of jobs.
@@ -10319,10 +9249,15 @@ func (jc JobCollection) IsEmpty() bool {
 	return jc.Value == nil || len(*jc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (jc JobCollection) hasNextLink() bool {
+	return jc.NextLink != nil && len(*jc.NextLink) != 0
+}
+
 // jobCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (jc JobCollection) jobCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if jc.NextLink == nil || len(to.String(jc.NextLink)) < 1 {
+	if !jc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -10350,11 +9285,16 @@ func (page *JobCollectionPage) NextWithContext(ctx context.Context) (err error) 
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.jc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.jc)
+		if err != nil {
+			return err
+		}
+		page.jc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.jc = next
 	return nil
 }
 
@@ -10869,6 +9809,18 @@ type LogicalNetwork struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for LogicalNetwork.
+func (ln LogicalNetwork) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ln.Properties != nil {
+		objectMap["properties"] = ln.Properties
+	}
+	if ln.Location != nil {
+		objectMap["location"] = ln.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // LogicalNetworkCollection list of logical networks.
 type LogicalNetworkCollection struct {
 	autorest.Response `json:"-"`
@@ -10946,10 +9898,15 @@ func (lnc LogicalNetworkCollection) IsEmpty() bool {
 	return lnc.Value == nil || len(*lnc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (lnc LogicalNetworkCollection) hasNextLink() bool {
+	return lnc.NextLink != nil && len(*lnc.NextLink) != 0
+}
+
 // logicalNetworkCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (lnc LogicalNetworkCollection) logicalNetworkCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if lnc.NextLink == nil || len(to.String(lnc.NextLink)) < 1 {
+	if !lnc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -10977,11 +9934,16 @@ func (page *LogicalNetworkCollectionPage) NextWithContext(ctx context.Context) (
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.lnc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.lnc)
+		if err != nil {
+			return err
+		}
+		page.lnc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.lnc = next
 	return nil
 }
 
@@ -11272,6 +10234,18 @@ type MigrationItem struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for MigrationItem.
+func (mi MigrationItem) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mi.Properties != nil {
+		objectMap["properties"] = mi.Properties
+	}
+	if mi.Location != nil {
+		objectMap["location"] = mi.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // MigrationItemCollection migration item collection.
 type MigrationItemCollection struct {
 	autorest.Response `json:"-"`
@@ -11349,10 +10323,15 @@ func (mic MigrationItemCollection) IsEmpty() bool {
 	return mic.Value == nil || len(*mic.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (mic MigrationItemCollection) hasNextLink() bool {
+	return mic.NextLink != nil && len(*mic.NextLink) != 0
+}
+
 // migrationItemCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (mic MigrationItemCollection) migrationItemCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if mic.NextLink == nil || len(to.String(mic.NextLink)) < 1 {
+	if !mic.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -11380,11 +10359,16 @@ func (page *MigrationItemCollectionPage) NextWithContext(ctx context.Context) (e
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.mic)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.mic)
+		if err != nil {
+			return err
+		}
+		page.mic = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.mic = next
 	return nil
 }
 
@@ -11426,26 +10410,37 @@ type MigrationItemProperties struct {
 	PolicyID *string `json:"policyId,omitempty"`
 	// PolicyFriendlyName - READ-ONLY; The name of policy governing this item.
 	PolicyFriendlyName *string `json:"policyFriendlyName,omitempty"`
-	// RecoveryServicesProviderID - READ-ONLY; The recovery services provider ARM Id.
-	RecoveryServicesProviderID *string `json:"recoveryServicesProviderId,omitempty"`
 	// MigrationState - READ-ONLY; The migration status. Possible values include: 'MigrationStateNone', 'MigrationStateEnableMigrationInProgress', 'MigrationStateEnableMigrationFailed', 'MigrationStateDisableMigrationInProgress', 'MigrationStateDisableMigrationFailed', 'MigrationStateInitialSeedingInProgress', 'MigrationStateInitialSeedingFailed', 'MigrationStateReplicating', 'MigrationStateMigrationInProgress', 'MigrationStateMigrationSucceeded', 'MigrationStateMigrationFailed'
 	MigrationState MigrationState `json:"migrationState,omitempty"`
 	// MigrationStateDescription - READ-ONLY; The migration state description.
 	MigrationStateDescription *string `json:"migrationStateDescription,omitempty"`
+	// LastTestMigrationTime - READ-ONLY; The last test migration time.
+	LastTestMigrationTime *date.Time `json:"lastTestMigrationTime,omitempty"`
+	// LastTestMigrationStatus - READ-ONLY; The status of the last test migration.
+	LastTestMigrationStatus *string `json:"lastTestMigrationStatus,omitempty"`
 	// TestMigrateState - READ-ONLY; The test migrate state. Possible values include: 'TestMigrationStateNone', 'TestMigrationStateTestMigrationInProgress', 'TestMigrationStateTestMigrationSucceeded', 'TestMigrationStateTestMigrationFailed', 'TestMigrationStateTestMigrationCleanupInProgress'
 	TestMigrateState TestMigrationState `json:"testMigrateState,omitempty"`
 	// TestMigrateStateDescription - READ-ONLY; The test migrate state description.
 	TestMigrateStateDescription *string `json:"testMigrateStateDescription,omitempty"`
-	// Health - READ-ONLY; The consolidated health.
-	Health *string `json:"health,omitempty"`
+	// Health - READ-ONLY; The consolidated health. Possible values include: 'ProtectionHealthNone', 'ProtectionHealthNormal', 'ProtectionHealthWarning', 'ProtectionHealthCritical'
+	Health ProtectionHealth `json:"health,omitempty"`
 	// HealthErrors - READ-ONLY; The list of health errors.
 	HealthErrors *[]HealthError `json:"healthErrors,omitempty"`
 	// AllowedOperations - READ-ONLY; The allowed operations on the migration item, based on the current migration state of the item.
 	AllowedOperations *[]MigrationItemOperation `json:"allowedOperations,omitempty"`
 	// CurrentJob - READ-ONLY; The current job details.
 	CurrentJob *CurrentJobDetails `json:"currentJob,omitempty"`
+	// EventCorrelationID - READ-ONLY; The correlation Id for events associated with this migration item.
+	EventCorrelationID *string `json:"eventCorrelationId,omitempty"`
 	// ProviderSpecificDetails - The migration provider custom settings.
 	ProviderSpecificDetails BasicMigrationProviderSpecificSettings `json:"providerSpecificDetails,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrationItemProperties.
+func (mip MigrationItemProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["providerSpecificDetails"] = mip.ProviderSpecificDetails
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for MigrationItemProperties struct.
@@ -11484,15 +10479,6 @@ func (mip *MigrationItemProperties) UnmarshalJSON(body []byte) error {
 				}
 				mip.PolicyFriendlyName = &policyFriendlyName
 			}
-		case "recoveryServicesProviderId":
-			if v != nil {
-				var recoveryServicesProviderID string
-				err = json.Unmarshal(*v, &recoveryServicesProviderID)
-				if err != nil {
-					return err
-				}
-				mip.RecoveryServicesProviderID = &recoveryServicesProviderID
-			}
 		case "migrationState":
 			if v != nil {
 				var migrationState MigrationState
@@ -11510,6 +10496,24 @@ func (mip *MigrationItemProperties) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				mip.MigrationStateDescription = &migrationStateDescription
+			}
+		case "lastTestMigrationTime":
+			if v != nil {
+				var lastTestMigrationTime date.Time
+				err = json.Unmarshal(*v, &lastTestMigrationTime)
+				if err != nil {
+					return err
+				}
+				mip.LastTestMigrationTime = &lastTestMigrationTime
+			}
+		case "lastTestMigrationStatus":
+			if v != nil {
+				var lastTestMigrationStatus string
+				err = json.Unmarshal(*v, &lastTestMigrationStatus)
+				if err != nil {
+					return err
+				}
+				mip.LastTestMigrationStatus = &lastTestMigrationStatus
 			}
 		case "testMigrateState":
 			if v != nil {
@@ -11531,12 +10535,12 @@ func (mip *MigrationItemProperties) UnmarshalJSON(body []byte) error {
 			}
 		case "health":
 			if v != nil {
-				var health string
+				var health ProtectionHealth
 				err = json.Unmarshal(*v, &health)
 				if err != nil {
 					return err
 				}
-				mip.Health = &health
+				mip.Health = health
 			}
 		case "healthErrors":
 			if v != nil {
@@ -11564,6 +10568,15 @@ func (mip *MigrationItemProperties) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				mip.CurrentJob = &currentJob
+			}
+		case "eventCorrelationId":
+			if v != nil {
+				var eventCorrelationID string
+				err = json.Unmarshal(*v, &eventCorrelationID)
+				if err != nil {
+					return err
+				}
+				mip.EventCorrelationID = &eventCorrelationID
 			}
 		case "providerSpecificDetails":
 			if v != nil {
@@ -11676,6 +10689,18 @@ type MigrationRecoveryPoint struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for MigrationRecoveryPoint.
+func (mrp MigrationRecoveryPoint) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mrp.Properties != nil {
+		objectMap["properties"] = mrp.Properties
+	}
+	if mrp.Location != nil {
+		objectMap["location"] = mrp.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // MigrationRecoveryPointCollection collection of migration recovery points.
 type MigrationRecoveryPointCollection struct {
 	autorest.Response `json:"-"`
@@ -11754,10 +10779,15 @@ func (mrpc MigrationRecoveryPointCollection) IsEmpty() bool {
 	return mrpc.Value == nil || len(*mrpc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (mrpc MigrationRecoveryPointCollection) hasNextLink() bool {
+	return mrpc.NextLink != nil && len(*mrpc.NextLink) != 0
+}
+
 // migrationRecoveryPointCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (mrpc MigrationRecoveryPointCollection) migrationRecoveryPointCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if mrpc.NextLink == nil || len(to.String(mrpc.NextLink)) < 1 {
+	if !mrpc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -11785,11 +10815,16 @@ func (page *MigrationRecoveryPointCollectionPage) NextWithContext(ctx context.Co
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.mrpc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.mrpc)
+		if err != nil {
+			return err
+		}
+		page.mrpc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.mrpc = next
 	return nil
 }
 
@@ -11854,6 +10889,18 @@ type Network struct {
 	Type *string `json:"type,omitempty"`
 	// Location - Resource Location
 	Location *string `json:"location,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Network.
+func (n Network) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if n.Properties != nil {
+		objectMap["properties"] = n.Properties
+	}
+	if n.Location != nil {
+		objectMap["location"] = n.Location
+	}
+	return json.Marshal(objectMap)
 }
 
 // NetworkCollection list of networks.
@@ -11933,10 +10980,15 @@ func (nc NetworkCollection) IsEmpty() bool {
 	return nc.Value == nil || len(*nc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (nc NetworkCollection) hasNextLink() bool {
+	return nc.NextLink != nil && len(*nc.NextLink) != 0
+}
+
 // networkCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (nc NetworkCollection) networkCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if nc.NextLink == nil || len(to.String(nc.NextLink)) < 1 {
+	if !nc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -11964,11 +11016,16 @@ func (page *NetworkCollectionPage) NextWithContext(ctx context.Context) (err err
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.nc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.nc)
+		if err != nil {
+			return err
+		}
+		page.nc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.nc = next
 	return nil
 }
 
@@ -12002,11 +11059,11 @@ func NewNetworkCollectionPage(getNextPage func(context.Context, NetworkCollectio
 	return NetworkCollectionPage{fn: getNextPage}
 }
 
-// NetworkMapping network Mapping model. Ideally it should have been possible to inherit this class from
-// prev version in InheritedModels as long as there is no difference in structure or method signature.
-// Since there were no base Models for certain fields and methods viz NetworkMappingProperties and Load
-// with required return type, the class has been introduced in its entirety with references to base models
-// to facilitate extensions in subsequent versions.
+// NetworkMapping network Mapping model. Ideally it should have been possible to inherit this class from prev
+// version in InheritedModels as long as there is no difference in structure or method signature. Since there
+// were no base Models for certain fields and methods viz NetworkMappingProperties and Load with required
+// return type, the class has been introduced in its entirety with references to base models to facilitate
+// extensions in subsequent versions.
 type NetworkMapping struct {
 	autorest.Response `json:"-"`
 	// Properties - The Network Mapping Properties.
@@ -12021,10 +11078,22 @@ type NetworkMapping struct {
 	Location *string `json:"location,omitempty"`
 }
 
-// NetworkMappingCollection list of network mappings. As with NetworkMapping, it should be possible to
-// reuse a prev version of this class. It doesn't seem likely this class could be anything more than a
-// slightly bespoke collection of NetworkMapping. Hence it makes sense to override Load with
-// Base.NetworkMapping instead of existing CurrentVersion.NetworkMapping.
+// MarshalJSON is the custom marshaler for NetworkMapping.
+func (nm NetworkMapping) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if nm.Properties != nil {
+		objectMap["properties"] = nm.Properties
+	}
+	if nm.Location != nil {
+		objectMap["location"] = nm.Location
+	}
+	return json.Marshal(objectMap)
+}
+
+// NetworkMappingCollection list of network mappings. As with NetworkMapping, it should be possible to reuse a
+// prev version of this class. It doesn't seem likely this class could be anything more than a slightly bespoke
+// collection of NetworkMapping. Hence it makes sense to override Load with Base.NetworkMapping instead of
+// existing CurrentVersion.NetworkMapping.
 type NetworkMappingCollection struct {
 	autorest.Response `json:"-"`
 	// Value - The Network Mappings list.
@@ -12101,10 +11170,15 @@ func (nmc NetworkMappingCollection) IsEmpty() bool {
 	return nmc.Value == nil || len(*nmc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (nmc NetworkMappingCollection) hasNextLink() bool {
+	return nmc.NextLink != nil && len(*nmc.NextLink) != 0
+}
+
 // networkMappingCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (nmc NetworkMappingCollection) networkMappingCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if nmc.NextLink == nil || len(to.String(nmc.NextLink)) < 1 {
+	if !nmc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -12132,11 +11206,16 @@ func (page *NetworkMappingCollectionPage) NextWithContext(ctx context.Context) (
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.nmc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.nmc)
+		if err != nil {
+			return err
+		}
+		page.nmc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.nmc = next
 	return nil
 }
 
@@ -12414,8 +11493,7 @@ type OperationsDiscoveryCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// OperationsDiscoveryCollectionIterator provides access to a complete listing of OperationsDiscovery
-// values.
+// OperationsDiscoveryCollectionIterator provides access to a complete listing of OperationsDiscovery values.
 type OperationsDiscoveryCollectionIterator struct {
 	i    int
 	page OperationsDiscoveryCollectionPage
@@ -12483,10 +11561,15 @@ func (odc OperationsDiscoveryCollection) IsEmpty() bool {
 	return odc.Value == nil || len(*odc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (odc OperationsDiscoveryCollection) hasNextLink() bool {
+	return odc.NextLink != nil && len(*odc.NextLink) != 0
+}
+
 // operationsDiscoveryCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (odc OperationsDiscoveryCollection) operationsDiscoveryCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if odc.NextLink == nil || len(to.String(odc.NextLink)) < 1 {
+	if !odc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -12514,11 +11597,16 @@ func (page *OperationsDiscoveryCollectionPage) NextWithContext(ctx context.Conte
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.odc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.odc)
+		if err != nil {
+			return err
+		}
+		page.odc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.odc = next
 	return nil
 }
 
@@ -12639,6 +11727,18 @@ type Policy struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Policy.
+func (p Policy) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if p.Properties != nil {
+		objectMap["properties"] = p.Properties
+	}
+	if p.Location != nil {
+		objectMap["location"] = p.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // PolicyCollection protection Profile Collection details.
 type PolicyCollection struct {
 	autorest.Response `json:"-"`
@@ -12716,10 +11816,15 @@ func (pc PolicyCollection) IsEmpty() bool {
 	return pc.Value == nil || len(*pc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (pc PolicyCollection) hasNextLink() bool {
+	return pc.NextLink != nil && len(*pc.NextLink) != 0
+}
+
 // policyCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (pc PolicyCollection) policyCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if pc.NextLink == nil || len(to.String(pc.NextLink)) < 1 {
+	if !pc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -12747,11 +11852,16 @@ func (page *PolicyCollectionPage) NextWithContext(ctx context.Context) (err erro
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.pc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.pc)
+		if err != nil {
+			return err
+		}
+		page.pc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.pc = next
 	return nil
 }
 
@@ -13198,6 +12308,18 @@ type ProtectableItem struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for ProtectableItem.
+func (pi ProtectableItem) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pi.Properties != nil {
+		objectMap["properties"] = pi.Properties
+	}
+	if pi.Location != nil {
+		objectMap["location"] = pi.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // ProtectableItemCollection protectable item collection.
 type ProtectableItemCollection struct {
 	autorest.Response `json:"-"`
@@ -13275,10 +12397,15 @@ func (pic ProtectableItemCollection) IsEmpty() bool {
 	return pic.Value == nil || len(*pic.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (pic ProtectableItemCollection) hasNextLink() bool {
+	return pic.NextLink != nil && len(*pic.NextLink) != 0
+}
+
 // protectableItemCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (pic ProtectableItemCollection) protectableItemCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if pic.NextLink == nil || len(to.String(pic.NextLink)) < 1 {
+	if !pic.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -13306,11 +12433,16 @@ func (page *ProtectableItemCollectionPage) NextWithContext(ctx context.Context) 
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.pic)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.pic)
+		if err != nil {
+			return err
+		}
+		page.pic = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.pic = next
 	return nil
 }
 
@@ -13474,6 +12606,18 @@ type ProtectionContainer struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for ProtectionContainer.
+func (pc ProtectionContainer) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pc.Properties != nil {
+		objectMap["properties"] = pc.Properties
+	}
+	if pc.Location != nil {
+		objectMap["location"] = pc.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // ProtectionContainerCollection protection Container collection.
 type ProtectionContainerCollection struct {
 	autorest.Response `json:"-"`
@@ -13483,8 +12627,7 @@ type ProtectionContainerCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ProtectionContainerCollectionIterator provides access to a complete listing of ProtectionContainer
-// values.
+// ProtectionContainerCollectionIterator provides access to a complete listing of ProtectionContainer values.
 type ProtectionContainerCollectionIterator struct {
 	i    int
 	page ProtectionContainerCollectionPage
@@ -13552,10 +12695,15 @@ func (pcc ProtectionContainerCollection) IsEmpty() bool {
 	return pcc.Value == nil || len(*pcc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (pcc ProtectionContainerCollection) hasNextLink() bool {
+	return pcc.NextLink != nil && len(*pcc.NextLink) != 0
+}
+
 // protectionContainerCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (pcc ProtectionContainerCollection) protectionContainerCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if pcc.NextLink == nil || len(to.String(pcc.NextLink)) < 1 {
+	if !pcc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -13583,11 +12731,16 @@ func (page *ProtectionContainerCollectionPage) NextWithContext(ctx context.Conte
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.pcc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.pcc)
+		if err != nil {
+			return err
+		}
+		page.pcc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.pcc = next
 	return nil
 }
 
@@ -13640,6 +12793,18 @@ type ProtectionContainerMapping struct {
 	Type *string `json:"type,omitempty"`
 	// Location - Resource Location
 	Location *string `json:"location,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ProtectionContainerMapping.
+func (pcm ProtectionContainerMapping) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pcm.Properties != nil {
+		objectMap["properties"] = pcm.Properties
+	}
+	if pcm.Location != nil {
+		objectMap["location"] = pcm.Location
+	}
+	return json.Marshal(objectMap)
 }
 
 // ProtectionContainerMappingCollection protection container mapping collection class.
@@ -13720,10 +12885,15 @@ func (pcmc ProtectionContainerMappingCollection) IsEmpty() bool {
 	return pcmc.Value == nil || len(*pcmc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (pcmc ProtectionContainerMappingCollection) hasNextLink() bool {
+	return pcmc.NextLink != nil && len(*pcmc.NextLink) != 0
+}
+
 // protectionContainerMappingCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (pcmc ProtectionContainerMappingCollection) protectionContainerMappingCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if pcmc.NextLink == nil || len(to.String(pcmc.NextLink)) < 1 {
+	if !pcmc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -13751,11 +12921,16 @@ func (page *ProtectionContainerMappingCollectionPage) NextWithContext(ctx contex
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.pcmc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.pcmc)
+		if err != nil {
+			return err
+		}
+		page.pcmc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.pcmc = next
 	return nil
 }
 
@@ -14358,6 +13533,18 @@ type RecoveryPlan struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for RecoveryPlan.
+func (rp RecoveryPlan) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rp.Properties != nil {
+		objectMap["properties"] = rp.Properties
+	}
+	if rp.Location != nil {
+		objectMap["location"] = rp.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // RecoveryPlanA2AFailoverInput recovery plan A2A failover input.
 type RecoveryPlanA2AFailoverInput struct {
 	// RecoveryPointType - The recovery point type. Possible values include: 'Latest', 'LatestApplicationConsistent', 'LatestCrashConsistent', 'LatestProcessed'
@@ -14713,10 +13900,15 @@ func (RPCVar RecoveryPlanCollection) IsEmpty() bool {
 	return RPCVar.Value == nil || len(*RPCVar.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (RPCVar RecoveryPlanCollection) hasNextLink() bool {
+	return RPCVar.NextLink != nil && len(*RPCVar.NextLink) != 0
+}
+
 // recoveryPlanCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (RPCVar RecoveryPlanCollection) recoveryPlanCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if RPCVar.NextLink == nil || len(to.String(RPCVar.NextLink)) < 1 {
+	if !RPCVar.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -14744,11 +13936,16 @@ func (page *RecoveryPlanCollectionPage) NextWithContext(ctx context.Context) (er
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.RPCVar)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.RPCVar)
+		if err != nil {
+			return err
+		}
+		page.RPCVar = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.RPCVar = next
 	return nil
 }
 
@@ -15413,8 +14610,7 @@ func (rpsad RecoveryPlanScriptActionDetails) AsBasicRecoveryPlanActionDetails() 
 	return &rpsad, true
 }
 
-// RecoveryPlanShutdownGroupTaskDetails this class represents the recovery plan shutdown group task
-// details.
+// RecoveryPlanShutdownGroupTaskDetails this class represents the recovery plan shutdown group task details.
 type RecoveryPlanShutdownGroupTaskDetails struct {
 	// Name - The name.
 	Name *string `json:"name,omitempty"`
@@ -15638,6 +14834,18 @@ type RecoveryPoint struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for RecoveryPoint.
+func (rp RecoveryPoint) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rp.Properties != nil {
+		objectMap["properties"] = rp.Properties
+	}
+	if rp.Location != nil {
+		objectMap["location"] = rp.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // RecoveryPointCollection collection of recovery point details.
 type RecoveryPointCollection struct {
 	autorest.Response `json:"-"`
@@ -15715,10 +14923,15 @@ func (RPCVar RecoveryPointCollection) IsEmpty() bool {
 	return RPCVar.Value == nil || len(*RPCVar.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (RPCVar RecoveryPointCollection) hasNextLink() bool {
+	return RPCVar.NextLink != nil && len(*RPCVar.NextLink) != 0
+}
+
 // recoveryPointCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (RPCVar RecoveryPointCollection) recoveryPointCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if RPCVar.NextLink == nil || len(to.String(RPCVar.NextLink)) < 1 {
+	if !RPCVar.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -15746,11 +14959,16 @@ func (page *RecoveryPointCollectionPage) NextWithContext(ctx context.Context) (e
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.RPCVar)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.RPCVar)
+		if err != nil {
+			return err
+		}
+		page.RPCVar = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.RPCVar = next
 	return nil
 }
 
@@ -15850,6 +15068,18 @@ type RecoveryServicesProvider struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for RecoveryServicesProvider.
+func (rsp RecoveryServicesProvider) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rsp.Properties != nil {
+		objectMap["properties"] = rsp.Properties
+	}
+	if rsp.Location != nil {
+		objectMap["location"] = rsp.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // RecoveryServicesProviderCollection collection of providers.
 type RecoveryServicesProviderCollection struct {
 	autorest.Response `json:"-"`
@@ -15859,8 +15089,8 @@ type RecoveryServicesProviderCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// RecoveryServicesProviderCollectionIterator provides access to a complete listing of
-// RecoveryServicesProvider values.
+// RecoveryServicesProviderCollectionIterator provides access to a complete listing of RecoveryServicesProvider
+// values.
 type RecoveryServicesProviderCollectionIterator struct {
 	i    int
 	page RecoveryServicesProviderCollectionPage
@@ -15928,10 +15158,15 @@ func (rspc RecoveryServicesProviderCollection) IsEmpty() bool {
 	return rspc.Value == nil || len(*rspc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (rspc RecoveryServicesProviderCollection) hasNextLink() bool {
+	return rspc.NextLink != nil && len(*rspc.NextLink) != 0
+}
+
 // recoveryServicesProviderCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (rspc RecoveryServicesProviderCollection) recoveryServicesProviderCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if rspc.NextLink == nil || len(to.String(rspc.NextLink)) < 1 {
+	if !rspc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -15959,11 +15194,16 @@ func (page *RecoveryServicesProviderCollectionPage) NextWithContext(ctx context.
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.rspc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.rspc)
+		if err != nil {
+			return err
+		}
+		page.rspc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.rspc = next
 	return nil
 }
 
@@ -16086,8 +15326,8 @@ func (future *ReplicationFabricsCheckConsistencyFuture) Result(client Replicatio
 	return
 }
 
-// ReplicationFabricsCreateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationFabricsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationFabricsCreateFuture struct {
 	azure.Future
 }
@@ -16115,8 +15355,8 @@ func (future *ReplicationFabricsCreateFuture) Result(client ReplicationFabricsCl
 	return
 }
 
-// ReplicationFabricsDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationFabricsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationFabricsDeleteFuture struct {
 	azure.Future
 }
@@ -16485,8 +15725,37 @@ func (future *ReplicationMigrationItemsMigrateFuture) Result(client ReplicationM
 	return
 }
 
-// ReplicationMigrationItemsTestMigrateCleanupFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationMigrationItemsResyncFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type ReplicationMigrationItemsResyncFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ReplicationMigrationItemsResyncFuture) Result(client ReplicationMigrationItemsClient) (mi MigrationItem, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsResyncFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("siterecovery.ReplicationMigrationItemsResyncFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if mi.Response.Response, err = future.GetResult(sender); err == nil && mi.Response.Response.StatusCode != http.StatusNoContent {
+		mi, err = client.ResyncResponder(mi.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "siterecovery.ReplicationMigrationItemsResyncFuture", "Result", mi.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// ReplicationMigrationItemsTestMigrateCleanupFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationMigrationItemsTestMigrateCleanupFuture struct {
 	azure.Future
 }
@@ -16653,8 +15922,8 @@ func (future *ReplicationNetworkMappingsUpdateFuture) Result(client ReplicationN
 	return
 }
 
-// ReplicationPoliciesCreateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationPoliciesCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationPoliciesCreateFuture struct {
 	azure.Future
 }
@@ -16682,8 +15951,8 @@ func (future *ReplicationPoliciesCreateFuture) Result(client ReplicationPolicies
 	return
 }
 
-// ReplicationPoliciesDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationPoliciesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationPoliciesDeleteFuture struct {
 	azure.Future
 }
@@ -16705,8 +15974,8 @@ func (future *ReplicationPoliciesDeleteFuture) Result(client ReplicationPolicies
 	return
 }
 
-// ReplicationPoliciesUpdateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationPoliciesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationPoliciesUpdateFuture struct {
 	azure.Future
 }
@@ -16749,6 +16018,18 @@ type ReplicationProtectedItem struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for ReplicationProtectedItem.
+func (rpi ReplicationProtectedItem) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rpi.Properties != nil {
+		objectMap["properties"] = rpi.Properties
+	}
+	if rpi.Location != nil {
+		objectMap["location"] = rpi.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // ReplicationProtectedItemCollection replication protected item collection.
 type ReplicationProtectedItemCollection struct {
 	autorest.Response `json:"-"`
@@ -16758,8 +16039,8 @@ type ReplicationProtectedItemCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ReplicationProtectedItemCollectionIterator provides access to a complete listing of
-// ReplicationProtectedItem values.
+// ReplicationProtectedItemCollectionIterator provides access to a complete listing of ReplicationProtectedItem
+// values.
 type ReplicationProtectedItemCollectionIterator struct {
 	i    int
 	page ReplicationProtectedItemCollectionPage
@@ -16827,10 +16108,15 @@ func (rpic ReplicationProtectedItemCollection) IsEmpty() bool {
 	return rpic.Value == nil || len(*rpic.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (rpic ReplicationProtectedItemCollection) hasNextLink() bool {
+	return rpic.NextLink != nil && len(*rpic.NextLink) != 0
+}
+
 // replicationProtectedItemCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (rpic ReplicationProtectedItemCollection) replicationProtectedItemCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if rpic.NextLink == nil || len(to.String(rpic.NextLink)) < 1 {
+	if !rpic.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -16858,11 +16144,16 @@ func (page *ReplicationProtectedItemCollectionPage) NextWithContext(ctx context.
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.rpic)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.rpic)
+		if err != nil {
+			return err
+		}
+		page.rpic = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.rpic = next
 	return nil
 }
 
@@ -17211,8 +16502,8 @@ func (rpip *ReplicationProtectedItemProperties) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// ReplicationProtectedItemsApplyRecoveryPointFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectedItemsApplyRecoveryPointFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectedItemsApplyRecoveryPointFuture struct {
 	azure.Future
 }
@@ -17292,8 +16583,8 @@ func (future *ReplicationProtectedItemsDeleteFuture) Result(client ReplicationPr
 	return
 }
 
-// ReplicationProtectedItemsFailoverCommitFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ReplicationProtectedItemsFailoverCommitFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsFailoverCommitFuture struct {
 	azure.Future
 }
@@ -17321,8 +16612,8 @@ func (future *ReplicationProtectedItemsFailoverCommitFuture) Result(client Repli
 	return
 }
 
-// ReplicationProtectedItemsPlannedFailoverFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ReplicationProtectedItemsPlannedFailoverFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsPlannedFailoverFuture struct {
 	azure.Future
 }
@@ -17373,8 +16664,8 @@ func (future *ReplicationProtectedItemsPurgeFuture) Result(client ReplicationPro
 	return
 }
 
-// ReplicationProtectedItemsRepairReplicationFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectedItemsRepairReplicationFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationProtectedItemsRepairReplicationFuture struct {
 	azure.Future
 }
@@ -17431,8 +16722,8 @@ func (future *ReplicationProtectedItemsReprotectFuture) Result(client Replicatio
 	return
 }
 
-// ReplicationProtectedItemsTestFailoverCleanupFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectedItemsTestFailoverCleanupFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectedItemsTestFailoverCleanupFuture struct {
 	azure.Future
 }
@@ -17460,8 +16751,8 @@ func (future *ReplicationProtectedItemsTestFailoverCleanupFuture) Result(client 
 	return
 }
 
-// ReplicationProtectedItemsTestFailoverFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationProtectedItemsTestFailoverFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectedItemsTestFailoverFuture struct {
 	azure.Future
 }
@@ -17489,8 +16780,8 @@ func (future *ReplicationProtectedItemsTestFailoverFuture) Result(client Replica
 	return
 }
 
-// ReplicationProtectedItemsUnplannedFailoverFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectedItemsUnplannedFailoverFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationProtectedItemsUnplannedFailoverFuture struct {
 	azure.Future
 }
@@ -17576,8 +16867,8 @@ func (future *ReplicationProtectedItemsUpdateMobilityServiceFuture) Result(clien
 	return
 }
 
-// ReplicationProtectionContainerMappingsCreateFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectionContainerMappingsCreateFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectionContainerMappingsCreateFuture struct {
 	azure.Future
 }
@@ -17605,8 +16896,8 @@ func (future *ReplicationProtectionContainerMappingsCreateFuture) Result(client 
 	return
 }
 
-// ReplicationProtectionContainerMappingsDeleteFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectionContainerMappingsDeleteFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectionContainerMappingsDeleteFuture struct {
 	azure.Future
 }
@@ -17628,8 +16919,8 @@ func (future *ReplicationProtectionContainerMappingsDeleteFuture) Result(client 
 	return
 }
 
-// ReplicationProtectionContainerMappingsPurgeFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectionContainerMappingsPurgeFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectionContainerMappingsPurgeFuture struct {
 	azure.Future
 }
@@ -17651,8 +16942,8 @@ func (future *ReplicationProtectionContainerMappingsPurgeFuture) Result(client R
 	return
 }
 
-// ReplicationProtectionContainerMappingsUpdateFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationProtectionContainerMappingsUpdateFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationProtectionContainerMappingsUpdateFuture struct {
 	azure.Future
 }
@@ -17680,8 +16971,8 @@ func (future *ReplicationProtectionContainerMappingsUpdateFuture) Result(client 
 	return
 }
 
-// ReplicationProtectionContainersCreateFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationProtectionContainersCreateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectionContainersCreateFuture struct {
 	azure.Future
 }
@@ -17709,8 +17000,8 @@ func (future *ReplicationProtectionContainersCreateFuture) Result(client Replica
 	return
 }
 
-// ReplicationProtectionContainersDeleteFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationProtectionContainersDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationProtectionContainersDeleteFuture struct {
 	azure.Future
 }
@@ -17732,8 +17023,8 @@ func (future *ReplicationProtectionContainersDeleteFuture) Result(client Replica
 	return
 }
 
-// ReplicationProtectionContainersDiscoverProtectableItemFuture an abstraction for monitoring and
-// retrieving the results of a long-running operation.
+// ReplicationProtectionContainersDiscoverProtectableItemFuture an abstraction for monitoring and retrieving
+// the results of a long-running operation.
 type ReplicationProtectionContainersDiscoverProtectableItemFuture struct {
 	azure.Future
 }
@@ -17805,7 +17096,7 @@ type BasicReplicationProviderSpecificContainerCreationInput interface {
 
 // ReplicationProviderSpecificContainerCreationInput provider specific input for container creation operation.
 type ReplicationProviderSpecificContainerCreationInput struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerCreationInput `json:"instanceType,omitempty"`
 }
 
@@ -17821,7 +17112,7 @@ func unmarshalBasicReplicationProviderSpecificContainerCreationInput(body []byte
 		var acci A2AContainerCreationInput
 		err := json.Unmarshal(body, &acci)
 		return acci, err
-	case string(InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero):
+	case string(InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeVMwareCbt):
 		var vmccci VMwareCbtContainerCreationInput
 		err := json.Unmarshal(body, &vmccci)
 		return vmccci, err
@@ -18225,8 +17516,8 @@ func (future *ReplicationRecoveryPlansDeleteFuture) Result(client ReplicationRec
 	return
 }
 
-// ReplicationRecoveryPlansFailoverCommitFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// ReplicationRecoveryPlansFailoverCommitFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationRecoveryPlansFailoverCommitFuture struct {
 	azure.Future
 }
@@ -18254,8 +17545,8 @@ func (future *ReplicationRecoveryPlansFailoverCommitFuture) Result(client Replic
 	return
 }
 
-// ReplicationRecoveryPlansPlannedFailoverFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ReplicationRecoveryPlansPlannedFailoverFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationRecoveryPlansPlannedFailoverFuture struct {
 	azure.Future
 }
@@ -18312,8 +17603,8 @@ func (future *ReplicationRecoveryPlansReprotectFuture) Result(client Replication
 	return
 }
 
-// ReplicationRecoveryPlansTestFailoverCleanupFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationRecoveryPlansTestFailoverCleanupFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ReplicationRecoveryPlansTestFailoverCleanupFuture struct {
 	azure.Future
 }
@@ -18370,8 +17661,8 @@ func (future *ReplicationRecoveryPlansTestFailoverFuture) Result(client Replicat
 	return
 }
 
-// ReplicationRecoveryPlansUnplannedFailoverFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ReplicationRecoveryPlansUnplannedFailoverFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationRecoveryPlansUnplannedFailoverFuture struct {
 	azure.Future
 }
@@ -18428,8 +17719,8 @@ func (future *ReplicationRecoveryPlansUpdateFuture) Result(client ReplicationRec
 	return
 }
 
-// ReplicationRecoveryServicesProvidersCreateFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationRecoveryServicesProvidersCreateFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationRecoveryServicesProvidersCreateFuture struct {
 	azure.Future
 }
@@ -18457,8 +17748,8 @@ func (future *ReplicationRecoveryServicesProvidersCreateFuture) Result(client Re
 	return
 }
 
-// ReplicationRecoveryServicesProvidersDeleteFuture an abstraction for monitoring and retrieving the
-// results of a long-running operation.
+// ReplicationRecoveryServicesProvidersDeleteFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationRecoveryServicesProvidersDeleteFuture struct {
 	azure.Future
 }
@@ -18480,8 +17771,8 @@ func (future *ReplicationRecoveryServicesProvidersDeleteFuture) Result(client Re
 	return
 }
 
-// ReplicationRecoveryServicesProvidersPurgeFuture an abstraction for monitoring and retrieving the results
-// of a long-running operation.
+// ReplicationRecoveryServicesProvidersPurgeFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationRecoveryServicesProvidersPurgeFuture struct {
 	azure.Future
 }
@@ -18503,8 +17794,8 @@ func (future *ReplicationRecoveryServicesProvidersPurgeFuture) Result(client Rep
 	return
 }
 
-// ReplicationRecoveryServicesProvidersRefreshProviderFuture an abstraction for monitoring and retrieving
-// the results of a long-running operation.
+// ReplicationRecoveryServicesProvidersRefreshProviderFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
 type ReplicationRecoveryServicesProvidersRefreshProviderFuture struct {
 	azure.Future
 }
@@ -18613,8 +17904,8 @@ func (future *ReplicationVaultHealthRefreshFuture) Result(client ReplicationVaul
 	return
 }
 
-// ReplicationvCentersCreateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationvCentersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationvCentersCreateFuture struct {
 	azure.Future
 }
@@ -18642,8 +17933,8 @@ func (future *ReplicationvCentersCreateFuture) Result(client ReplicationvCenters
 	return
 }
 
-// ReplicationvCentersDeleteFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationvCentersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationvCentersDeleteFuture struct {
 	azure.Future
 }
@@ -18665,8 +17956,8 @@ func (future *ReplicationvCentersDeleteFuture) Result(client ReplicationvCenters
 	return
 }
 
-// ReplicationvCentersUpdateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationvCentersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ReplicationvCentersUpdateFuture struct {
 	azure.Future
 }
@@ -18706,6 +17997,15 @@ type Resource struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // ResourceHealthSummary base class to define the health summary of the resources contained under an Arm
 // resource.
 type ResourceHealthSummary struct {
@@ -18713,6 +18013,23 @@ type ResourceHealthSummary struct {
 	ResourceCount *int32 `json:"resourceCount,omitempty"`
 	// Issues - The list of summary of health errors across the resources under the container.
 	Issues *[]HealthErrorSummary `json:"issues,omitempty"`
+	// CategorizedResourceCounts - The categorized resource counts.
+	CategorizedResourceCounts map[string]*int32 `json:"categorizedResourceCounts"`
+}
+
+// MarshalJSON is the custom marshaler for ResourceHealthSummary.
+func (RHS ResourceHealthSummary) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if RHS.ResourceCount != nil {
+		objectMap["resourceCount"] = RHS.ResourceCount
+	}
+	if RHS.Issues != nil {
+		objectMap["issues"] = RHS.Issues
+	}
+	if RHS.CategorizedResourceCounts != nil {
+		objectMap["categorizedResourceCounts"] = RHS.CategorizedResourceCounts
+	}
+	return json.Marshal(objectMap)
 }
 
 // ResumeJobParams resume job params.
@@ -18725,6 +18042,115 @@ type ResumeJobParams struct {
 type ResumeJobParamsProperties struct {
 	// Comments - Resume job comments.
 	Comments *string `json:"comments,omitempty"`
+}
+
+// ResyncInput resync input.
+type ResyncInput struct {
+	// Properties - Resync input properties.
+	Properties *ResyncInputProperties `json:"properties,omitempty"`
+}
+
+// ResyncInputProperties resync input properties.
+type ResyncInputProperties struct {
+	// ProviderSpecificDetails - The provider specific details.
+	ProviderSpecificDetails BasicResyncProviderSpecificInput `json:"providerSpecificDetails,omitempty"`
+}
+
+// UnmarshalJSON is the custom unmarshaler for ResyncInputProperties struct.
+func (rip *ResyncInputProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "providerSpecificDetails":
+			if v != nil {
+				providerSpecificDetails, err := unmarshalBasicResyncProviderSpecificInput(*v)
+				if err != nil {
+					return err
+				}
+				rip.ProviderSpecificDetails = providerSpecificDetails
+			}
+		}
+	}
+
+	return nil
+}
+
+// BasicResyncProviderSpecificInput resync provider specific input.
+type BasicResyncProviderSpecificInput interface {
+	AsVMwareCbtResyncInput() (*VMwareCbtResyncInput, bool)
+	AsResyncProviderSpecificInput() (*ResyncProviderSpecificInput, bool)
+}
+
+// ResyncProviderSpecificInput resync provider specific input.
+type ResyncProviderSpecificInput struct {
+	// InstanceType - Possible values include: 'InstanceTypeBasicResyncProviderSpecificInputInstanceTypeResyncProviderSpecificInput', 'InstanceTypeBasicResyncProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicResyncProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+func unmarshalBasicResyncProviderSpecificInput(body []byte) (BasicResyncProviderSpecificInput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["instanceType"] {
+	case string(InstanceTypeBasicResyncProviderSpecificInputInstanceTypeVMwareCbt):
+		var vmcri VMwareCbtResyncInput
+		err := json.Unmarshal(body, &vmcri)
+		return vmcri, err
+	default:
+		var rpsi ResyncProviderSpecificInput
+		err := json.Unmarshal(body, &rpsi)
+		return rpsi, err
+	}
+}
+func unmarshalBasicResyncProviderSpecificInputArray(body []byte) ([]BasicResyncProviderSpecificInput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	rpsiArray := make([]BasicResyncProviderSpecificInput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		rpsi, err := unmarshalBasicResyncProviderSpecificInput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		rpsiArray[index] = rpsi
+	}
+	return rpsiArray, nil
+}
+
+// MarshalJSON is the custom marshaler for ResyncProviderSpecificInput.
+func (rpsi ResyncProviderSpecificInput) MarshalJSON() ([]byte, error) {
+	rpsi.InstanceType = InstanceTypeBasicResyncProviderSpecificInputInstanceTypeResyncProviderSpecificInput
+	objectMap := make(map[string]interface{})
+	if rpsi.InstanceType != "" {
+		objectMap["instanceType"] = rpsi.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtResyncInput is the BasicResyncProviderSpecificInput implementation for ResyncProviderSpecificInput.
+func (rpsi ResyncProviderSpecificInput) AsVMwareCbtResyncInput() (*VMwareCbtResyncInput, bool) {
+	return nil, false
+}
+
+// AsResyncProviderSpecificInput is the BasicResyncProviderSpecificInput implementation for ResyncProviderSpecificInput.
+func (rpsi ResyncProviderSpecificInput) AsResyncProviderSpecificInput() (*ResyncProviderSpecificInput, bool) {
+	return &rpsi, true
+}
+
+// AsBasicResyncProviderSpecificInput is the BasicResyncProviderSpecificInput implementation for ResyncProviderSpecificInput.
+func (rpsi ResyncProviderSpecificInput) AsBasicResyncProviderSpecificInput() (BasicResyncProviderSpecificInput, bool) {
+	return &rpsi, true
 }
 
 // RetentionVolume the retention details of the MT.
@@ -19077,6 +18503,18 @@ type StorageClassification struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for StorageClassification.
+func (sc StorageClassification) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sc.Properties != nil {
+		objectMap["properties"] = sc.Properties
+	}
+	if sc.Location != nil {
+		objectMap["location"] = sc.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // StorageClassificationCollection collection of storage details.
 type StorageClassificationCollection struct {
 	autorest.Response `json:"-"`
@@ -19155,10 +18593,15 @@ func (scc StorageClassificationCollection) IsEmpty() bool {
 	return scc.Value == nil || len(*scc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (scc StorageClassificationCollection) hasNextLink() bool {
+	return scc.NextLink != nil && len(*scc.NextLink) != 0
+}
+
 // storageClassificationCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (scc StorageClassificationCollection) storageClassificationCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if scc.NextLink == nil || len(to.String(scc.NextLink)) < 1 {
+	if !scc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -19186,11 +18629,16 @@ func (page *StorageClassificationCollectionPage) NextWithContext(ctx context.Con
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.scc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.scc)
+		if err != nil {
+			return err
+		}
+		page.scc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.scc = next
 	return nil
 }
 
@@ -19237,6 +18685,18 @@ type StorageClassificationMapping struct {
 	Type *string `json:"type,omitempty"`
 	// Location - Resource Location
 	Location *string `json:"location,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for StorageClassificationMapping.
+func (scm StorageClassificationMapping) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if scm.Properties != nil {
+		objectMap["properties"] = scm.Properties
+	}
+	if scm.Location != nil {
+		objectMap["location"] = scm.Location
+	}
+	return json.Marshal(objectMap)
 }
 
 // StorageClassificationMappingCollection collection of storage mapping details.
@@ -19317,10 +18777,15 @@ func (scmc StorageClassificationMappingCollection) IsEmpty() bool {
 	return scmc.Value == nil || len(*scmc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (scmc StorageClassificationMappingCollection) hasNextLink() bool {
+	return scmc.NextLink != nil && len(*scmc.NextLink) != 0
+}
+
 // storageClassificationMappingCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (scmc StorageClassificationMappingCollection) storageClassificationMappingCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if scmc.NextLink == nil || len(to.String(scmc.NextLink)) < 1 {
+	if !scmc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -19348,11 +18813,16 @@ func (page *StorageClassificationMappingCollectionPage) NextWithContext(ctx cont
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.scmc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.scmc)
+		if err != nil {
+			return err
+		}
+		page.scmc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.scmc = next
 	return nil
 }
 
@@ -19690,10 +19160,15 @@ func (tcsc TargetComputeSizeCollection) IsEmpty() bool {
 	return tcsc.Value == nil || len(*tcsc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (tcsc TargetComputeSizeCollection) hasNextLink() bool {
+	return tcsc.NextLink != nil && len(*tcsc.NextLink) != 0
+}
+
 // targetComputeSizeCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (tcsc TargetComputeSizeCollection) targetComputeSizeCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if tcsc.NextLink == nil || len(to.String(tcsc.NextLink)) < 1 {
+	if !tcsc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -19721,11 +19196,16 @@ func (page *TargetComputeSizeCollectionPage) NextWithContext(ctx context.Context
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.tcsc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.tcsc)
+		if err != nil {
+			return err
+		}
+		page.tcsc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.tcsc = next
 	return nil
 }
 
@@ -20790,6 +20270,18 @@ type VaultHealthDetails struct {
 	Location *string `json:"location,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for VaultHealthDetails.
+func (vhd VaultHealthDetails) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if vhd.Properties != nil {
+		objectMap["properties"] = vhd.Properties
+	}
+	if vhd.Location != nil {
+		objectMap["location"] = vhd.Location
+	}
+	return json.Marshal(objectMap)
+}
+
 // VaultHealthProperties class to define the health summary of the Vault.
 type VaultHealthProperties struct {
 	// VaultErrors - The list of errors on the vault.
@@ -20815,6 +20307,18 @@ type VCenter struct {
 	Type *string `json:"type,omitempty"`
 	// Location - Resource Location
 	Location *string `json:"location,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VCenter.
+func (vc VCenter) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if vc.Properties != nil {
+		objectMap["properties"] = vc.Properties
+	}
+	if vc.Location != nil {
+		objectMap["location"] = vc.Location
+	}
+	return json.Marshal(objectMap)
 }
 
 // VCenterCollection collection of vCenter details.
@@ -20894,10 +20398,15 @@ func (vcc VCenterCollection) IsEmpty() bool {
 	return vcc.Value == nil || len(*vcc.Value) == 0
 }
 
+// hasNextLink returns true if the NextLink is not empty.
+func (vcc VCenterCollection) hasNextLink() bool {
+	return vcc.NextLink != nil && len(*vcc.NextLink) != 0
+}
+
 // vCenterCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
 func (vcc VCenterCollection) vCenterCollectionPreparer(ctx context.Context) (*http.Request, error) {
-	if vcc.NextLink == nil || len(to.String(vcc.NextLink)) < 1 {
+	if !vcc.hasNextLink() {
 		return nil, nil
 	}
 	return autorest.Prepare((&http.Request{}).WithContext(ctx),
@@ -20925,11 +20434,16 @@ func (page *VCenterCollectionPage) NextWithContext(ctx context.Context) (err err
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	next, err := page.fn(ctx, page.vcc)
-	if err != nil {
-		return err
+	for {
+		next, err := page.fn(ctx, page.vcc)
+		if err != nil {
+			return err
+		}
+		page.vcc = next
+		if !next.hasNextLink() || !next.IsEmpty() {
+			break
+		}
 	}
-	page.vcc = next
 	return nil
 }
 
@@ -21256,8 +20770,8 @@ func (vtaunmi VmmToAzureUpdateNetworkMappingInput) AsBasicFabricSpecificUpdateNe
 	return &vtaunmi, true
 }
 
-// VmmToVmmCreateNetworkMappingInput create network mappings input properties/behavior specific to vmm to
-// vmm Network mapping.
+// VmmToVmmCreateNetworkMappingInput create network mappings input properties/behavior specific to vmm to vmm
+// Network mapping.
 type VmmToVmmCreateNetworkMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeFabricSpecificCreateNetworkMappingInput', 'InstanceTypeAzureToAzure', 'InstanceTypeVmmToAzure', 'InstanceTypeVmmToVmm'
 	InstanceType InstanceTypeBasicFabricSpecificCreateNetworkMappingInput `json:"instanceType,omitempty"`
@@ -21339,8 +20853,7 @@ func (vtvnms VmmToVmmNetworkMappingSettings) AsBasicNetworkMappingFabricSpecific
 	return &vtvnms, true
 }
 
-// VmmToVmmUpdateNetworkMappingInput update network mappings input properties/behavior specific to vmm to
-// vmm.
+// VmmToVmmUpdateNetworkMappingInput update network mappings input properties/behavior specific to vmm to vmm.
 type VmmToVmmUpdateNetworkMappingInput struct {
 	// InstanceType - Possible values include: 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeFabricSpecificUpdateNetworkMappingInput', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeAzureToAzure', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToAzure', 'InstanceTypeBasicFabricSpecificUpdateNetworkMappingInputInstanceTypeVmmToVmm'
 	InstanceType InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput `json:"instanceType,omitempty"`
@@ -21589,13 +21102,13 @@ func (vnutd VMNicUpdatesTaskDetails) AsBasicTaskTypeDetails() (BasicTaskTypeDeta
 
 // VMwareCbtContainerCreationInput vMwareCbt container creation input.
 type VMwareCbtContainerCreationInput struct {
-	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero'
+	// InstanceType - Possible values include: 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A', 'InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicReplicationProviderSpecificContainerCreationInput `json:"instanceType,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for VMwareCbtContainerCreationInput.
 func (vmccci VMwareCbtContainerCreationInput) MarshalJSON() ([]byte, error) {
-	vmccci.InstanceType = InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero
+	vmccci.InstanceType = InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeVMwareCbt
 	objectMap := make(map[string]interface{})
 	if vmccci.InstanceType != "" {
 		objectMap["instanceType"] = vmccci.InstanceType
@@ -21701,6 +21214,8 @@ type VMwareCbtDiskInput struct {
 	LogStorageAccountSasSecretName *string `json:"logStorageAccountSasSecretName,omitempty"`
 	// DiskType - The disk type. Possible values include: 'StandardLRS', 'PremiumLRS', 'StandardSSDLRS'
 	DiskType DiskAccountType `json:"diskType,omitempty"`
+	// DiskEncryptionSetID - The DiskEncryptionSet ARM Id.
+	DiskEncryptionSetID *string `json:"diskEncryptionSetId,omitempty"`
 }
 
 // VMwareCbtEnableMigrationInput vMwareCbt specific enable migration input.
@@ -21729,6 +21244,8 @@ type VMwareCbtEnableMigrationInput struct {
 	TargetAvailabilitySetID *string `json:"targetAvailabilitySetId,omitempty"`
 	// TargetBootDiagnosticsStorageAccountID - The target boot diagnostics storage account ARM Id.
 	TargetBootDiagnosticsStorageAccountID *string `json:"targetBootDiagnosticsStorageAccountId,omitempty"`
+	// PerformAutoResync - A value indicating whether auto resync is to be done.
+	PerformAutoResync *string `json:"performAutoResync,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeEnableMigrationProviderSpecificInput', 'InstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicEnableMigrationProviderSpecificInput `json:"instanceType,omitempty"`
 }
@@ -21773,6 +21290,9 @@ func (vmcemi VMwareCbtEnableMigrationInput) MarshalJSON() ([]byte, error) {
 	if vmcemi.TargetBootDiagnosticsStorageAccountID != nil {
 		objectMap["targetBootDiagnosticsStorageAccountId"] = vmcemi.TargetBootDiagnosticsStorageAccountID
 	}
+	if vmcemi.PerformAutoResync != nil {
+		objectMap["performAutoResync"] = vmcemi.PerformAutoResync
+	}
 	if vmcemi.InstanceType != "" {
 		objectMap["instanceType"] = vmcemi.InstanceType
 	}
@@ -21792,6 +21312,69 @@ func (vmcemi VMwareCbtEnableMigrationInput) AsEnableMigrationProviderSpecificInp
 // AsBasicEnableMigrationProviderSpecificInput is the BasicEnableMigrationProviderSpecificInput implementation for VMwareCbtEnableMigrationInput.
 func (vmcemi VMwareCbtEnableMigrationInput) AsBasicEnableMigrationProviderSpecificInput() (BasicEnableMigrationProviderSpecificInput, bool) {
 	return &vmcemi, true
+}
+
+// VMwareCbtEventDetails event details for VMwareCbt provider.
+type VMwareCbtEventDetails struct {
+	// MigrationItemName - READ-ONLY; The migration item name.
+	MigrationItemName *string `json:"migrationItemName,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeEventProviderSpecificDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeA2A', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplica2012R2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaAzure', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeHyperVReplicaBaseEventDetails', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeInMageAzureV2', 'InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicEventProviderSpecificDetails `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) MarshalJSON() ([]byte, error) {
+	vmced.InstanceType = InstanceTypeBasicEventProviderSpecificDetailsInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmced.InstanceType != "" {
+		objectMap["instanceType"] = vmced.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsA2AEventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsA2AEventDetails() (*A2AEventDetails, bool) {
+	return nil, false
+}
+
+// AsHyperVReplica2012EventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsHyperVReplica2012EventDetails() (*HyperVReplica2012EventDetails, bool) {
+	return nil, false
+}
+
+// AsHyperVReplica2012R2EventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsHyperVReplica2012R2EventDetails() (*HyperVReplica2012R2EventDetails, bool) {
+	return nil, false
+}
+
+// AsHyperVReplicaAzureEventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsHyperVReplicaAzureEventDetails() (*HyperVReplicaAzureEventDetails, bool) {
+	return nil, false
+}
+
+// AsHyperVReplicaBaseEventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsHyperVReplicaBaseEventDetails() (*HyperVReplicaBaseEventDetails, bool) {
+	return nil, false
+}
+
+// AsInMageAzureV2EventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsInMageAzureV2EventDetails() (*InMageAzureV2EventDetails, bool) {
+	return nil, false
+}
+
+// AsVMwareCbtEventDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsVMwareCbtEventDetails() (*VMwareCbtEventDetails, bool) {
+	return &vmced, true
+}
+
+// AsEventProviderSpecificDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsEventProviderSpecificDetails() (*EventProviderSpecificDetails, bool) {
+	return nil, false
+}
+
+// AsBasicEventProviderSpecificDetails is the BasicEventProviderSpecificDetails implementation for VMwareCbtEventDetails.
+func (vmced VMwareCbtEventDetails) AsBasicEventProviderSpecificDetails() (BasicEventProviderSpecificDetails, bool) {
+	return &vmced, true
 }
 
 // VMwareCbtMigrateInput vMwareCbt specific migrate input.
@@ -21830,7 +21413,7 @@ func (vmcmi VMwareCbtMigrateInput) AsBasicMigrateProviderSpecificInput() (BasicM
 	return &vmcmi, true
 }
 
-// VMwareCbtMigrationDetails vMwareCbt provider specific settings
+// VMwareCbtMigrationDetails vMwareCbt provider specific settings.
 type VMwareCbtMigrationDetails struct {
 	// VmwareMachineID - READ-ONLY; The ARM Id of the VM discovered in VMware.
 	VmwareMachineID *string `json:"vmwareMachineId,omitempty"`
@@ -21864,6 +21447,20 @@ type VMwareCbtMigrationDetails struct {
 	MigrationRecoveryPointID *string `json:"migrationRecoveryPointId,omitempty"`
 	// LastRecoveryPointReceived - READ-ONLY; The last recovery point received time.
 	LastRecoveryPointReceived *date.Time `json:"lastRecoveryPointReceived,omitempty"`
+	// LastRecoveryPointID - READ-ONLY; The last recovery point Id.
+	LastRecoveryPointID *string `json:"lastRecoveryPointId,omitempty"`
+	// InitialSeedingProgressPercentage - READ-ONLY; The initial seeding progress percentage.
+	InitialSeedingProgressPercentage *int32 `json:"initialSeedingProgressPercentage,omitempty"`
+	// MigrationProgressPercentage - READ-ONLY; The migration progress percentage.
+	MigrationProgressPercentage *int32 `json:"migrationProgressPercentage,omitempty"`
+	// ResyncProgressPercentage - READ-ONLY; The resync progress percentage.
+	ResyncProgressPercentage *int32 `json:"resyncProgressPercentage,omitempty"`
+	// ResyncRequired - READ-ONLY; A value indicating whether resync is required.
+	ResyncRequired *string `json:"resyncRequired,omitempty"`
+	// ResyncState - READ-ONLY; The resync state. Possible values include: 'ResyncStateNone', 'ResyncStatePreparedForResynchronization', 'ResyncStateStartedResynchronization'
+	ResyncState ResyncState `json:"resyncState,omitempty"`
+	// PerformAutoResync - A value indicating whether auto resync is to be done.
+	PerformAutoResync *string `json:"performAutoResync,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings', 'InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicMigrationProviderSpecificSettings `json:"instanceType,omitempty"`
 }
@@ -21898,6 +21495,9 @@ func (vmcmd VMwareCbtMigrationDetails) MarshalJSON() ([]byte, error) {
 	}
 	if vmcmd.VMNics != nil {
 		objectMap["vmNics"] = vmcmd.VMNics
+	}
+	if vmcmd.PerformAutoResync != nil {
+		objectMap["performAutoResync"] = vmcmd.PerformAutoResync
 	}
 	if vmcmd.InstanceType != "" {
 		objectMap["instanceType"] = vmcmd.InstanceType
@@ -21940,6 +21540,27 @@ type VMwareCbtNicDetails struct {
 	TargetSubnetName *string `json:"targetSubnetName,omitempty"`
 	// IsSelectedForMigration - A value indicating whether this NIC is selected for migration.
 	IsSelectedForMigration *string `json:"isSelectedForMigration,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtNicDetails.
+func (vmcnd VMwareCbtNicDetails) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if vmcnd.IsPrimaryNic != nil {
+		objectMap["isPrimaryNic"] = vmcnd.IsPrimaryNic
+	}
+	if vmcnd.TargetIPAddress != nil {
+		objectMap["targetIPAddress"] = vmcnd.TargetIPAddress
+	}
+	if vmcnd.TargetIPAddressType != "" {
+		objectMap["targetIPAddressType"] = vmcnd.TargetIPAddressType
+	}
+	if vmcnd.TargetSubnetName != nil {
+		objectMap["targetSubnetName"] = vmcnd.TargetSubnetName
+	}
+	if vmcnd.IsSelectedForMigration != nil {
+		objectMap["isSelectedForMigration"] = vmcnd.IsSelectedForMigration
+	}
+	return json.Marshal(objectMap)
 }
 
 // VMwareCbtNicInput vMwareCbt NIC input.
@@ -22139,12 +21760,23 @@ type VMwareCbtProtectedDiskDetails struct {
 	LogStorageAccountID *string `json:"logStorageAccountId,omitempty"`
 	// LogStorageAccountSasSecretName - READ-ONLY; The key vault secret name of the log storage account.
 	LogStorageAccountSasSecretName *string `json:"logStorageAccountSasSecretName,omitempty"`
+	// DiskEncryptionSetID - READ-ONLY; The DiskEncryptionSet ARM Id.
+	DiskEncryptionSetID *string `json:"diskEncryptionSetId,omitempty"`
 	// SeedManagedDiskID - READ-ONLY; The ARM Id of the seed managed disk.
 	SeedManagedDiskID *string `json:"seedManagedDiskId,omitempty"`
 	// TargetManagedDiskID - READ-ONLY; The ARM Id of the target managed disk.
 	TargetManagedDiskID *string `json:"targetManagedDiskId,omitempty"`
-	// DiskType - The disk type. Possible values include: 'DiskTypeStandardLRS', 'DiskTypePremiumLRS', 'DiskTypeStandardSSDLRS'
-	DiskType DiskType `json:"diskType,omitempty"`
+	// DiskType - The disk type. Possible values include: 'StandardLRS', 'PremiumLRS', 'StandardSSDLRS'
+	DiskType DiskAccountType `json:"diskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtProtectedDiskDetails.
+func (vmcpdd VMwareCbtProtectedDiskDetails) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if vmcpdd.DiskType != "" {
+		objectMap["diskType"] = vmcpdd.DiskType
+	}
+	return json.Marshal(objectMap)
 }
 
 // VMwareCbtProtectionContainerMappingDetails vMwareCbt provider specific container mapping details.
@@ -22193,6 +21825,42 @@ func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) AsProtectionContainerM
 // AsBasicProtectionContainerMappingProviderSpecificDetails is the BasicProtectionContainerMappingProviderSpecificDetails implementation for VMwareCbtProtectionContainerMappingDetails.
 func (vmcpcmd VMwareCbtProtectionContainerMappingDetails) AsBasicProtectionContainerMappingProviderSpecificDetails() (BasicProtectionContainerMappingProviderSpecificDetails, bool) {
 	return &vmcpcmd, true
+}
+
+// VMwareCbtResyncInput vMwareCbt specific resync input.
+type VMwareCbtResyncInput struct {
+	// SkipCbtReset - A value indicating whether CBT is to be reset.
+	SkipCbtReset *string `json:"skipCbtReset,omitempty"`
+	// InstanceType - Possible values include: 'InstanceTypeBasicResyncProviderSpecificInputInstanceTypeResyncProviderSpecificInput', 'InstanceTypeBasicResyncProviderSpecificInputInstanceTypeVMwareCbt'
+	InstanceType InstanceTypeBasicResyncProviderSpecificInput `json:"instanceType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for VMwareCbtResyncInput.
+func (vmcri VMwareCbtResyncInput) MarshalJSON() ([]byte, error) {
+	vmcri.InstanceType = InstanceTypeBasicResyncProviderSpecificInputInstanceTypeVMwareCbt
+	objectMap := make(map[string]interface{})
+	if vmcri.SkipCbtReset != nil {
+		objectMap["skipCbtReset"] = vmcri.SkipCbtReset
+	}
+	if vmcri.InstanceType != "" {
+		objectMap["instanceType"] = vmcri.InstanceType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsVMwareCbtResyncInput is the BasicResyncProviderSpecificInput implementation for VMwareCbtResyncInput.
+func (vmcri VMwareCbtResyncInput) AsVMwareCbtResyncInput() (*VMwareCbtResyncInput, bool) {
+	return &vmcri, true
+}
+
+// AsResyncProviderSpecificInput is the BasicResyncProviderSpecificInput implementation for VMwareCbtResyncInput.
+func (vmcri VMwareCbtResyncInput) AsResyncProviderSpecificInput() (*ResyncProviderSpecificInput, bool) {
+	return nil, false
+}
+
+// AsBasicResyncProviderSpecificInput is the BasicResyncProviderSpecificInput implementation for VMwareCbtResyncInput.
+func (vmcri VMwareCbtResyncInput) AsBasicResyncProviderSpecificInput() (BasicResyncProviderSpecificInput, bool) {
+	return &vmcri, true
 }
 
 // VMwareCbtTestMigrateInput vMwareCbt specific test migrate input.
@@ -22254,6 +21922,8 @@ type VMwareCbtUpdateMigrationItemInput struct {
 	VMNics *[]VMwareCbtNicInput `json:"vmNics,omitempty"`
 	// LicenseType - The license type. Possible values include: 'LicenseTypeNotSpecified', 'LicenseTypeNoLicenseType', 'LicenseTypeWindowsServer'
 	LicenseType LicenseType `json:"licenseType,omitempty"`
+	// PerformAutoResync - A value indicating whether auto resync is to be done.
+	PerformAutoResync *string `json:"performAutoResync,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput', 'InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt'
 	InstanceType InstanceTypeBasicUpdateMigrationItemProviderSpecificInput `json:"instanceType,omitempty"`
 }
@@ -22285,6 +21955,9 @@ func (vmcumii VMwareCbtUpdateMigrationItemInput) MarshalJSON() ([]byte, error) {
 	}
 	if vmcumii.LicenseType != "" {
 		objectMap["licenseType"] = vmcumii.LicenseType
+	}
+	if vmcumii.PerformAutoResync != nil {
+		objectMap["performAutoResync"] = vmcumii.PerformAutoResync
 	}
 	if vmcumii.InstanceType != "" {
 		objectMap["instanceType"] = vmcumii.InstanceType
@@ -22522,6 +22195,8 @@ func (vmd VMwareDetails) AsBasicFabricSpecificDetails() (BasicFabricSpecificDeta
 type VMwareV2FabricCreationInput struct {
 	// VmwareSiteID - The ARM Id of the VMware site.
 	VmwareSiteID *string `json:"vmwareSiteId,omitempty"`
+	// PhysicalSiteID - The ARM Id of the physical site.
+	PhysicalSiteID *string `json:"physicalSiteId,omitempty"`
 	// MigrationSolutionID - The ARM Id of the migration solution.
 	MigrationSolutionID *string `json:"migrationSolutionId,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeFabricSpecificCreationInput', 'InstanceTypeAzure', 'InstanceTypeVMwareV2'
@@ -22534,6 +22209,9 @@ func (vmvfci VMwareV2FabricCreationInput) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if vmvfci.VmwareSiteID != nil {
 		objectMap["vmwareSiteId"] = vmvfci.VmwareSiteID
+	}
+	if vmvfci.PhysicalSiteID != nil {
+		objectMap["physicalSiteId"] = vmvfci.PhysicalSiteID
 	}
 	if vmvfci.MigrationSolutionID != nil {
 		objectMap["migrationSolutionId"] = vmvfci.MigrationSolutionID
@@ -22568,10 +22246,14 @@ func (vmvfci VMwareV2FabricCreationInput) AsBasicFabricSpecificCreationInput() (
 type VMwareV2FabricSpecificDetails struct {
 	// VmwareSiteID - READ-ONLY; The ARM Id of the VMware site.
 	VmwareSiteID *string `json:"vmwareSiteId,omitempty"`
+	// PhysicalSiteID - READ-ONLY; The ARM Id of the physical site.
+	PhysicalSiteID *string `json:"physicalSiteId,omitempty"`
 	// MigrationSolutionID - READ-ONLY; The Migration solution ARM Id.
 	MigrationSolutionID *string `json:"migrationSolutionId,omitempty"`
 	// ServiceEndpoint - READ-ONLY; The service endpoint.
 	ServiceEndpoint *string `json:"serviceEndpoint,omitempty"`
+	// ServiceResourceID - READ-ONLY; The service resource Id.
+	ServiceResourceID *string `json:"serviceResourceId,omitempty"`
 	// InstanceType - Possible values include: 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeFabricSpecificDetails', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeAzure', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeHyperVSite', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMM', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMware', 'InstanceTypeBasicFabricSpecificDetailsInstanceTypeVMwareV2'
 	InstanceType InstanceTypeBasicFabricSpecificDetails `json:"instanceType,omitempty"`
 }

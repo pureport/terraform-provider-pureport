@@ -1,0 +1,21 @@
+{
+    "resource": {
+        "pureport_network": {
+            "AUTO-1-20-04-15-19-20-48-ksk": {
+                "name": "AUTO-1-20-04-15-19-20-48-ksk",
+                "account_href": "/accounts/ac-wgAgzIyxyAUECNJV90p9nQ",
+                "description": "Auto-kskwork"
+            }
+        },
+        "pureport_google_cloud_connection": {
+            "AUTO-1-20-04-14-19-56-09-ksk-cloud-1": {
+                "name": "AUTO-1-20-04-14-19-56-09-ksk-cloud-1",
+                "speed": 50,
+                "high_availability": false,
+                "location_href": "/locations/us-sea",
+                "network_href": "${pureport_network.AUTO-1-20-04-15-19-20-48-ksk.href}",
+                "primary_pairing_key": "f0ba459c-f65a-428a-84db-3ef2fc81ee8a/us-west1/1"
+            }
+        }
+    }
+}

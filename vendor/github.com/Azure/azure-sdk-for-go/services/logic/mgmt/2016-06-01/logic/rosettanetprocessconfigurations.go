@@ -37,7 +37,8 @@ func NewRosettaNetProcessConfigurationsClient(subscriptionID string) RosettaNetP
 }
 
 // NewRosettaNetProcessConfigurationsClientWithBaseURI creates an instance of the RosettaNetProcessConfigurationsClient
-// client.
+// client using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI
+// (sovereign clouds, Azure stack).
 func NewRosettaNetProcessConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) RosettaNetProcessConfigurationsClient {
 	return RosettaNetProcessConfigurationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -150,8 +151,7 @@ func (client RosettaNetProcessConfigurationsClient) CreateOrUpdatePreparer(ctx c
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client RosettaNetProcessConfigurationsClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -159,7 +159,6 @@ func (client RosettaNetProcessConfigurationsClient) CreateOrUpdateSender(req *ht
 func (client RosettaNetProcessConfigurationsClient) CreateOrUpdateResponder(resp *http.Response) (result IntegrationAccountRosettaNetProcessConfiguration, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -229,8 +228,7 @@ func (client RosettaNetProcessConfigurationsClient) DeletePreparer(ctx context.C
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client RosettaNetProcessConfigurationsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -238,7 +236,6 @@ func (client RosettaNetProcessConfigurationsClient) DeleteSender(req *http.Reque
 func (client RosettaNetProcessConfigurationsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -307,8 +304,7 @@ func (client RosettaNetProcessConfigurationsClient) GetPreparer(ctx context.Cont
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client RosettaNetProcessConfigurationsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -316,7 +312,6 @@ func (client RosettaNetProcessConfigurationsClient) GetSender(req *http.Request)
 func (client RosettaNetProcessConfigurationsClient) GetResponder(resp *http.Response) (result IntegrationAccountRosettaNetProcessConfiguration, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -359,6 +354,9 @@ func (client RosettaNetProcessConfigurationsClient) ListByIntegrationAccounts(ct
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.RosettaNetProcessConfigurationsClient", "ListByIntegrationAccounts", resp, "Failure responding to request")
 	}
+	if result.iarnpclr.hasNextLink() && result.iarnpclr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -393,8 +391,7 @@ func (client RosettaNetProcessConfigurationsClient) ListByIntegrationAccountsPre
 // ListByIntegrationAccountsSender sends the ListByIntegrationAccounts request. The method will close the
 // http.Response Body if it receives an error.
 func (client RosettaNetProcessConfigurationsClient) ListByIntegrationAccountsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByIntegrationAccountsResponder handles the response to the ListByIntegrationAccounts request. The method always
@@ -402,7 +399,6 @@ func (client RosettaNetProcessConfigurationsClient) ListByIntegrationAccountsSen
 func (client RosettaNetProcessConfigurationsClient) ListByIntegrationAccountsResponder(resp *http.Response) (result IntegrationAccountRosettaNetProcessConfigurationListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

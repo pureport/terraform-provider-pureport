@@ -97,6 +97,11 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 $ make testacc
 ```
 
+If you want to run just a specific test in the acceptance test suite, override the TESTARGS paramter
+```sh
+$ make testacc TESTARGS='-run=TestResourceAWSConnection_basic'
+```
+
 You can also install the plugin which will build and copy the plugin to your terraform third party
 plugin directory. You'll need to re-initialize terraform in module directory after installing the
 new plugin.

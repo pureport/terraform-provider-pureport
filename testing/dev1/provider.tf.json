@@ -1,0 +1,9 @@
+{
+    "provider": {
+        "pureport": {
+            "api_key": "J9JNvaC9sKTiI",
+            "api_secret": "ApDWNeERzMQi7chTI",
+            "api_url": "https://dev1-api.pureportdev.com"
+        }
+    }
+}

@@ -36,7 +36,8 @@ func NewTopologyClient(subscriptionID string, ascLocation string) TopologyClient
 	return NewTopologyClientWithBaseURI(DefaultBaseURI, subscriptionID, ascLocation)
 }
 
-// NewTopologyClientWithBaseURI creates an instance of the TopologyClient client.
+// NewTopologyClientWithBaseURI creates an instance of the TopologyClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewTopologyClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) TopologyClient {
 	return TopologyClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -113,8 +114,7 @@ func (client TopologyClient) GetPreparer(ctx context.Context, resourceGroupName 
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client TopologyClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -122,7 +122,6 @@ func (client TopologyClient) GetSender(req *http.Request) (*http.Response, error
 func (client TopologyClient) GetResponder(resp *http.Response) (result TopologyResource, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -166,6 +165,9 @@ func (client TopologyClient) List(ctx context.Context) (result TopologyListPage,
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.TopologyClient", "List", resp, "Failure responding to request")
 	}
+	if result.tl.hasNextLink() && result.tl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -192,8 +194,7 @@ func (client TopologyClient) ListPreparer(ctx context.Context) (*http.Request, e
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client TopologyClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -201,7 +202,6 @@ func (client TopologyClient) ListSender(req *http.Request) (*http.Response, erro
 func (client TopologyClient) ListResponder(resp *http.Response) (result TopologyList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -282,6 +282,9 @@ func (client TopologyClient) ListByHomeRegion(ctx context.Context) (result Topol
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.TopologyClient", "ListByHomeRegion", resp, "Failure responding to request")
 	}
+	if result.tl.hasNextLink() && result.tl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -309,8 +312,7 @@ func (client TopologyClient) ListByHomeRegionPreparer(ctx context.Context) (*htt
 // ListByHomeRegionSender sends the ListByHomeRegion request. The method will close the
 // http.Response Body if it receives an error.
 func (client TopologyClient) ListByHomeRegionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByHomeRegionResponder handles the response to the ListByHomeRegion request. The method always
@@ -318,7 +320,6 @@ func (client TopologyClient) ListByHomeRegionSender(req *http.Request) (*http.Re
 func (client TopologyClient) ListByHomeRegionResponder(resp *http.Response) (result TopologyList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -54,10 +54,10 @@ fmtcheck:
 errcheck:
 	@sh -c "'$(CURDIR)/scripts/errcheck.sh'"
 
-lint:
+lint: tools
 	@echo "==> Checking source code against linters..."
 	@GOGC=$(GOLINT_GOGC) golangci-lint run ./$(PKG_NAME)
-	@tfproviderlint -c 1 -S001 -S002 -S003 -S004 -S005 ./$(PKG_NAME)
+	@tfproviderlint -c 1 ./$(PKG_NAME)
 
 tools:
 	GO111MODULE=on go install github.com/bflad/tfproviderlint/cmd/tfproviderlint

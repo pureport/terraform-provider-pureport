@@ -27,7 +27,8 @@ func resourceSiteVPNConnection() *schema.Resource {
 		},
 		"ike_version": {
 			Type:         schema.TypeString,
-			Required:     true,
+			Optional:     true,
+			Computed:     true,
 			ValidateFunc: validation.StringInSlice([]string{"V1", "V2"}, true),
 			StateFunc: func(val interface{}) string {
 				return strings.ToUpper(val.(string))
@@ -134,12 +135,12 @@ func resourceSiteVPNConnection() *schema.Resource {
 					"customer_side": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.CIDRNetwork(8, 32),
+						ValidateFunc: validation.IsCIDRNetwork(8, 32),
 					},
 					"pureport_side": {
 						Type:         schema.TypeString,
 						Required:     true,
-						ValidateFunc: validation.CIDRNetwork(8, 32),
+						ValidateFunc: validation.IsCIDRNetwork(8, 32),
 					},
 				},
 			},
@@ -214,13 +215,13 @@ func expandIkeVersion1(d *schema.ResourceData) *client.Ikev1Config {
 		tmp_ike := raw_config["ike"].([]interface{})
 		ike := tmp_ike[0].(map[string]interface{})
 
-		config.Esp = &client.Ikev1EspConfig{
+		config.Esp = client.Ikev1EspConfig{
 			DhGroup:    esp["dh_group"].(string),
 			Encryption: esp["encryption"].(string),
 			Integrity:  esp["integrity"].(string),
 		}
 
-		config.Ike = &client.Ikev1IkeConfig{
+		config.Ike = client.Ikev1IkeConfig{
 			DhGroup:    ike["dh_group"].(string),
 			Encryption: ike["encryption"].(string),
 			Integrity:  ike["integrity"].(string),
@@ -228,13 +229,13 @@ func expandIkeVersion1(d *schema.ResourceData) *client.Ikev1Config {
 
 	} else {
 
-		config.Esp = &client.Ikev1EspConfig{
+		config.Esp = client.Ikev1EspConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
 		}
 
-		config.Ike = &client.Ikev1IkeConfig{
+		config.Ike = client.Ikev1IkeConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
@@ -260,13 +261,13 @@ func expandIkeVersion2(d *schema.ResourceData) *client.Ikev2Config {
 		tmp_ike := raw_config["ike"].([]interface{})
 		ike := tmp_ike[0].(map[string]interface{})
 
-		config.Esp = &client.Ikev2EspConfig{
+		config.Esp = client.Ikev2EspConfig{
 			DhGroup:    esp["dh_group"].(string),
 			Encryption: esp["encryption"].(string),
 			Integrity:  esp["integrity"].(string),
 		}
 
-		config.Ike = &client.Ikev2IkeConfig{
+		config.Ike = client.Ikev2IkeConfig{
 			DhGroup:    ike["dh_group"].(string),
 			Encryption: ike["encryption"].(string),
 			Integrity:  ike["integrity"].(string),
@@ -275,13 +276,13 @@ func expandIkeVersion2(d *schema.ResourceData) *client.Ikev2Config {
 
 	} else {
 
-		config.Esp = &client.Ikev2EspConfig{
+		config.Esp = client.Ikev2EspConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
 		}
 
-		config.Ike = &client.Ikev2IkeConfig{
+		config.Ike = client.Ikev2IkeConfig{
 			DhGroup:    "MODP_2048",
 			Encryption: "AES_128",
 			Integrity:  "SHA256_HMAC",
@@ -295,21 +296,25 @@ func expandSiteVPNConnection(d *schema.ResourceData) client.SiteIpSecVpnConnecti
 
 	// Generic Connection values
 	speed := d.Get("speed").(int)
+	ikeVersion := "V2"
+	if version, ok := d.GetOk("ike_version"); ok {
+		ikeVersion = version.(string)
+	}
 
 	// Create the body of the request
 	c := client.SiteIpSecVpnConnection{
-		Type_:       "SITE_IPSEC_VPN",
+		Type:        "SITE_IPSEC_VPN",
 		Name:        d.Get("name").(string),
 		Speed:       int32(speed),
 		AuthType:    d.Get("auth_type").(string),
-		IkeVersion:  d.Get("ike_version").(string),
+		IkeVersion:  ikeVersion,
 		RoutingType: d.Get("routing_type").(string),
 		PrimaryKey:  d.Get("primary_key").(string),
 
-		Location: &client.Link{
+		Location: client.Link{
 			Href: d.Get("location_href").(string),
 		},
-		Network: &client.Link{
+		Network: client.Link{
 			Href: d.Get("network_href").(string),
 		},
 		BillingTerm: d.Get("billing_term").(string),
@@ -375,7 +380,7 @@ func resourceSiteVPNConnectionCreate(d *schema.ResourceData, m interface{}) erro
 	ctx := config.Session.GetSessionContext()
 
 	opts := client.AddConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.AddConnection(
@@ -387,7 +392,7 @@ func resourceSiteVPNConnectionCreate(d *schema.ResourceData, m interface{}) erro
 	if err != nil {
 
 		http_err := err
-		json_response := string(err.(client.GenericSwaggerError).Body()[:])
+		json_response := string(err.(client.GenericOpenAPIError).Body()[:])
 		response, err := structure.ExpandJsonFromString(json_response)
 		if err != nil {
 			log.Printf("Error Creating new %s: %v", connection.SiteVPNConnectionName, err)
@@ -561,24 +566,19 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 
 	c := expandSiteVPNConnection(d)
 
-	d.Partial(true)
-
 	config := m.(*configuration.Config)
 	ctx := config.Session.GetSessionContext()
 
 	if d.HasChange("name") {
 		c.Name = d.Get("name").(string)
-		d.SetPartial("name")
 	}
 
 	if d.HasChange("description") {
 		c.Description = d.Get("description").(string)
-		d.SetPartial("description")
 	}
 
 	if d.HasChange("speed") {
 		c.Speed = int32(d.Get("speed").(int))
-		d.SetPartial("speed")
 	}
 
 	if d.HasChange("customer_networks") {
@@ -649,7 +649,7 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 	}
 
 	opts := client.UpdateConnectionOpts{
-		Body: optional.NewInterface(c),
+		Connection: optional.NewInterface(c),
 	}
 
 	_, resp, err := config.Session.Client.ConnectionsApi.UpdateConnection(
@@ -660,7 +660,7 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 
 	if err != nil {
 
-		if swerr, ok := err.(client.GenericSwaggerError); ok {
+		if swerr, ok := err.(client.GenericOpenAPIError); ok {
 
 			json_response := string(swerr.Body()[:])
 			response, jerr := structure.ExpandJsonFromString(json_response)
@@ -683,8 +683,6 @@ func resourceSiteVPNConnectionUpdate(d *schema.ResourceData, m interface{}) erro
 	if err := connection.WaitForConnection(connection.SiteVPNConnectionName, d, m); err != nil {
 		return fmt.Errorf("Error waiting for %s: err=%s", connection.SiteVPNConnectionName, err)
 	}
-
-	d.Partial(false)
 
 	return resourceSiteVPNConnectionRead(d, m)
 }

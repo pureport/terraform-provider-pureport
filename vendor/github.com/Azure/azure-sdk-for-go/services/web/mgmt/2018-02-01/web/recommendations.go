@@ -36,7 +36,8 @@ func NewRecommendationsClient(subscriptionID string) RecommendationsClient {
 	return NewRecommendationsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewRecommendationsClientWithBaseURI creates an instance of the RecommendationsClient client.
+// NewRecommendationsClientWithBaseURI creates an instance of the RecommendationsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewRecommendationsClientWithBaseURI(baseURI string, subscriptionID string) RecommendationsClient {
 	return RecommendationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -110,8 +111,7 @@ func (client RecommendationsClient) DisableAllForHostingEnvironmentPreparer(ctx 
 // DisableAllForHostingEnvironmentSender sends the DisableAllForHostingEnvironment request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) DisableAllForHostingEnvironmentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableAllForHostingEnvironmentResponder handles the response to the DisableAllForHostingEnvironment request. The method always
@@ -119,7 +119,6 @@ func (client RecommendationsClient) DisableAllForHostingEnvironmentSender(req *h
 func (client RecommendationsClient) DisableAllForHostingEnvironmentResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -194,8 +193,7 @@ func (client RecommendationsClient) DisableAllForWebAppPreparer(ctx context.Cont
 // DisableAllForWebAppSender sends the DisableAllForWebApp request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) DisableAllForWebAppSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableAllForWebAppResponder handles the response to the DisableAllForWebApp request. The method always
@@ -203,7 +201,6 @@ func (client RecommendationsClient) DisableAllForWebAppSender(req *http.Request)
 func (client RecommendationsClient) DisableAllForWebAppResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -281,8 +278,7 @@ func (client RecommendationsClient) DisableRecommendationForHostingEnvironmentPr
 // DisableRecommendationForHostingEnvironmentSender sends the DisableRecommendationForHostingEnvironment request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) DisableRecommendationForHostingEnvironmentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableRecommendationForHostingEnvironmentResponder handles the response to the DisableRecommendationForHostingEnvironment request. The method always
@@ -290,7 +286,6 @@ func (client RecommendationsClient) DisableRecommendationForHostingEnvironmentSe
 func (client RecommendationsClient) DisableRecommendationForHostingEnvironmentResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -367,8 +362,7 @@ func (client RecommendationsClient) DisableRecommendationForSitePreparer(ctx con
 // DisableRecommendationForSiteSender sends the DisableRecommendationForSite request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) DisableRecommendationForSiteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableRecommendationForSiteResponder handles the response to the DisableRecommendationForSite request. The method always
@@ -376,7 +370,6 @@ func (client RecommendationsClient) DisableRecommendationForSiteSender(req *http
 func (client RecommendationsClient) DisableRecommendationForSiteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -442,8 +435,7 @@ func (client RecommendationsClient) DisableRecommendationForSubscriptionPreparer
 // DisableRecommendationForSubscriptionSender sends the DisableRecommendationForSubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) DisableRecommendationForSubscriptionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DisableRecommendationForSubscriptionResponder handles the response to the DisableRecommendationForSubscription request. The method always
@@ -451,7 +443,6 @@ func (client RecommendationsClient) DisableRecommendationForSubscriptionSender(r
 func (client RecommendationsClient) DisableRecommendationForSubscriptionResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -537,8 +528,7 @@ func (client RecommendationsClient) GetRuleDetailsByHostingEnvironmentPreparer(c
 // GetRuleDetailsByHostingEnvironmentSender sends the GetRuleDetailsByHostingEnvironment request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) GetRuleDetailsByHostingEnvironmentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetRuleDetailsByHostingEnvironmentResponder handles the response to the GetRuleDetailsByHostingEnvironment request. The method always
@@ -546,7 +536,6 @@ func (client RecommendationsClient) GetRuleDetailsByHostingEnvironmentSender(req
 func (client RecommendationsClient) GetRuleDetailsByHostingEnvironmentResponder(resp *http.Response) (result RecommendationRule, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -633,8 +622,7 @@ func (client RecommendationsClient) GetRuleDetailsByWebAppPreparer(ctx context.C
 // GetRuleDetailsByWebAppSender sends the GetRuleDetailsByWebApp request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) GetRuleDetailsByWebAppSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetRuleDetailsByWebAppResponder handles the response to the GetRuleDetailsByWebApp request. The method always
@@ -642,7 +630,6 @@ func (client RecommendationsClient) GetRuleDetailsByWebAppSender(req *http.Reque
 func (client RecommendationsClient) GetRuleDetailsByWebAppResponder(resp *http.Response) (result RecommendationRule, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -686,6 +673,9 @@ func (client RecommendationsClient) List(ctx context.Context, featured *bool, fi
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "List", resp, "Failure responding to request")
 	}
+	if result.rc.hasNextLink() && result.rc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -718,8 +708,7 @@ func (client RecommendationsClient) ListPreparer(ctx context.Context, featured *
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -727,7 +716,6 @@ func (client RecommendationsClient) ListSender(req *http.Request) (*http.Respons
 func (client RecommendationsClient) ListResponder(resp *http.Response) (result RecommendationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -818,6 +806,9 @@ func (client RecommendationsClient) ListHistoryForHostingEnvironment(ctx context
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "ListHistoryForHostingEnvironment", resp, "Failure responding to request")
 	}
+	if result.rc.hasNextLink() && result.rc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -852,8 +843,7 @@ func (client RecommendationsClient) ListHistoryForHostingEnvironmentPreparer(ctx
 // ListHistoryForHostingEnvironmentSender sends the ListHistoryForHostingEnvironment request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ListHistoryForHostingEnvironmentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListHistoryForHostingEnvironmentResponder handles the response to the ListHistoryForHostingEnvironment request. The method always
@@ -861,7 +851,6 @@ func (client RecommendationsClient) ListHistoryForHostingEnvironmentSender(req *
 func (client RecommendationsClient) ListHistoryForHostingEnvironmentResponder(resp *http.Response) (result RecommendationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -952,6 +941,9 @@ func (client RecommendationsClient) ListHistoryForWebApp(ctx context.Context, re
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "ListHistoryForWebApp", resp, "Failure responding to request")
 	}
+	if result.rc.hasNextLink() && result.rc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -986,8 +978,7 @@ func (client RecommendationsClient) ListHistoryForWebAppPreparer(ctx context.Con
 // ListHistoryForWebAppSender sends the ListHistoryForWebApp request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ListHistoryForWebAppSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListHistoryForWebAppResponder handles the response to the ListHistoryForWebApp request. The method always
@@ -995,7 +986,6 @@ func (client RecommendationsClient) ListHistoryForWebAppSender(req *http.Request
 func (client RecommendationsClient) ListHistoryForWebAppResponder(resp *http.Response) (result RecommendationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1085,6 +1075,9 @@ func (client RecommendationsClient) ListRecommendedRulesForHostingEnvironment(ct
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "ListRecommendedRulesForHostingEnvironment", resp, "Failure responding to request")
 	}
+	if result.rc.hasNextLink() && result.rc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1119,8 +1112,7 @@ func (client RecommendationsClient) ListRecommendedRulesForHostingEnvironmentPre
 // ListRecommendedRulesForHostingEnvironmentSender sends the ListRecommendedRulesForHostingEnvironment request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ListRecommendedRulesForHostingEnvironmentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListRecommendedRulesForHostingEnvironmentResponder handles the response to the ListRecommendedRulesForHostingEnvironment request. The method always
@@ -1128,7 +1120,6 @@ func (client RecommendationsClient) ListRecommendedRulesForHostingEnvironmentSen
 func (client RecommendationsClient) ListRecommendedRulesForHostingEnvironmentResponder(resp *http.Response) (result RecommendationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1218,6 +1209,9 @@ func (client RecommendationsClient) ListRecommendedRulesForWebApp(ctx context.Co
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "ListRecommendedRulesForWebApp", resp, "Failure responding to request")
 	}
+	if result.rc.hasNextLink() && result.rc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1252,8 +1246,7 @@ func (client RecommendationsClient) ListRecommendedRulesForWebAppPreparer(ctx co
 // ListRecommendedRulesForWebAppSender sends the ListRecommendedRulesForWebApp request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ListRecommendedRulesForWebAppSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListRecommendedRulesForWebAppResponder handles the response to the ListRecommendedRulesForWebApp request. The method always
@@ -1261,7 +1254,6 @@ func (client RecommendationsClient) ListRecommendedRulesForWebAppSender(req *htt
 func (client RecommendationsClient) ListRecommendedRulesForWebAppResponder(resp *http.Response) (result RecommendationCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1361,8 +1353,7 @@ func (client RecommendationsClient) ResetAllFiltersPreparer(ctx context.Context)
 // ResetAllFiltersSender sends the ResetAllFilters request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ResetAllFiltersSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ResetAllFiltersResponder handles the response to the ResetAllFilters request. The method always
@@ -1370,7 +1361,6 @@ func (client RecommendationsClient) ResetAllFiltersSender(req *http.Request) (*h
 func (client RecommendationsClient) ResetAllFiltersResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1446,8 +1436,7 @@ func (client RecommendationsClient) ResetAllFiltersForHostingEnvironmentPreparer
 // ResetAllFiltersForHostingEnvironmentSender sends the ResetAllFiltersForHostingEnvironment request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ResetAllFiltersForHostingEnvironmentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ResetAllFiltersForHostingEnvironmentResponder handles the response to the ResetAllFiltersForHostingEnvironment request. The method always
@@ -1455,7 +1444,6 @@ func (client RecommendationsClient) ResetAllFiltersForHostingEnvironmentSender(r
 func (client RecommendationsClient) ResetAllFiltersForHostingEnvironmentResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1530,8 +1518,7 @@ func (client RecommendationsClient) ResetAllFiltersForWebAppPreparer(ctx context
 // ResetAllFiltersForWebAppSender sends the ResetAllFiltersForWebApp request. The method will close the
 // http.Response Body if it receives an error.
 func (client RecommendationsClient) ResetAllFiltersForWebAppSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ResetAllFiltersForWebAppResponder handles the response to the ResetAllFiltersForWebApp request. The method always
@@ -1539,7 +1526,6 @@ func (client RecommendationsClient) ResetAllFiltersForWebAppSender(req *http.Req
 func (client RecommendationsClient) ResetAllFiltersForWebAppResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp

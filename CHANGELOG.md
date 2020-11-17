@@ -1,4 +1,25 @@
 ## 1.2.0 (Unreleased)
+
+ENHANCEMENTS:
+
+* Add Oracle Fast Connect Data Source ([41](https://github.com/pureport/terraform-provider-pureport/pull/41) by [kevinkirkup](https://github.com/kevinkirkup))
+* Automate CHANGELOG.md using paultyng/changelog-gen. ([40](https://github.com/pureport/terraform-provider-pureport/pull/40) by [kevinkirkup](https://github.com/kevinkirkup))
+* Handle network transitions ([51](https://github.com/pureport/terraform-provider-pureport/pull/51) by [kevinkirkup](https://github.com/kevinkirkup))
+* Update Pureport SDK v2.0.0 ([34](https://github.com/pureport/terraform-provider-pureport/pull/34) by [kevinkirkup](https://github.com/kevinkirkup))
+* [PE-2083] Update Create/Delete timeouts to account for rate limiting ([46](https://github.com/pureport/terraform-provider-pureport/pull/46) by [kevinkirkup](https://github.com/kevinkirkup))
+* [PE-2173] Update documentation to show ike_version as optional ([38](https://github.com/pureport/terraform-provider-pureport/pull/38) by [kevinkirkup](https://github.com/kevinkirkup))
+* [PE-2210] Setup/Teardown environment for each test run ([39](https://github.com/pureport/terraform-provider-pureport/pull/39) by [kevinkirkup](https://github.com/kevinkirkup))
+* Update to Terraform 0.13.x
+* Update to Terraform Plugin v1.16.0
+
+BUG FIXES:
+
+* Set the default IKE Version to 'V2'. ([35](https://github.com/pureport/terraform-provider-pureport/pull/35) by [kevinkirkup](https://github.com/kevinkirkup))
+* Update CloudServices acceptance tests based on new services. ([37](https://github.com/pureport/terraform-provider-pureport/pull/37) by [kevinkirkup](https://github.com/kevinkirkup))
+* [PE-2149] Add custom validator for cloud connections for HA ([33](https://github.com/pureport/terraform-provider-pureport/pull/33) by [kevinkirkup](https://github.com/kevinkirkup))
+* [PE-2257] Recreate connection on network update ([50](https://github.com/pureport/terraform-provider-pureport/pull/50) by [kevinkirkup](https://github.com/kevinkirkup))
+* [PE-2316] Updating AzureRM is causing failures ([48](https://github.com/pureport/terraform-provider-pureport/pull/48) by [kevinkirkup](https://github.com/kevinkirkup))
+
 ## 1.1.9 (August 14, 2020)
 
 ENHANCEMENTS:

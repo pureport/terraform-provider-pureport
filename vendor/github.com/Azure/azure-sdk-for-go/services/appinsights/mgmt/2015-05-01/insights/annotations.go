@@ -36,7 +36,8 @@ func NewAnnotationsClient(subscriptionID string) AnnotationsClient {
 	return NewAnnotationsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewAnnotationsClientWithBaseURI creates an instance of the AnnotationsClient client.
+// NewAnnotationsClientWithBaseURI creates an instance of the AnnotationsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewAnnotationsClientWithBaseURI(baseURI string, subscriptionID string) AnnotationsClient {
 	return AnnotationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -115,8 +116,7 @@ func (client AnnotationsClient) CreatePreparer(ctx context.Context, resourceGrou
 // CreateSender sends the Create request. The method will close the
 // http.Response Body if it receives an error.
 func (client AnnotationsClient) CreateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateResponder handles the response to the Create request. The method always
@@ -124,7 +124,6 @@ func (client AnnotationsClient) CreateSender(req *http.Request) (*http.Response,
 func (client AnnotationsClient) CreateResponder(resp *http.Response) (result ListAnnotation, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -204,8 +203,7 @@ func (client AnnotationsClient) DeletePreparer(ctx context.Context, resourceGrou
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client AnnotationsClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -213,7 +211,6 @@ func (client AnnotationsClient) DeleteSender(req *http.Request) (*http.Response,
 func (client AnnotationsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -292,8 +289,7 @@ func (client AnnotationsClient) GetPreparer(ctx context.Context, resourceGroupNa
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client AnnotationsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -301,7 +297,6 @@ func (client AnnotationsClient) GetSender(req *http.Request) (*http.Response, er
 func (client AnnotationsClient) GetResponder(resp *http.Response) (result ListAnnotation, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -383,8 +378,7 @@ func (client AnnotationsClient) ListPreparer(ctx context.Context, resourceGroupN
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client AnnotationsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -392,7 +386,6 @@ func (client AnnotationsClient) ListSender(req *http.Request) (*http.Response, e
 func (client AnnotationsClient) ListResponder(resp *http.Response) (result AnnotationsListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

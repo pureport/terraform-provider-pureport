@@ -16,9 +16,9 @@ var (
 	}
 
 	nested_items = []interface{}{
-		client.Connection{Name: "TestConnection 1", Location: &client.Link{Title: "Raleigh"}},
-		client.Connection{Name: "TestConnection 2", Location: &client.Link{Title: "San Jose"}},
-		client.Connection{Name: "TestConnection 3", Location: &client.Link{Title: "Seattle"}},
+		client.Connection{Name: "TestConnection 1", Location: client.Link{Title: "Raleigh"}},
+		client.Connection{Name: "TestConnection 2", Location: client.Link{Title: "San Jose"}},
+		client.Connection{Name: "TestConnection 3", Location: client.Link{Title: "Seattle"}},
 	}
 
 	tagged_items = []interface{}{
