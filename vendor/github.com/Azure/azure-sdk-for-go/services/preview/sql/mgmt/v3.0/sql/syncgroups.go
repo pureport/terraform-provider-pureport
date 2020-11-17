@@ -37,7 +37,8 @@ func NewSyncGroupsClient(subscriptionID string) SyncGroupsClient {
 	return NewSyncGroupsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewSyncGroupsClientWithBaseURI creates an instance of the SyncGroupsClient client.
+// NewSyncGroupsClientWithBaseURI creates an instance of the SyncGroupsClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewSyncGroupsClientWithBaseURI(baseURI string, subscriptionID string) SyncGroupsClient {
 	return SyncGroupsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -91,7 +92,7 @@ func (client SyncGroupsClient) CancelSyncPreparer(ctx context.Context, resourceG
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -107,8 +108,7 @@ func (client SyncGroupsClient) CancelSyncPreparer(ctx context.Context, resourceG
 // CancelSyncSender sends the CancelSync request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) CancelSyncSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CancelSyncResponder handles the response to the CancelSync request. The method always
@@ -116,7 +116,6 @@ func (client SyncGroupsClient) CancelSyncSender(req *http.Request) (*http.Respon
 func (client SyncGroupsClient) CancelSyncResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -167,7 +166,7 @@ func (client SyncGroupsClient) CreateOrUpdatePreparer(ctx context.Context, resou
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -185,9 +184,8 @@ func (client SyncGroupsClient) CreateOrUpdatePreparer(ctx context.Context, resou
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) CreateOrUpdateSender(req *http.Request) (future SyncGroupsCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -200,7 +198,6 @@ func (client SyncGroupsClient) CreateOrUpdateSender(req *http.Request) (future S
 func (client SyncGroupsClient) CreateOrUpdateResponder(resp *http.Response) (result SyncGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -251,7 +248,7 @@ func (client SyncGroupsClient) DeletePreparer(ctx context.Context, resourceGroup
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -267,9 +264,8 @@ func (client SyncGroupsClient) DeletePreparer(ctx context.Context, resourceGroup
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) DeleteSender(req *http.Request) (future SyncGroupsDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -282,7 +278,6 @@ func (client SyncGroupsClient) DeleteSender(req *http.Request) (future SyncGroup
 func (client SyncGroupsClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -338,7 +333,7 @@ func (client SyncGroupsClient) GetPreparer(ctx context.Context, resourceGroupNam
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -354,8 +349,7 @@ func (client SyncGroupsClient) GetPreparer(ctx context.Context, resourceGroupNam
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -363,7 +357,6 @@ func (client SyncGroupsClient) GetSender(req *http.Request) (*http.Response, err
 func (client SyncGroupsClient) GetResponder(resp *http.Response) (result SyncGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -406,6 +399,9 @@ func (client SyncGroupsClient) ListByDatabase(ctx context.Context, resourceGroup
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "ListByDatabase", resp, "Failure responding to request")
 	}
+	if result.sglr.hasNextLink() && result.sglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -419,7 +415,7 @@ func (client SyncGroupsClient) ListByDatabasePreparer(ctx context.Context, resou
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -435,8 +431,7 @@ func (client SyncGroupsClient) ListByDatabasePreparer(ctx context.Context, resou
 // ListByDatabaseSender sends the ListByDatabase request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) ListByDatabaseSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByDatabaseResponder handles the response to the ListByDatabase request. The method always
@@ -444,7 +439,6 @@ func (client SyncGroupsClient) ListByDatabaseSender(req *http.Request) (*http.Re
 func (client SyncGroupsClient) ListByDatabaseResponder(resp *http.Response) (result SyncGroupListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -525,6 +519,9 @@ func (client SyncGroupsClient) ListHubSchemas(ctx context.Context, resourceGroup
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "ListHubSchemas", resp, "Failure responding to request")
 	}
+	if result.sfsplr.hasNextLink() && result.sfsplr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -539,7 +536,7 @@ func (client SyncGroupsClient) ListHubSchemasPreparer(ctx context.Context, resou
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -555,8 +552,7 @@ func (client SyncGroupsClient) ListHubSchemasPreparer(ctx context.Context, resou
 // ListHubSchemasSender sends the ListHubSchemas request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) ListHubSchemasSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListHubSchemasResponder handles the response to the ListHubSchemas request. The method always
@@ -564,7 +560,6 @@ func (client SyncGroupsClient) ListHubSchemasSender(req *http.Request) (*http.Re
 func (client SyncGroupsClient) ListHubSchemasResponder(resp *http.Response) (result SyncFullSchemaPropertiesListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -649,6 +644,9 @@ func (client SyncGroupsClient) ListLogs(ctx context.Context, resourceGroupName s
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "ListLogs", resp, "Failure responding to request")
 	}
+	if result.sgllr.hasNextLink() && result.sgllr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -663,7 +661,7 @@ func (client SyncGroupsClient) ListLogsPreparer(ctx context.Context, resourceGro
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 		"endTime":     autorest.Encode("query", endTime),
@@ -685,8 +683,7 @@ func (client SyncGroupsClient) ListLogsPreparer(ctx context.Context, resourceGro
 // ListLogsSender sends the ListLogs request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) ListLogsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListLogsResponder handles the response to the ListLogs request. The method always
@@ -694,7 +691,6 @@ func (client SyncGroupsClient) ListLogsSender(req *http.Request) (*http.Response
 func (client SyncGroupsClient) ListLogsResponder(resp *http.Response) (result SyncGroupLogListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -771,6 +767,9 @@ func (client SyncGroupsClient) ListSyncDatabaseIds(ctx context.Context, location
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "ListSyncDatabaseIds", resp, "Failure responding to request")
 	}
+	if result.sdilr.hasNextLink() && result.sdilr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -782,7 +781,7 @@ func (client SyncGroupsClient) ListSyncDatabaseIdsPreparer(ctx context.Context, 
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -798,8 +797,7 @@ func (client SyncGroupsClient) ListSyncDatabaseIdsPreparer(ctx context.Context, 
 // ListSyncDatabaseIdsSender sends the ListSyncDatabaseIds request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) ListSyncDatabaseIdsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSyncDatabaseIdsResponder handles the response to the ListSyncDatabaseIds request. The method always
@@ -807,7 +805,6 @@ func (client SyncGroupsClient) ListSyncDatabaseIdsSender(req *http.Request) (*ht
 func (client SyncGroupsClient) ListSyncDatabaseIdsResponder(resp *http.Response) (result SyncDatabaseIDListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -895,7 +892,7 @@ func (client SyncGroupsClient) RefreshHubSchemaPreparer(ctx context.Context, res
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -911,9 +908,8 @@ func (client SyncGroupsClient) RefreshHubSchemaPreparer(ctx context.Context, res
 // RefreshHubSchemaSender sends the RefreshHubSchema request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) RefreshHubSchemaSender(req *http.Request) (future SyncGroupsRefreshHubSchemaFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -926,7 +922,6 @@ func (client SyncGroupsClient) RefreshHubSchemaSender(req *http.Request) (future
 func (client SyncGroupsClient) RefreshHubSchemaResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByClosing())
 	result.Response = resp
@@ -982,7 +977,7 @@ func (client SyncGroupsClient) TriggerSyncPreparer(ctx context.Context, resource
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -998,8 +993,7 @@ func (client SyncGroupsClient) TriggerSyncPreparer(ctx context.Context, resource
 // TriggerSyncSender sends the TriggerSync request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) TriggerSyncSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // TriggerSyncResponder handles the response to the TriggerSync request. The method always
@@ -1007,7 +1001,6 @@ func (client SyncGroupsClient) TriggerSyncSender(req *http.Request) (*http.Respo
 func (client SyncGroupsClient) TriggerSyncResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -1058,7 +1051,7 @@ func (client SyncGroupsClient) UpdatePreparer(ctx context.Context, resourceGroup
 		"syncGroupName":     autorest.Encode("path", syncGroupName),
 	}
 
-	const APIVersion = "2015-05-01-preview"
+	const APIVersion = "2019-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1076,9 +1069,8 @@ func (client SyncGroupsClient) UpdatePreparer(ctx context.Context, resourceGroup
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client SyncGroupsClient) UpdateSender(req *http.Request) (future SyncGroupsUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -1091,7 +1083,6 @@ func (client SyncGroupsClient) UpdateSender(req *http.Request) (future SyncGroup
 func (client SyncGroupsClient) UpdateResponder(resp *http.Response) (result SyncGroup, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

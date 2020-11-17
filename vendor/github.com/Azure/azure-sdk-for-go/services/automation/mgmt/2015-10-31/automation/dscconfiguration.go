@@ -36,7 +36,9 @@ func NewDscConfigurationClient(subscriptionID string) DscConfigurationClient {
 	return NewDscConfigurationClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDscConfigurationClientWithBaseURI creates an instance of the DscConfigurationClient client.
+// NewDscConfigurationClientWithBaseURI creates an instance of the DscConfigurationClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewDscConfigurationClientWithBaseURI(baseURI string, subscriptionID string) DscConfigurationClient {
 	return DscConfigurationClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -123,8 +125,7 @@ func (client DscConfigurationClient) CreateOrUpdatePreparer(ctx context.Context,
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client DscConfigurationClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -132,7 +133,6 @@ func (client DscConfigurationClient) CreateOrUpdateSender(req *http.Request) (*h
 func (client DscConfigurationClient) CreateOrUpdateResponder(resp *http.Response) (result DscConfiguration, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -210,8 +210,7 @@ func (client DscConfigurationClient) DeletePreparer(ctx context.Context, resourc
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client DscConfigurationClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -219,7 +218,6 @@ func (client DscConfigurationClient) DeleteSender(req *http.Request) (*http.Resp
 func (client DscConfigurationClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -296,8 +294,7 @@ func (client DscConfigurationClient) GetPreparer(ctx context.Context, resourceGr
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client DscConfigurationClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -305,7 +302,6 @@ func (client DscConfigurationClient) GetSender(req *http.Request) (*http.Respons
 func (client DscConfigurationClient) GetResponder(resp *http.Response) (result DscConfiguration, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -383,8 +379,7 @@ func (client DscConfigurationClient) GetContentPreparer(ctx context.Context, res
 // GetContentSender sends the GetContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client DscConfigurationClient) GetContentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetContentResponder handles the response to the GetContent request. The method always
@@ -393,7 +388,6 @@ func (client DscConfigurationClient) GetContentResponder(resp *http.Response) (r
 	result.Value = &resp.Body
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK))
 	result.Response = autorest.Response{Response: resp}
 	return
@@ -444,6 +438,9 @@ func (client DscConfigurationClient) ListByAutomationAccount(ctx context.Context
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "automation.DscConfigurationClient", "ListByAutomationAccount", resp, "Failure responding to request")
 	}
+	if result.dclr.hasNextLink() && result.dclr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -484,8 +481,7 @@ func (client DscConfigurationClient) ListByAutomationAccountPreparer(ctx context
 // ListByAutomationAccountSender sends the ListByAutomationAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client DscConfigurationClient) ListByAutomationAccountSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByAutomationAccountResponder handles the response to the ListByAutomationAccount request. The method always
@@ -493,7 +489,6 @@ func (client DscConfigurationClient) ListByAutomationAccountSender(req *http.Req
 func (client DscConfigurationClient) ListByAutomationAccountResponder(resp *http.Response) (result DscConfigurationListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -614,8 +609,7 @@ func (client DscConfigurationClient) UpdatePreparer(ctx context.Context, resourc
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client DscConfigurationClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -623,7 +617,6 @@ func (client DscConfigurationClient) UpdateSender(req *http.Request) (*http.Resp
 func (client DscConfigurationClient) UpdateResponder(resp *http.Response) (result DscConfiguration, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -3,7 +3,7 @@ services:
   - docker
 language: go
 go:
-  - "1.14.x"
+  - "1.15.x"
 os:
   - linux
   - osx
@@ -25,13 +25,13 @@ jobs:
   allow_failures:
   - go: tip
   include:
-  - go: "1.14.x"
+  - go: "1.15.x"
     name: "Code Lint"
     script: travis_wait 30 make lint
-  - go: "1.14.x"
+  - go: "1.15.x"
     name: "Code UnitTest"
     script: make test
-  - go: "1.14.x"
+  - go: "1.15.x"
     name: "Website"
     script:
       - make website-test

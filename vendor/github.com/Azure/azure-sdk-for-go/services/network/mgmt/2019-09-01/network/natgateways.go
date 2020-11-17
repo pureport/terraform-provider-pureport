@@ -35,7 +35,8 @@ func NewNatGatewaysClient(subscriptionID string) NatGatewaysClient {
 	return NewNatGatewaysClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewNatGatewaysClientWithBaseURI creates an instance of the NatGatewaysClient client.
+// NewNatGatewaysClientWithBaseURI creates an instance of the NatGatewaysClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewNatGatewaysClientWithBaseURI(baseURI string, subscriptionID string) NatGatewaysClient {
 	return NatGatewaysClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -98,9 +99,8 @@ func (client NatGatewaysClient) CreateOrUpdatePreparer(ctx context.Context, reso
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client NatGatewaysClient) CreateOrUpdateSender(req *http.Request) (future NatGatewaysCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -113,7 +113,6 @@ func (client NatGatewaysClient) CreateOrUpdateSender(req *http.Request) (future 
 func (client NatGatewaysClient) CreateOrUpdateResponder(resp *http.Response) (result NatGateway, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -175,9 +174,8 @@ func (client NatGatewaysClient) DeletePreparer(ctx context.Context, resourceGrou
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client NatGatewaysClient) DeleteSender(req *http.Request) (future NatGatewaysDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -190,7 +188,6 @@ func (client NatGatewaysClient) DeleteSender(req *http.Request) (future NatGatew
 func (client NatGatewaysClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -261,8 +258,7 @@ func (client NatGatewaysClient) GetPreparer(ctx context.Context, resourceGroupNa
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client NatGatewaysClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -270,7 +266,6 @@ func (client NatGatewaysClient) GetSender(req *http.Request) (*http.Response, er
 func (client NatGatewaysClient) GetResponder(resp *http.Response) (result NatGateway, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -310,6 +305,9 @@ func (client NatGatewaysClient) List(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.NatGatewaysClient", "List", resp, "Failure responding to request")
 	}
+	if result.nglr.hasNextLink() && result.nglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -337,8 +335,7 @@ func (client NatGatewaysClient) ListPreparer(ctx context.Context, resourceGroupN
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client NatGatewaysClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -346,7 +343,6 @@ func (client NatGatewaysClient) ListSender(req *http.Request) (*http.Response, e
 func (client NatGatewaysClient) ListResponder(resp *http.Response) (result NatGatewayListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -421,6 +417,9 @@ func (client NatGatewaysClient) ListAll(ctx context.Context) (result NatGatewayL
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.NatGatewaysClient", "ListAll", resp, "Failure responding to request")
 	}
+	if result.nglr.hasNextLink() && result.nglr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -447,8 +446,7 @@ func (client NatGatewaysClient) ListAllPreparer(ctx context.Context) (*http.Requ
 // ListAllSender sends the ListAll request. The method will close the
 // http.Response Body if it receives an error.
 func (client NatGatewaysClient) ListAllSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAllResponder handles the response to the ListAll request. The method always
@@ -456,7 +454,6 @@ func (client NatGatewaysClient) ListAllSender(req *http.Request) (*http.Response
 func (client NatGatewaysClient) ListAllResponder(resp *http.Response) (result NatGatewayListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -564,8 +561,7 @@ func (client NatGatewaysClient) UpdateTagsPreparer(ctx context.Context, resource
 // UpdateTagsSender sends the UpdateTags request. The method will close the
 // http.Response Body if it receives an error.
 func (client NatGatewaysClient) UpdateTagsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateTagsResponder handles the response to the UpdateTags request. The method always
@@ -573,7 +569,6 @@ func (client NatGatewaysClient) UpdateTagsSender(req *http.Request) (*http.Respo
 func (client NatGatewaysClient) UpdateTagsResponder(resp *http.Response) (result NatGateway, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

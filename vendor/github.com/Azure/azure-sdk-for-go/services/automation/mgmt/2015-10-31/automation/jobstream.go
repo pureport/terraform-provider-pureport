@@ -36,7 +36,8 @@ func NewJobStreamClient(subscriptionID string) JobStreamClient {
 	return NewJobStreamClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewJobStreamClientWithBaseURI creates an instance of the JobStreamClient client.
+// NewJobStreamClientWithBaseURI creates an instance of the JobStreamClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewJobStreamClientWithBaseURI(baseURI string, subscriptionID string) JobStreamClient {
 	return JobStreamClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client JobStreamClient) GetPreparer(ctx context.Context, resourceGroupName
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobStreamClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -122,7 +122,6 @@ func (client JobStreamClient) GetSender(req *http.Request) (*http.Response, erro
 func (client JobStreamClient) GetResponder(resp *http.Response) (result JobStream, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -173,6 +172,9 @@ func (client JobStreamClient) ListByJob(ctx context.Context, resourceGroupName s
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "automation.JobStreamClient", "ListByJob", resp, "Failure responding to request")
 	}
+	if result.jslr.hasNextLink() && result.jslr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -205,8 +207,7 @@ func (client JobStreamClient) ListByJobPreparer(ctx context.Context, resourceGro
 // ListByJobSender sends the ListByJob request. The method will close the
 // http.Response Body if it receives an error.
 func (client JobStreamClient) ListByJobSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByJobResponder handles the response to the ListByJob request. The method always
@@ -214,7 +215,6 @@ func (client JobStreamClient) ListByJobSender(req *http.Request) (*http.Response
 func (client JobStreamClient) ListByJobResponder(resp *http.Response) (result JobStreamListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

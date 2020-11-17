@@ -37,7 +37,9 @@ func NewSubscriptionUsagesClient(subscriptionID string) SubscriptionUsagesClient
 	return NewSubscriptionUsagesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewSubscriptionUsagesClientWithBaseURI creates an instance of the SubscriptionUsagesClient client.
+// NewSubscriptionUsagesClientWithBaseURI creates an instance of the SubscriptionUsagesClient client using a custom
+// endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure
+// stack).
 func NewSubscriptionUsagesClientWithBaseURI(baseURI string, subscriptionID string) SubscriptionUsagesClient {
 	return SubscriptionUsagesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -102,8 +104,7 @@ func (client SubscriptionUsagesClient) GetPreparer(ctx context.Context, location
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client SubscriptionUsagesClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -111,7 +112,6 @@ func (client SubscriptionUsagesClient) GetSender(req *http.Request) (*http.Respo
 func (client SubscriptionUsagesClient) GetResponder(resp *http.Response) (result SubscriptionUsage, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -151,6 +151,9 @@ func (client SubscriptionUsagesClient) ListByLocation(ctx context.Context, locat
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SubscriptionUsagesClient", "ListByLocation", resp, "Failure responding to request")
 	}
+	if result.sulr.hasNextLink() && result.sulr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -178,8 +181,7 @@ func (client SubscriptionUsagesClient) ListByLocationPreparer(ctx context.Contex
 // ListByLocationSender sends the ListByLocation request. The method will close the
 // http.Response Body if it receives an error.
 func (client SubscriptionUsagesClient) ListByLocationSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByLocationResponder handles the response to the ListByLocation request. The method always
@@ -187,7 +189,6 @@ func (client SubscriptionUsagesClient) ListByLocationSender(req *http.Request) (
 func (client SubscriptionUsagesClient) ListByLocationResponder(resp *http.Response) (result SubscriptionUsageListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -37,7 +37,8 @@ func NewDiagnosticsClient(subscriptionID string) DiagnosticsClient {
 	return NewDiagnosticsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewDiagnosticsClientWithBaseURI creates an instance of the DiagnosticsClient client.
+// NewDiagnosticsClientWithBaseURI creates an instance of the DiagnosticsClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewDiagnosticsClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticsClient {
 	return DiagnosticsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -129,8 +130,7 @@ func (client DiagnosticsClient) ExecuteSiteAnalysisPreparer(ctx context.Context,
 // ExecuteSiteAnalysisSender sends the ExecuteSiteAnalysis request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ExecuteSiteAnalysisSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ExecuteSiteAnalysisResponder handles the response to the ExecuteSiteAnalysis request. The method always
@@ -138,7 +138,6 @@ func (client DiagnosticsClient) ExecuteSiteAnalysisSender(req *http.Request) (*h
 func (client DiagnosticsClient) ExecuteSiteAnalysisResponder(resp *http.Response) (result DiagnosticAnalysis, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -235,8 +234,7 @@ func (client DiagnosticsClient) ExecuteSiteAnalysisSlotPreparer(ctx context.Cont
 // ExecuteSiteAnalysisSlotSender sends the ExecuteSiteAnalysisSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ExecuteSiteAnalysisSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ExecuteSiteAnalysisSlotResponder handles the response to the ExecuteSiteAnalysisSlot request. The method always
@@ -244,7 +242,6 @@ func (client DiagnosticsClient) ExecuteSiteAnalysisSlotSender(req *http.Request)
 func (client DiagnosticsClient) ExecuteSiteAnalysisSlotResponder(resp *http.Response) (result DiagnosticAnalysis, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -339,8 +336,7 @@ func (client DiagnosticsClient) ExecuteSiteDetectorPreparer(ctx context.Context,
 // ExecuteSiteDetectorSender sends the ExecuteSiteDetector request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ExecuteSiteDetectorSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ExecuteSiteDetectorResponder handles the response to the ExecuteSiteDetector request. The method always
@@ -348,7 +344,6 @@ func (client DiagnosticsClient) ExecuteSiteDetectorSender(req *http.Request) (*h
 func (client DiagnosticsClient) ExecuteSiteDetectorResponder(resp *http.Response) (result DiagnosticDetectorResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -445,8 +440,7 @@ func (client DiagnosticsClient) ExecuteSiteDetectorSlotPreparer(ctx context.Cont
 // ExecuteSiteDetectorSlotSender sends the ExecuteSiteDetectorSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ExecuteSiteDetectorSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ExecuteSiteDetectorSlotResponder handles the response to the ExecuteSiteDetectorSlot request. The method always
@@ -454,7 +448,6 @@ func (client DiagnosticsClient) ExecuteSiteDetectorSlotSender(req *http.Request)
 func (client DiagnosticsClient) ExecuteSiteDetectorSlotResponder(resp *http.Response) (result DiagnosticDetectorResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -547,8 +540,7 @@ func (client DiagnosticsClient) GetHostingEnvironmentDetectorResponsePreparer(ct
 // GetHostingEnvironmentDetectorResponseSender sends the GetHostingEnvironmentDetectorResponse request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetHostingEnvironmentDetectorResponseSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetHostingEnvironmentDetectorResponseResponder handles the response to the GetHostingEnvironmentDetectorResponse request. The method always
@@ -556,7 +548,6 @@ func (client DiagnosticsClient) GetHostingEnvironmentDetectorResponseSender(req 
 func (client DiagnosticsClient) GetHostingEnvironmentDetectorResponseResponder(resp *http.Response) (result DetectorResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -636,8 +627,7 @@ func (client DiagnosticsClient) GetSiteAnalysisPreparer(ctx context.Context, res
 // GetSiteAnalysisSender sends the GetSiteAnalysis request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteAnalysisSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteAnalysisResponder handles the response to the GetSiteAnalysis request. The method always
@@ -645,7 +635,6 @@ func (client DiagnosticsClient) GetSiteAnalysisSender(req *http.Request) (*http.
 func (client DiagnosticsClient) GetSiteAnalysisResponder(resp *http.Response) (result DiagnosticAnalysis, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -727,8 +716,7 @@ func (client DiagnosticsClient) GetSiteAnalysisSlotPreparer(ctx context.Context,
 // GetSiteAnalysisSlotSender sends the GetSiteAnalysisSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteAnalysisSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteAnalysisSlotResponder handles the response to the GetSiteAnalysisSlot request. The method always
@@ -736,7 +724,6 @@ func (client DiagnosticsClient) GetSiteAnalysisSlotSender(req *http.Request) (*h
 func (client DiagnosticsClient) GetSiteAnalysisSlotResponder(resp *http.Response) (result DiagnosticAnalysis, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -787,6 +774,9 @@ func (client DiagnosticsClient) GetSiteDetector(ctx context.Context, resourceGro
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "GetSiteDetector", resp, "Failure responding to request")
 	}
+	if result.ddc.hasNextLink() && result.ddc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -817,8 +807,7 @@ func (client DiagnosticsClient) GetSiteDetectorPreparer(ctx context.Context, res
 // GetSiteDetectorSender sends the GetSiteDetector request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteDetectorSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteDetectorResponder handles the response to the GetSiteDetector request. The method always
@@ -826,7 +815,6 @@ func (client DiagnosticsClient) GetSiteDetectorSender(req *http.Request) (*http.
 func (client DiagnosticsClient) GetSiteDetectorResponder(resp *http.Response) (result DiagnosticDetectorCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -956,8 +944,7 @@ func (client DiagnosticsClient) GetSiteDetectorResponsePreparer(ctx context.Cont
 // GetSiteDetectorResponseSender sends the GetSiteDetectorResponse request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteDetectorResponseSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteDetectorResponseResponder handles the response to the GetSiteDetectorResponse request. The method always
@@ -965,7 +952,6 @@ func (client DiagnosticsClient) GetSiteDetectorResponseSender(req *http.Request)
 func (client DiagnosticsClient) GetSiteDetectorResponseResponder(resp *http.Response) (result DetectorResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1060,8 +1046,7 @@ func (client DiagnosticsClient) GetSiteDetectorResponseSlotPreparer(ctx context.
 // GetSiteDetectorResponseSlotSender sends the GetSiteDetectorResponseSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteDetectorResponseSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteDetectorResponseSlotResponder handles the response to the GetSiteDetectorResponseSlot request. The method always
@@ -1069,7 +1054,6 @@ func (client DiagnosticsClient) GetSiteDetectorResponseSlotSender(req *http.Requ
 func (client DiagnosticsClient) GetSiteDetectorResponseSlotResponder(resp *http.Response) (result DetectorResponse, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1121,6 +1105,9 @@ func (client DiagnosticsClient) GetSiteDetectorSlot(ctx context.Context, resourc
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "GetSiteDetectorSlot", resp, "Failure responding to request")
 	}
+	if result.ddc.hasNextLink() && result.ddc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1152,8 +1139,7 @@ func (client DiagnosticsClient) GetSiteDetectorSlotPreparer(ctx context.Context,
 // GetSiteDetectorSlotSender sends the GetSiteDetectorSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteDetectorSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteDetectorSlotResponder handles the response to the GetSiteDetectorSlot request. The method always
@@ -1161,7 +1147,6 @@ func (client DiagnosticsClient) GetSiteDetectorSlotSender(req *http.Request) (*h
 func (client DiagnosticsClient) GetSiteDetectorSlotResponder(resp *http.Response) (result DiagnosticDetectorCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1276,8 +1261,7 @@ func (client DiagnosticsClient) GetSiteDiagnosticCategoryPreparer(ctx context.Co
 // GetSiteDiagnosticCategorySender sends the GetSiteDiagnosticCategory request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteDiagnosticCategorySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteDiagnosticCategoryResponder handles the response to the GetSiteDiagnosticCategory request. The method always
@@ -1285,7 +1269,6 @@ func (client DiagnosticsClient) GetSiteDiagnosticCategorySender(req *http.Reques
 func (client DiagnosticsClient) GetSiteDiagnosticCategoryResponder(resp *http.Response) (result DiagnosticCategory, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1365,8 +1348,7 @@ func (client DiagnosticsClient) GetSiteDiagnosticCategorySlotPreparer(ctx contex
 // GetSiteDiagnosticCategorySlotSender sends the GetSiteDiagnosticCategorySlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) GetSiteDiagnosticCategorySlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetSiteDiagnosticCategorySlotResponder handles the response to the GetSiteDiagnosticCategorySlot request. The method always
@@ -1374,7 +1356,6 @@ func (client DiagnosticsClient) GetSiteDiagnosticCategorySlotSender(req *http.Re
 func (client DiagnosticsClient) GetSiteDiagnosticCategorySlotResponder(resp *http.Response) (result DiagnosticCategory, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1423,6 +1404,9 @@ func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponses(ctx cont
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListHostingEnvironmentDetectorResponses", resp, "Failure responding to request")
 	}
+	if result.drc.hasNextLink() && result.drc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1451,8 +1435,7 @@ func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesPreparer(
 // ListHostingEnvironmentDetectorResponsesSender sends the ListHostingEnvironmentDetectorResponses request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListHostingEnvironmentDetectorResponsesResponder handles the response to the ListHostingEnvironmentDetectorResponses request. The method always
@@ -1460,7 +1443,6 @@ func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesSender(re
 func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesResponder(resp *http.Response) (result DetectorResponseCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1547,6 +1529,9 @@ func (client DiagnosticsClient) ListSiteAnalyses(ctx context.Context, resourceGr
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteAnalyses", resp, "Failure responding to request")
 	}
+	if result.dac.hasNextLink() && result.dac.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1576,8 +1561,7 @@ func (client DiagnosticsClient) ListSiteAnalysesPreparer(ctx context.Context, re
 // ListSiteAnalysesSender sends the ListSiteAnalyses request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteAnalysesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteAnalysesResponder handles the response to the ListSiteAnalyses request. The method always
@@ -1585,7 +1569,6 @@ func (client DiagnosticsClient) ListSiteAnalysesSender(req *http.Request) (*http
 func (client DiagnosticsClient) ListSiteAnalysesResponder(resp *http.Response) (result DiagnosticAnalysisCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1673,6 +1656,9 @@ func (client DiagnosticsClient) ListSiteAnalysesSlot(ctx context.Context, resour
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteAnalysesSlot", resp, "Failure responding to request")
 	}
+	if result.dac.hasNextLink() && result.dac.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1703,8 +1689,7 @@ func (client DiagnosticsClient) ListSiteAnalysesSlotPreparer(ctx context.Context
 // ListSiteAnalysesSlotSender sends the ListSiteAnalysesSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteAnalysesSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteAnalysesSlotResponder handles the response to the ListSiteAnalysesSlot request. The method always
@@ -1712,7 +1697,6 @@ func (client DiagnosticsClient) ListSiteAnalysesSlotSender(req *http.Request) (*
 func (client DiagnosticsClient) ListSiteAnalysesSlotResponder(resp *http.Response) (result DiagnosticAnalysisCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1798,6 +1782,9 @@ func (client DiagnosticsClient) ListSiteDetectorResponses(ctx context.Context, r
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteDetectorResponses", resp, "Failure responding to request")
 	}
+	if result.drc.hasNextLink() && result.drc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1826,8 +1813,7 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesPreparer(ctx context.Co
 // ListSiteDetectorResponsesSender sends the ListSiteDetectorResponses request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteDetectorResponsesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteDetectorResponsesResponder handles the response to the ListSiteDetectorResponses request. The method always
@@ -1835,7 +1821,6 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesSender(req *http.Reques
 func (client DiagnosticsClient) ListSiteDetectorResponsesResponder(resp *http.Response) (result DetectorResponseCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1922,6 +1907,9 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesSlot(ctx context.Contex
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteDetectorResponsesSlot", resp, "Failure responding to request")
 	}
+	if result.drc.hasNextLink() && result.drc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -1951,8 +1939,7 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesSlotPreparer(ctx contex
 // ListSiteDetectorResponsesSlotSender sends the ListSiteDetectorResponsesSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteDetectorResponsesSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteDetectorResponsesSlotResponder handles the response to the ListSiteDetectorResponsesSlot request. The method always
@@ -1960,7 +1947,6 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesSlotSender(req *http.Re
 func (client DiagnosticsClient) ListSiteDetectorResponsesSlotResponder(resp *http.Response) (result DetectorResponseCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2047,6 +2033,9 @@ func (client DiagnosticsClient) ListSiteDetectors(ctx context.Context, resourceG
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteDetectors", resp, "Failure responding to request")
 	}
+	if result.ddc.hasNextLink() && result.ddc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2076,8 +2065,7 @@ func (client DiagnosticsClient) ListSiteDetectorsPreparer(ctx context.Context, r
 // ListSiteDetectorsSender sends the ListSiteDetectors request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteDetectorsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteDetectorsResponder handles the response to the ListSiteDetectors request. The method always
@@ -2085,7 +2073,6 @@ func (client DiagnosticsClient) ListSiteDetectorsSender(req *http.Request) (*htt
 func (client DiagnosticsClient) ListSiteDetectorsResponder(resp *http.Response) (result DiagnosticDetectorCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2173,6 +2160,9 @@ func (client DiagnosticsClient) ListSiteDetectorsSlot(ctx context.Context, resou
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteDetectorsSlot", resp, "Failure responding to request")
 	}
+	if result.ddc.hasNextLink() && result.ddc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2203,8 +2193,7 @@ func (client DiagnosticsClient) ListSiteDetectorsSlotPreparer(ctx context.Contex
 // ListSiteDetectorsSlotSender sends the ListSiteDetectorsSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteDetectorsSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteDetectorsSlotResponder handles the response to the ListSiteDetectorsSlot request. The method always
@@ -2212,7 +2201,6 @@ func (client DiagnosticsClient) ListSiteDetectorsSlotSender(req *http.Request) (
 func (client DiagnosticsClient) ListSiteDetectorsSlotResponder(resp *http.Response) (result DiagnosticDetectorCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2298,6 +2286,9 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategories(ctx context.Context
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteDiagnosticCategories", resp, "Failure responding to request")
 	}
+	if result.dcc.hasNextLink() && result.dcc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2326,8 +2317,7 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesPreparer(ctx context
 // ListSiteDiagnosticCategoriesSender sends the ListSiteDiagnosticCategories request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteDiagnosticCategoriesResponder handles the response to the ListSiteDiagnosticCategories request. The method always
@@ -2335,7 +2325,6 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSender(req *http.Req
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesResponder(resp *http.Response) (result DiagnosticCategoryCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -2422,6 +2411,9 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlot(ctx context.Con
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.DiagnosticsClient", "ListSiteDiagnosticCategoriesSlot", resp, "Failure responding to request")
 	}
+	if result.dcc.hasNextLink() && result.dcc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -2451,8 +2443,7 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlotPreparer(ctx con
 // ListSiteDiagnosticCategoriesSlotSender sends the ListSiteDiagnosticCategoriesSlot request. The method will close the
 // http.Response Body if it receives an error.
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlotSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListSiteDiagnosticCategoriesSlotResponder handles the response to the ListSiteDiagnosticCategoriesSlot request. The method always
@@ -2460,7 +2451,6 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlotSender(req *http
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlotResponder(resp *http.Response) (result DiagnosticCategoryCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

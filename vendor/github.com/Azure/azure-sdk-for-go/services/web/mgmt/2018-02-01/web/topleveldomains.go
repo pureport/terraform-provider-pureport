@@ -35,7 +35,8 @@ func NewTopLevelDomainsClient(subscriptionID string) TopLevelDomainsClient {
 	return NewTopLevelDomainsClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewTopLevelDomainsClientWithBaseURI creates an instance of the TopLevelDomainsClient client.
+// NewTopLevelDomainsClientWithBaseURI creates an instance of the TopLevelDomainsClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewTopLevelDomainsClientWithBaseURI(baseURI string, subscriptionID string) TopLevelDomainsClient {
 	return TopLevelDomainsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -98,8 +99,7 @@ func (client TopLevelDomainsClient) GetPreparer(ctx context.Context, name string
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client TopLevelDomainsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -107,7 +107,6 @@ func (client TopLevelDomainsClient) GetSender(req *http.Request) (*http.Response
 func (client TopLevelDomainsClient) GetResponder(resp *http.Response) (result TopLevelDomain, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -145,6 +144,9 @@ func (client TopLevelDomainsClient) List(ctx context.Context) (result TopLevelDo
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.TopLevelDomainsClient", "List", resp, "Failure responding to request")
 	}
+	if result.tldc.hasNextLink() && result.tldc.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -171,8 +173,7 @@ func (client TopLevelDomainsClient) ListPreparer(ctx context.Context) (*http.Req
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client TopLevelDomainsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -180,7 +181,6 @@ func (client TopLevelDomainsClient) ListSender(req *http.Request) (*http.Respons
 func (client TopLevelDomainsClient) ListResponder(resp *http.Response) (result TopLevelDomainCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -258,6 +258,9 @@ func (client TopLevelDomainsClient) ListAgreements(ctx context.Context, name str
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.TopLevelDomainsClient", "ListAgreements", resp, "Failure responding to request")
 	}
+	if result.tlac.hasNextLink() && result.tlac.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -287,8 +290,7 @@ func (client TopLevelDomainsClient) ListAgreementsPreparer(ctx context.Context, 
 // ListAgreementsSender sends the ListAgreements request. The method will close the
 // http.Response Body if it receives an error.
 func (client TopLevelDomainsClient) ListAgreementsSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAgreementsResponder handles the response to the ListAgreements request. The method always
@@ -296,7 +298,6 @@ func (client TopLevelDomainsClient) ListAgreementsSender(req *http.Request) (*ht
 func (client TopLevelDomainsClient) ListAgreementsResponder(resp *http.Response) (result TldLegalAgreementCollection, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

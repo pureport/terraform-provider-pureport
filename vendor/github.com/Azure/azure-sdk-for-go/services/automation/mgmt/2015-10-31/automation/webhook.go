@@ -36,7 +36,8 @@ func NewWebhookClient(subscriptionID string) WebhookClient {
 	return NewWebhookClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewWebhookClientWithBaseURI creates an instance of the WebhookClient client.
+// NewWebhookClientWithBaseURI creates an instance of the WebhookClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewWebhookClientWithBaseURI(baseURI string, subscriptionID string) WebhookClient {
 	return WebhookClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -117,8 +118,7 @@ func (client WebhookClient) CreateOrUpdatePreparer(ctx context.Context, resource
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebhookClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -126,7 +126,6 @@ func (client WebhookClient) CreateOrUpdateSender(req *http.Request) (*http.Respo
 func (client WebhookClient) CreateOrUpdateResponder(resp *http.Response) (result Webhook, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -204,8 +203,7 @@ func (client WebhookClient) DeletePreparer(ctx context.Context, resourceGroupNam
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebhookClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -213,7 +211,6 @@ func (client WebhookClient) DeleteSender(req *http.Request) (*http.Response, err
 func (client WebhookClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByClosing())
 	result.Response = resp
@@ -288,8 +285,7 @@ func (client WebhookClient) GenerateURIPreparer(ctx context.Context, resourceGro
 // GenerateURISender sends the GenerateURI request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebhookClient) GenerateURISender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GenerateURIResponder handles the response to the GenerateURI request. The method always
@@ -297,7 +293,6 @@ func (client WebhookClient) GenerateURISender(req *http.Request) (*http.Response
 func (client WebhookClient) GenerateURIResponder(resp *http.Response) (result String, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
@@ -375,8 +370,7 @@ func (client WebhookClient) GetPreparer(ctx context.Context, resourceGroupName s
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebhookClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -384,7 +378,6 @@ func (client WebhookClient) GetSender(req *http.Request) (*http.Response, error)
 func (client WebhookClient) GetResponder(resp *http.Response) (result Webhook, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -434,6 +427,9 @@ func (client WebhookClient) ListByAutomationAccount(ctx context.Context, resourc
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "automation.WebhookClient", "ListByAutomationAccount", resp, "Failure responding to request")
 	}
+	if result.wlr.hasNextLink() && result.wlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -465,8 +461,7 @@ func (client WebhookClient) ListByAutomationAccountPreparer(ctx context.Context,
 // ListByAutomationAccountSender sends the ListByAutomationAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebhookClient) ListByAutomationAccountSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByAutomationAccountResponder handles the response to the ListByAutomationAccount request. The method always
@@ -474,7 +469,6 @@ func (client WebhookClient) ListByAutomationAccountSender(req *http.Request) (*h
 func (client WebhookClient) ListByAutomationAccountResponder(resp *http.Response) (result WebhookListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -592,8 +586,7 @@ func (client WebhookClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client WebhookClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -601,7 +594,6 @@ func (client WebhookClient) UpdateSender(req *http.Request) (*http.Response, err
 func (client WebhookClient) UpdateResponder(resp *http.Response) (result Webhook, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -117,8 +117,7 @@ func (client BaseClient) CheckFrontDoorNameAvailabilityPreparer(ctx context.Cont
 // CheckFrontDoorNameAvailabilitySender sends the CheckFrontDoorNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CheckFrontDoorNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // CheckFrontDoorNameAvailabilityResponder handles the response to the CheckFrontDoorNameAvailability request. The method always
@@ -126,7 +125,6 @@ func (client BaseClient) CheckFrontDoorNameAvailabilitySender(req *http.Request)
 func (client BaseClient) CheckFrontDoorNameAvailabilityResponder(resp *http.Response) (result CheckNameAvailabilityOutput, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -199,8 +197,7 @@ func (client BaseClient) CheckFrontDoorNameAvailabilityWithSubscriptionPreparer(
 // CheckFrontDoorNameAvailabilityWithSubscriptionSender sends the CheckFrontDoorNameAvailabilityWithSubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client BaseClient) CheckFrontDoorNameAvailabilityWithSubscriptionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckFrontDoorNameAvailabilityWithSubscriptionResponder handles the response to the CheckFrontDoorNameAvailabilityWithSubscription request. The method always
@@ -208,7 +205,6 @@ func (client BaseClient) CheckFrontDoorNameAvailabilityWithSubscriptionSender(re
 func (client BaseClient) CheckFrontDoorNameAvailabilityWithSubscriptionResponder(resp *http.Response) (result CheckNameAvailabilityOutput, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

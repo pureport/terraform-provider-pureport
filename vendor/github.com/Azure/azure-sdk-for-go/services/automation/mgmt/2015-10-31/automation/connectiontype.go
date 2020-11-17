@@ -36,7 +36,8 @@ func NewConnectionTypeClient(subscriptionID string) ConnectionTypeClient {
 	return NewConnectionTypeClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewConnectionTypeClientWithBaseURI creates an instance of the ConnectionTypeClient client.
+// NewConnectionTypeClientWithBaseURI creates an instance of the ConnectionTypeClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewConnectionTypeClientWithBaseURI(baseURI string, subscriptionID string) ConnectionTypeClient {
 	return ConnectionTypeClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -118,8 +119,7 @@ func (client ConnectionTypeClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConnectionTypeClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -127,7 +127,6 @@ func (client ConnectionTypeClient) CreateOrUpdateSender(req *http.Request) (*htt
 func (client ConnectionTypeClient) CreateOrUpdateResponder(resp *http.Response) (result ConnectionType, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusConflict),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -205,8 +204,7 @@ func (client ConnectionTypeClient) DeletePreparer(ctx context.Context, resourceG
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConnectionTypeClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -214,7 +212,6 @@ func (client ConnectionTypeClient) DeleteSender(req *http.Request) (*http.Respon
 func (client ConnectionTypeClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -291,8 +288,7 @@ func (client ConnectionTypeClient) GetPreparer(ctx context.Context, resourceGrou
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConnectionTypeClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -300,7 +296,6 @@ func (client ConnectionTypeClient) GetSender(req *http.Request) (*http.Response,
 func (client ConnectionTypeClient) GetResponder(resp *http.Response) (result ConnectionType, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -349,6 +344,9 @@ func (client ConnectionTypeClient) ListByAutomationAccount(ctx context.Context, 
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "automation.ConnectionTypeClient", "ListByAutomationAccount", resp, "Failure responding to request")
 	}
+	if result.ctlr.hasNextLink() && result.ctlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -377,8 +375,7 @@ func (client ConnectionTypeClient) ListByAutomationAccountPreparer(ctx context.C
 // ListByAutomationAccountSender sends the ListByAutomationAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client ConnectionTypeClient) ListByAutomationAccountSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByAutomationAccountResponder handles the response to the ListByAutomationAccount request. The method always
@@ -386,7 +383,6 @@ func (client ConnectionTypeClient) ListByAutomationAccountSender(req *http.Reque
 func (client ConnectionTypeClient) ListByAutomationAccountResponder(resp *http.Response) (result ConnectionTypeListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

@@ -36,7 +36,8 @@ func NewRunbookClient(subscriptionID string) RunbookClient {
 	return NewRunbookClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewRunbookClientWithBaseURI creates an instance of the RunbookClient client.
+// NewRunbookClientWithBaseURI creates an instance of the RunbookClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewRunbookClientWithBaseURI(baseURI string, subscriptionID string) RunbookClient {
 	return RunbookClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -132,8 +133,7 @@ func (client RunbookClient) CreateOrUpdatePreparer(ctx context.Context, resource
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client RunbookClient) CreateOrUpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CreateOrUpdateResponder handles the response to the CreateOrUpdate request. The method always
@@ -141,7 +141,6 @@ func (client RunbookClient) CreateOrUpdateSender(req *http.Request) (*http.Respo
 func (client RunbookClient) CreateOrUpdateResponder(resp *http.Response) (result Runbook, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusBadRequest),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -219,8 +218,7 @@ func (client RunbookClient) DeletePreparer(ctx context.Context, resourceGroupNam
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client RunbookClient) DeleteSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // DeleteResponder handles the response to the Delete request. The method always
@@ -228,7 +226,6 @@ func (client RunbookClient) DeleteSender(req *http.Request) (*http.Response, err
 func (client RunbookClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -305,8 +302,7 @@ func (client RunbookClient) GetPreparer(ctx context.Context, resourceGroupName s
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client RunbookClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -314,7 +310,6 @@ func (client RunbookClient) GetSender(req *http.Request) (*http.Response, error)
 func (client RunbookClient) GetResponder(resp *http.Response) (result Runbook, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -392,8 +387,7 @@ func (client RunbookClient) GetContentPreparer(ctx context.Context, resourceGrou
 // GetContentSender sends the GetContent request. The method will close the
 // http.Response Body if it receives an error.
 func (client RunbookClient) GetContentSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetContentResponder handles the response to the GetContent request. The method always
@@ -402,7 +396,6 @@ func (client RunbookClient) GetContentResponder(resp *http.Response) (result Rea
 	result.Value = &resp.Body
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK))
 	result.Response = autorest.Response{Response: resp}
 	return
@@ -449,6 +442,9 @@ func (client RunbookClient) ListByAutomationAccount(ctx context.Context, resourc
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "automation.RunbookClient", "ListByAutomationAccount", resp, "Failure responding to request")
 	}
+	if result.rlr.hasNextLink() && result.rlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -477,8 +473,7 @@ func (client RunbookClient) ListByAutomationAccountPreparer(ctx context.Context,
 // ListByAutomationAccountSender sends the ListByAutomationAccount request. The method will close the
 // http.Response Body if it receives an error.
 func (client RunbookClient) ListByAutomationAccountSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByAutomationAccountResponder handles the response to the ListByAutomationAccount request. The method always
@@ -486,7 +481,6 @@ func (client RunbookClient) ListByAutomationAccountSender(req *http.Request) (*h
 func (client RunbookClient) ListByAutomationAccountResponder(resp *http.Response) (result RunbookListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -604,8 +598,7 @@ func (client RunbookClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client RunbookClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -613,7 +606,6 @@ func (client RunbookClient) UpdateSender(req *http.Request) (*http.Response, err
 func (client RunbookClient) UpdateResponder(resp *http.Response) (result Runbook, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

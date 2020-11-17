@@ -36,7 +36,9 @@ func NewExternalSecuritySolutionsClient(subscriptionID string, ascLocation strin
 	return NewExternalSecuritySolutionsClientWithBaseURI(DefaultBaseURI, subscriptionID, ascLocation)
 }
 
-// NewExternalSecuritySolutionsClientWithBaseURI creates an instance of the ExternalSecuritySolutionsClient client.
+// NewExternalSecuritySolutionsClientWithBaseURI creates an instance of the ExternalSecuritySolutionsClient client
+// using a custom endpoint.  Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign
+// clouds, Azure stack).
 func NewExternalSecuritySolutionsClientWithBaseURI(baseURI string, subscriptionID string, ascLocation string) ExternalSecuritySolutionsClient {
 	return ExternalSecuritySolutionsClient{NewWithBaseURI(baseURI, subscriptionID, ascLocation)}
 }
@@ -113,8 +115,7 @@ func (client ExternalSecuritySolutionsClient) GetPreparer(ctx context.Context, r
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client ExternalSecuritySolutionsClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -122,7 +123,6 @@ func (client ExternalSecuritySolutionsClient) GetSender(req *http.Request) (*htt
 func (client ExternalSecuritySolutionsClient) GetResponder(resp *http.Response) (result ExternalSecuritySolutionModel, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -166,6 +166,9 @@ func (client ExternalSecuritySolutionsClient) List(ctx context.Context) (result 
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.ExternalSecuritySolutionsClient", "List", resp, "Failure responding to request")
 	}
+	if result.essl.hasNextLink() && result.essl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -192,8 +195,7 @@ func (client ExternalSecuritySolutionsClient) ListPreparer(ctx context.Context) 
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client ExternalSecuritySolutionsClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -201,7 +203,6 @@ func (client ExternalSecuritySolutionsClient) ListSender(req *http.Request) (*ht
 func (client ExternalSecuritySolutionsClient) ListResponder(resp *http.Response) (result ExternalSecuritySolutionList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -282,6 +283,9 @@ func (client ExternalSecuritySolutionsClient) ListByHomeRegion(ctx context.Conte
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "security.ExternalSecuritySolutionsClient", "ListByHomeRegion", resp, "Failure responding to request")
 	}
+	if result.essl.hasNextLink() && result.essl.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -309,8 +313,7 @@ func (client ExternalSecuritySolutionsClient) ListByHomeRegionPreparer(ctx conte
 // ListByHomeRegionSender sends the ListByHomeRegion request. The method will close the
 // http.Response Body if it receives an error.
 func (client ExternalSecuritySolutionsClient) ListByHomeRegionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByHomeRegionResponder handles the response to the ListByHomeRegion request. The method always
@@ -318,7 +321,6 @@ func (client ExternalSecuritySolutionsClient) ListByHomeRegionSender(req *http.R
 func (client ExternalSecuritySolutionsClient) ListByHomeRegionResponder(resp *http.Response) (result ExternalSecuritySolutionList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

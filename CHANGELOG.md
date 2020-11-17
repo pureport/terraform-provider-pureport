@@ -9,6 +9,8 @@ ENHANCEMENTS:
 * [PE-2083] Update Create/Delete timeouts to account for rate limiting ([46](https://github.com/pureport/terraform-provider-pureport/pull/46) by [kevinkirkup](https://github.com/kevinkirkup))
 * [PE-2173] Update documentation to show ike_version as optional ([38](https://github.com/pureport/terraform-provider-pureport/pull/38) by [kevinkirkup](https://github.com/kevinkirkup))
 * [PE-2210] Setup/Teardown environment for each test run ([39](https://github.com/pureport/terraform-provider-pureport/pull/39) by [kevinkirkup](https://github.com/kevinkirkup))
+* Update to Terraform 0.13.x
+* Update to Terraform Plugin v1.16.0
 
 BUG FIXES:
 

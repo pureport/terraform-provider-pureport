@@ -36,7 +36,8 @@ func NewObjectDataTypesClient(subscriptionID string) ObjectDataTypesClient {
 	return NewObjectDataTypesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewObjectDataTypesClientWithBaseURI creates an instance of the ObjectDataTypesClient client.
+// NewObjectDataTypesClientWithBaseURI creates an instance of the ObjectDataTypesClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewObjectDataTypesClientWithBaseURI(baseURI string, subscriptionID string) ObjectDataTypesClient {
 	return ObjectDataTypesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -113,8 +114,7 @@ func (client ObjectDataTypesClient) ListFieldsByModuleAndTypePreparer(ctx contex
 // ListFieldsByModuleAndTypeSender sends the ListFieldsByModuleAndType request. The method will close the
 // http.Response Body if it receives an error.
 func (client ObjectDataTypesClient) ListFieldsByModuleAndTypeSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListFieldsByModuleAndTypeResponder handles the response to the ListFieldsByModuleAndType request. The method always
@@ -122,7 +122,6 @@ func (client ObjectDataTypesClient) ListFieldsByModuleAndTypeSender(req *http.Re
 func (client ObjectDataTypesClient) ListFieldsByModuleAndTypeResponder(resp *http.Response) (result TypeFieldListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -200,8 +199,7 @@ func (client ObjectDataTypesClient) ListFieldsByTypePreparer(ctx context.Context
 // ListFieldsByTypeSender sends the ListFieldsByType request. The method will close the
 // http.Response Body if it receives an error.
 func (client ObjectDataTypesClient) ListFieldsByTypeSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListFieldsByTypeResponder handles the response to the ListFieldsByType request. The method always
@@ -209,7 +207,6 @@ func (client ObjectDataTypesClient) ListFieldsByTypeSender(req *http.Request) (*
 func (client ObjectDataTypesClient) ListFieldsByTypeResponder(resp *http.Response) (result TypeFieldListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

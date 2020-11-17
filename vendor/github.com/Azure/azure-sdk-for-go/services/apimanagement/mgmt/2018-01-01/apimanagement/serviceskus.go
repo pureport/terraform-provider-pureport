@@ -36,7 +36,8 @@ func NewServiceSkusClient(subscriptionID string) ServiceSkusClient {
 	return NewServiceSkusClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewServiceSkusClientWithBaseURI creates an instance of the ServiceSkusClient client.
+// NewServiceSkusClientWithBaseURI creates an instance of the ServiceSkusClient client using a custom endpoint.  Use
+// this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewServiceSkusClientWithBaseURI(baseURI string, subscriptionID string) ServiceSkusClient {
 	return ServiceSkusClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -82,6 +83,9 @@ func (client ServiceSkusClient) ListAvailableServiceSkus(ctx context.Context, re
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.ServiceSkusClient", "ListAvailableServiceSkus", resp, "Failure responding to request")
 	}
+	if result.rsr.hasNextLink() && result.rsr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -110,8 +114,7 @@ func (client ServiceSkusClient) ListAvailableServiceSkusPreparer(ctx context.Con
 // ListAvailableServiceSkusSender sends the ListAvailableServiceSkus request. The method will close the
 // http.Response Body if it receives an error.
 func (client ServiceSkusClient) ListAvailableServiceSkusSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListAvailableServiceSkusResponder handles the response to the ListAvailableServiceSkus request. The method always
@@ -119,7 +122,6 @@ func (client ServiceSkusClient) ListAvailableServiceSkusSender(req *http.Request
 func (client ServiceSkusClient) ListAvailableServiceSkusResponder(resp *http.Response) (result ResourceSkuResults, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

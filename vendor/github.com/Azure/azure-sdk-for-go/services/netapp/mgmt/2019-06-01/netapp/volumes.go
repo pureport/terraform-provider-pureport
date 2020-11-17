@@ -36,7 +36,8 @@ func NewVolumesClient(subscriptionID string) VolumesClient {
 	return NewVolumesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewVolumesClientWithBaseURI creates an instance of the VolumesClient client.
+// NewVolumesClientWithBaseURI creates an instance of the VolumesClient client using a custom endpoint.  Use this when
+// interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewVolumesClientWithBaseURI(baseURI string, subscriptionID string) VolumesClient {
 	return VolumesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -138,9 +139,8 @@ func (client VolumesClient) CreateOrUpdatePreparer(ctx context.Context, body Vol
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client VolumesClient) CreateOrUpdateSender(req *http.Request) (future VolumesCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -153,7 +153,6 @@ func (client VolumesClient) CreateOrUpdateSender(req *http.Request) (future Volu
 func (client VolumesClient) CreateOrUpdateResponder(resp *http.Response) (result Volume, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -227,9 +226,8 @@ func (client VolumesClient) DeletePreparer(ctx context.Context, resourceGroupNam
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client VolumesClient) DeleteSender(req *http.Request) (future VolumesDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -242,7 +240,6 @@ func (client VolumesClient) DeleteSender(req *http.Request) (future VolumesDelet
 func (client VolumesClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
@@ -321,8 +318,7 @@ func (client VolumesClient) GetPreparer(ctx context.Context, resourceGroupName s
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client VolumesClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -330,7 +326,6 @@ func (client VolumesClient) GetSender(req *http.Request) (*http.Response, error)
 func (client VolumesClient) GetResponder(resp *http.Response) (result Volume, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -408,8 +403,7 @@ func (client VolumesClient) ListPreparer(ctx context.Context, resourceGroupName 
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client VolumesClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -417,7 +411,6 @@ func (client VolumesClient) ListSender(req *http.Request) (*http.Response, error
 func (client VolumesClient) ListResponder(resp *http.Response) (result VolumeList, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -503,8 +496,7 @@ func (client VolumesClient) UpdatePreparer(ctx context.Context, body VolumePatch
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client VolumesClient) UpdateSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // UpdateResponder handles the response to the Update request. The method always
@@ -512,7 +504,6 @@ func (client VolumesClient) UpdateSender(req *http.Request) (*http.Response, err
 func (client VolumesClient) UpdateResponder(resp *http.Response) (result Volume, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

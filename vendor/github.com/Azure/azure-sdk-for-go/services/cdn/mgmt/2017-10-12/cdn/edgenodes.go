@@ -35,7 +35,8 @@ func NewEdgeNodesClient(subscriptionID string) EdgeNodesClient {
 	return NewEdgeNodesClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewEdgeNodesClientWithBaseURI creates an instance of the EdgeNodesClient client.
+// NewEdgeNodesClientWithBaseURI creates an instance of the EdgeNodesClient client using a custom endpoint.  Use this
+// when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewEdgeNodesClientWithBaseURI(baseURI string, subscriptionID string) EdgeNodesClient {
 	return EdgeNodesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -70,6 +71,9 @@ func (client EdgeNodesClient) List(ctx context.Context) (result EdgenodeResultPa
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "cdn.EdgeNodesClient", "List", resp, "Failure responding to request")
 	}
+	if result.er.hasNextLink() && result.er.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -92,8 +96,7 @@ func (client EdgeNodesClient) ListPreparer(ctx context.Context) (*http.Request, 
 // ListSender sends the List request. The method will close the
 // http.Response Body if it receives an error.
 func (client EdgeNodesClient) ListSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
 // ListResponder handles the response to the List request. The method always
@@ -101,7 +104,6 @@ func (client EdgeNodesClient) ListSender(req *http.Request) (*http.Response, err
 func (client EdgeNodesClient) ListResponder(resp *http.Response) (result EdgenodeResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())

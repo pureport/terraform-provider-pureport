@@ -36,7 +36,8 @@ func NewIotDpsResourceClient(subscriptionID string) IotDpsResourceClient {
 	return NewIotDpsResourceClientWithBaseURI(DefaultBaseURI, subscriptionID)
 }
 
-// NewIotDpsResourceClientWithBaseURI creates an instance of the IotDpsResourceClient client.
+// NewIotDpsResourceClientWithBaseURI creates an instance of the IotDpsResourceClient client using a custom endpoint.
+// Use this when interacting with an Azure cloud that uses a non-standard base URI (sovereign clouds, Azure stack).
 func NewIotDpsResourceClientWithBaseURI(baseURI string, subscriptionID string) IotDpsResourceClient {
 	return IotDpsResourceClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
@@ -108,8 +109,7 @@ func (client IotDpsResourceClient) CheckProvisioningServiceNameAvailabilityPrepa
 // CheckProvisioningServiceNameAvailabilitySender sends the CheckProvisioningServiceNameAvailability request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) CheckProvisioningServiceNameAvailabilitySender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // CheckProvisioningServiceNameAvailabilityResponder handles the response to the CheckProvisioningServiceNameAvailability request. The method always
@@ -117,7 +117,6 @@ func (client IotDpsResourceClient) CheckProvisioningServiceNameAvailabilitySende
 func (client IotDpsResourceClient) CheckProvisioningServiceNameAvailabilityResponder(resp *http.Response) (result NameAvailabilityInfo, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -191,9 +190,8 @@ func (client IotDpsResourceClient) CreateOrUpdatePreparer(ctx context.Context, r
 // CreateOrUpdateSender sends the CreateOrUpdate request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) CreateOrUpdateSender(req *http.Request) (future IotDpsResourceCreateOrUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -206,7 +204,6 @@ func (client IotDpsResourceClient) CreateOrUpdateSender(req *http.Request) (futu
 func (client IotDpsResourceClient) CreateOrUpdateResponder(resp *http.Response) (result ProvisioningServiceDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -268,9 +265,8 @@ func (client IotDpsResourceClient) DeletePreparer(ctx context.Context, provision
 // DeleteSender sends the Delete request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) DeleteSender(req *http.Request) (future IotDpsResourceDeleteFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -283,7 +279,6 @@ func (client IotDpsResourceClient) DeleteSender(req *http.Request) (future IotDp
 func (client IotDpsResourceClient) DeleteResponder(resp *http.Response) (result autorest.Response, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent, http.StatusNotFound),
 		autorest.ByClosing())
 	result.Response = resp
@@ -350,8 +345,7 @@ func (client IotDpsResourceClient) GetPreparer(ctx context.Context, provisioning
 // GetSender sends the Get request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) GetSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetResponder handles the response to the Get request. The method always
@@ -359,7 +353,6 @@ func (client IotDpsResourceClient) GetSender(req *http.Request) (*http.Response,
 func (client IotDpsResourceClient) GetResponder(resp *http.Response) (result ProvisioningServiceDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -433,8 +426,7 @@ func (client IotDpsResourceClient) GetOperationResultPreparer(ctx context.Contex
 // GetOperationResultSender sends the GetOperationResult request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) GetOperationResultSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // GetOperationResultResponder handles the response to the GetOperationResult request. The method always
@@ -442,7 +434,6 @@ func (client IotDpsResourceClient) GetOperationResultSender(req *http.Request) (
 func (client IotDpsResourceClient) GetOperationResultResponder(resp *http.Response) (result AsyncOperationResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -482,6 +473,9 @@ func (client IotDpsResourceClient) ListByResourceGroup(ctx context.Context, reso
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iothub.IotDpsResourceClient", "ListByResourceGroup", resp, "Failure responding to request")
 	}
+	if result.psdlr.hasNextLink() && result.psdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -509,8 +503,7 @@ func (client IotDpsResourceClient) ListByResourceGroupPreparer(ctx context.Conte
 // ListByResourceGroupSender sends the ListByResourceGroup request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) ListByResourceGroupSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListByResourceGroupResponder handles the response to the ListByResourceGroup request. The method always
@@ -518,7 +511,6 @@ func (client IotDpsResourceClient) ListByResourceGroupSender(req *http.Request) 
 func (client IotDpsResourceClient) ListByResourceGroupResponder(resp *http.Response) (result ProvisioningServiceDescriptionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -593,6 +585,9 @@ func (client IotDpsResourceClient) ListBySubscription(ctx context.Context) (resu
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iothub.IotDpsResourceClient", "ListBySubscription", resp, "Failure responding to request")
 	}
+	if result.psdlr.hasNextLink() && result.psdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -619,8 +614,7 @@ func (client IotDpsResourceClient) ListBySubscriptionPreparer(ctx context.Contex
 // ListBySubscriptionSender sends the ListBySubscription request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) ListBySubscriptionSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListBySubscriptionResponder handles the response to the ListBySubscription request. The method always
@@ -628,7 +622,6 @@ func (client IotDpsResourceClient) ListBySubscriptionSender(req *http.Request) (
 func (client IotDpsResourceClient) ListBySubscriptionResponder(resp *http.Response) (result ProvisioningServiceDescriptionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -706,6 +699,9 @@ func (client IotDpsResourceClient) ListKeys(ctx context.Context, provisioningSer
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iothub.IotDpsResourceClient", "ListKeys", resp, "Failure responding to request")
 	}
+	if result.sasarlr.hasNextLink() && result.sasarlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -734,8 +730,7 @@ func (client IotDpsResourceClient) ListKeysPreparer(ctx context.Context, provisi
 // ListKeysSender sends the ListKeys request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) ListKeysSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysResponder handles the response to the ListKeys request. The method always
@@ -743,7 +738,6 @@ func (client IotDpsResourceClient) ListKeysSender(req *http.Request) (*http.Resp
 func (client IotDpsResourceClient) ListKeysResponder(resp *http.Response) (result SharedAccessSignatureAuthorizationRuleListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -850,8 +844,7 @@ func (client IotDpsResourceClient) ListKeysForKeyNamePreparer(ctx context.Contex
 // ListKeysForKeyNameSender sends the ListKeysForKeyName request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) ListKeysForKeyNameSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListKeysForKeyNameResponder handles the response to the ListKeysForKeyName request. The method always
@@ -859,7 +852,6 @@ func (client IotDpsResourceClient) ListKeysForKeyNameSender(req *http.Request) (
 func (client IotDpsResourceClient) ListKeysForKeyNameResponder(resp *http.Response) (result SharedAccessSignatureAuthorizationRuleAccessRightsDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -900,6 +892,9 @@ func (client IotDpsResourceClient) ListValidSkus(ctx context.Context, provisioni
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iothub.IotDpsResourceClient", "ListValidSkus", resp, "Failure responding to request")
 	}
+	if result.idsdlr.hasNextLink() && result.idsdlr.IsEmpty() {
+		err = result.NextWithContext(ctx)
+	}
 
 	return
 }
@@ -928,8 +923,7 @@ func (client IotDpsResourceClient) ListValidSkusPreparer(ctx context.Context, pr
 // ListValidSkusSender sends the ListValidSkus request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) ListValidSkusSender(req *http.Request) (*http.Response, error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
-	return autorest.SendWithSender(client, req, sd...)
+	return client.Send(req, azure.DoRetryWithRegistration(client.Client))
 }
 
 // ListValidSkusResponder handles the response to the ListValidSkus request. The method always
@@ -937,7 +931,6 @@ func (client IotDpsResourceClient) ListValidSkusSender(req *http.Request) (*http
 func (client IotDpsResourceClient) ListValidSkusResponder(resp *http.Response) (result IotDpsSkuDefinitionListResult, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
@@ -1039,9 +1032,8 @@ func (client IotDpsResourceClient) UpdatePreparer(ctx context.Context, resourceG
 // UpdateSender sends the Update request. The method will close the
 // http.Response Body if it receives an error.
 func (client IotDpsResourceClient) UpdateSender(req *http.Request) (future IotDpsResourceUpdateFuture, err error) {
-	sd := autorest.GetSendDecorators(req.Context(), azure.DoRetryWithRegistration(client.Client))
 	var resp *http.Response
-	resp, err = autorest.SendWithSender(client, req, sd...)
+	resp, err = client.Send(req, azure.DoRetryWithRegistration(client.Client))
 	if err != nil {
 		return
 	}
@@ -1054,7 +1046,6 @@ func (client IotDpsResourceClient) UpdateSender(req *http.Request) (future IotDp
 func (client IotDpsResourceClient) UpdateResponder(resp *http.Response) (result ProvisioningServiceDescription, err error) {
 	err = autorest.Respond(
 		resp,
-		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
